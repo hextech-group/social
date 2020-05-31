@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 
 <head>
+
   <title>blokz/profile powered by HIVE</title>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,15 +14,17 @@
 <script src="https://cdn.jsdelivr.net/npm/@hiveio/hive-js/dist/hive.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hivesigner"></script>
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-<link rel="shortcut icon" href="https://blokz.io/favicon.png"/>
 
+
+<link rel="shortcut icon" href="../favicon.png"/>
 <link rel="stylesheet" href="../css/styles.css?ver=1.01">
-<script src="../js/blokz.js?ver=1.01"></script>
+<script src="../js/blokz.js?ver=1.02"></script>
+
 </head>
 
 <body>
-  
-    <div style="background-color:white" id="gridd">
+
+  <div style="background-color:white" id="gridd">
   <!-- profileCover -->
   <div class="preopreo" id="coverimage">&nbsp;</div>
   <div style="text-align: center; margin: -64px auto;">
@@ -110,62 +113,38 @@
 
 <!-- Floating Action Button Popup card and Button -->
 
-<div id="blokzmenu" class="external" style="display: none;">
+<div id="blokzmenuPOP" class="external" style="display: none;">
   <main class="mdl-layout__content">
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text" style="color: white">blokz/profile</h2>
-      </div>
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">   
       <div class="mdl-card__supporting-text">
         Load a profile below: <br />
         <!-- TODO: add dynamic list of users -->
         <form id="frm1" action="/">
-          <a href="./?hive=sn0n">@sn0n</a><br />
-          <a href="./?hive=blokz">@blokz</a><br />
-          Other: <br />
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <label class="mdl-textfield__label" for="sample4">HIVE Username</label>
             <input type="text" name="hive" class="mdl-textfield__input">
           </div>
+          Userlist:<br />           <a href="./?hive=sn0n">@sn0n</a><br />
+          <a href="./?hive=blokz">@blokz</a><br />
         </form>
         <hr />
+        <!-- todo update dynamic-->
         <a href="./profile_update/">Update Profile</a>
       </div>
     </div>
   </main>
 </div>
+  <span style="padding-left: 10px; float: left">
+  <button id="blokztop"  class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+    <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
+  </button>
+</span>
 
-<button id="button" onclick="blokzmenu()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+<!-- show menu button -->
+<button id="blokzmenu" onclick="blokzmenu()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
   <img src="../favicon.png">
 </button>
-      
 
-
-<!-- ##### Footer ##### -->
-<div id="footer">
-   
-  <span style="padding-left: 10px; float: left">
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
-      <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
-    </button>
-  
-  </span>
-<!-- SIGNATURE -->
-<div style="width: 50%; margin: 0 50%">
- 
-    <div style="text-align: center;"><a href="https://blokz.io/">https://blokz.io/</a> <br />
-    This website is <a href="http://copyfree.org/" target="_blank">Copyfree</a>. <br />
-    Souce Code: <a href="https://github.com/blokz/profile">blokz/profile</a>
-
-    </div>
-
-</div>
-<!-- signature -->
- 
-
-    </div>
-
-      
 </body>
 
 </html>
