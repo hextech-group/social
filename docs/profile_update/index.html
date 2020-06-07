@@ -139,24 +139,7 @@
         </select>
         <label class="mdl-textfield__label" for="birthyear" id="birthyearLabel"></label>
       </div><br />
-      <div class="mdl-textfield mdl-js-textfield">
-        <small>Astrology Sign</small>
-        <select name="sign" id="sign" class="mdl-textfield mdl-js-textfield">
-          <option value="Aries">Aries</option>
-          <option value="Taurus">Taurus</option>
-          <option value="Gemini">Gemini</option>
-          <option value="Cancer">Cancer</option>
-          <option value="Leo">Leo</option>
-          <option value="Virgo">Virgo</option>
-          <option value="Libra">Libra</option>
-          <option value="Scorpio">Scorpio</option>
-          <option value="Sagittarius">Sagittarius</option>
-          <option value="Capricorn">Capricorn</option>
-          <option value="Aquarius">Aquarius</option>
-          <option value="Pisces">Pisces</option>
-        </select>
-        <label class="mdl-textfield__label" for="sign" id="signLabel"></label>
-      </div><br />
+
       <div class="mdl-textfield mdl-js-textfield">
         <small>Gender</small><input class="mdl-textfield__input" type="text" id="gender">
         <label class="mdl-textfield__label" for="gender" id="genderLabel"></label>
@@ -225,8 +208,8 @@
         document.getElementById("usertitleLabel").style.display = "none";
         document.getElementById("birthyear").value = bitff.birthyear;
         document.getElementById("birthyearLabel").style.display = "none";
-        document.getElementById("sign").value = bitff.sign;
-        document.getElementById("signLabel").style.display = "none";
+        //document.getElementById("sign").value = bitff.sign;
+        //document.getElementById("signLabel").style.display = "none";
         document.getElementById("location").value = bitff.location;
         document.getElementById("locationLabel").style.display = "none";
         document.getElementById("gender").value = bitff.gender;
@@ -251,12 +234,12 @@
     var favsite = document.getElementById('favsite').value;
     var usertitle = document.getElementById('usertitle').value;
     var birthyear = document.getElementById('birthyear').value;
-    var sign = document.getElementById('sign').value;
+    //var sign = document.getElementById('sign').value;
     var gender = document.getElementById('gender').value;
     var location = document.getElementById('location').value;
     var interests = document.getElementById('interests').value;
     var favorites = document.getElementById('favorites').value;
-    console.log("proof: " + favsite + article + name + usertitle + birthyear + sign + gender + location + interests + favorites);
+    console.log("proof: " + favsite + article + name + usertitle + birthyear + gender + location + interests + favorites);
 
     hive.broadcast.comment(
       document.getElementById('postingKey').value,
@@ -275,7 +258,6 @@
         favsite: favsite,
         usertitle: usertitle,
         birthyear: birthyear,
-        sign: sign,
         gender: gender,
         location: location,
         interests: interests,
@@ -306,7 +288,6 @@
     var name = document.getElementById('name').value;
     var usertitle = document.getElementById('usertitle').value;
     var birthyear = document.getElementById('birthyear').value;
-    var sign = document.getElementById('sign').value;
     var gender = document.getElementById('gender').value;
     var location = document.getElementById('location').value;
     var interests = document.getElementById('interests').value;
@@ -315,7 +296,7 @@
     var account_name = document.getElementById('steemagent').value;
 
     permlink = "blokzprofile";
-    console.log("proof: " + article + name + usertitle + birthyear + sign + gender + location + interests + favorites);
+    console.log("proof: " + article + name + usertitle + birthyear + gender + location + interests + favorites);
 
     // profile build finished
     var json_mm = {
@@ -325,7 +306,6 @@
       "name": name,
       "usertitle": usertitle,
       "birthyear": birthyear,
-      "sign": sign,
       "gender": gender,
       "location": location,
       "interests": interests,
@@ -372,12 +352,11 @@
     var favsite = document.getElementById('favsite').value;
     var usertitle = document.getElementById('usertitle').value;
     var birthyear = document.getElementById('birthyear').value;
-    var sign = document.getElementById('sign').value;
     var gender = document.getElementById('gender').value;
     var location = document.getElementById('location').value;
     var interests = document.getElementById('interests').value;
     var favorites = document.getElementById('favorites').value;
-    console.log("proof: " + favsite + article + name + usertitle + birthyear + sign + gender + location + interests + favorites);
+    console.log("proof: " + favsite + article + name + usertitle + birthyear + gender + location + interests + favorites);
     var client = new hivesigner.Client({
       app: 'blokz',
       callbackURL: '127.0.0.1',
@@ -403,7 +382,6 @@
       favsite: favsite,
       usertitle: usertitle,
       birthyear: birthyear,
-      sign: sign,
       gender: gender,
       location: location,
       interests: interests,

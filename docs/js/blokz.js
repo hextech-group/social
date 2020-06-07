@@ -99,7 +99,6 @@ window.onload = function loading() {
         document.getElementById("usertitle").innerHTML = bitff.usertitle;
         var profage = year.getFullYear() - bitff.birthyear;
         document.getElementById("age").innerHTML = profage;
-        document.getElementById("sign").innerHTML = bitff.sign;
         document.getElementById("location").innerHTML = bitff.location;
         document.getElementById("gender").innerHTML = bitff.gender;
         document.getElementById("favsite").innerHTML = "<a href='" + bitff.favsite + "' target='_blank'>" + bitff.favsite + "</a>";
@@ -181,7 +180,6 @@ window.onload = function loading() {
           document.getElementById("usertitle").innerHTML = JSON.parse(posting_json).profile.about;
           document.getElementById("name").innerHTML = JSON.parse(posting_json).profile.name;
           document.getElementById("strongAge").style.display = "none";
-          document.getElementById("strongSign").style.display = "none";
           document.getElementById("strongGender").style.display = "none";
           document.getElementById("strongFriends").style.display = "none";
           document.getElementById("strongAbout").style.display = "none";
