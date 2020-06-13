@@ -139,7 +139,6 @@
         </select>
         <label class="mdl-textfield__label" for="birthyear" id="birthyearLabel"></label>
       </div><br />
-
       <div class="mdl-textfield mdl-js-textfield">
         <small>Gender</small><input class="mdl-textfield__input" type="text" id="gender">
         <label class="mdl-textfield__label" for="gender" id="genderLabel"></label>
@@ -201,23 +200,14 @@
         var bitff = JSON.parse(JSON.stringify(blokzmeta));
         console.log(bitff);
         document.getElementById("name").value = bitff.name;
-        document.getElementById("nameLabel").style.display = "none";
         document.getElementById("article").value = bitff.article;
-        document.getElementById("articleLabel").style.display = "none";
         document.getElementById("usertitle").value = bitff.usertitle;
-        document.getElementById("usertitleLabel").style.display = "none";
         document.getElementById("birthyear").value = bitff.birthyear;
-        document.getElementById("birthyearLabel").style.display = "none";
         document.getElementById("location").value = bitff.location;
-        document.getElementById("locationLabel").style.display = "none";
         document.getElementById("gender").value = bitff.gender;
-        document.getElementById("genderLabel").style.display = "none";
         document.getElementById("interests").value = bitff.interests;
-        document.getElementById("interestsLabel").style.display = "none";
         document.getElementById("favorites").value = bitff.favorites;
-        document.getElementById("favoritesLabel").style.display = "none";
         document.getElementById("favsite").value = bitff.favsite;
-        document.getElementById("favsiteLabel").style.display = "none";
       } else {
         reject(err);
       }
@@ -267,8 +257,8 @@
         else
           alert('Profile Updated');
 
-          // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-          // window.location.href = '../';
+        // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+        // window.location.href = '../';
       }
     );
   }
@@ -338,8 +328,8 @@
     });
 
 
-  // 
-  // hivesigner code
+    // 
+    // hivesigner code
   };
 
   function blokz_keychain() {
@@ -510,6 +500,7 @@
     width: 70%;
     min-width: 300px;
   }
+
   input {
     padding: 10px;
     width: 100%;
@@ -517,15 +508,18 @@
     font-family: Raleway;
     border: 1px solid #aaaaaa;
   }
+
   /* Mark input boxes that gets an error on validation: */
   input.invalid {
     background-color: #ffdddd;
   }
+
   /* Hide all steps by default: */
   .slider {
     display: none;
     text-align: left;
   }
+
   button {
     background-color: #4CAF50;
     color: #ffffff;
@@ -535,12 +529,15 @@
     font-family: Raleway;
     cursor: pointer;
   }
+
   button:hover {
     opacity: 0.8;
   }
+
   #prevBtn {
     background-color: #bbbbbb;
   }
+
   /* Make circles that indicate the steps of the form: */
   .step {
     text-align: left;
@@ -549,25 +546,31 @@
     margin: 0 2px;
     opacity: 0.2;
   }
+
   .step.active {
     opacity: 1;
   }
+
   /* Mark the steps that are finished and valid: */
   .step.finish {
     background-color: #000;
     width: 20%;
   }
+
   .demo-card-square.mdl-card {
     width: 100%;
   }
+
   .demo-card-square>.mdl-card__title {
     color: #fff;
     height: 176px;
     background: url('https://i.imgur.com/Gjr80cA.jpg') center / cover;
   }
+
   .demo-card-square>.mdl-card__menu {
     color: #fff;
   }
+
   .profimg {
 
     border-radius: 50%;
@@ -579,12 +582,12 @@
 
 
 
-<!-- Floating Action Button Popup card and Button -->
+<!-- Floating Action Button Popup card -->
 
 
 <div id="blokzmenuPOP" class="external" style="display: none;">
   <main class="mdl-layout__content">
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">   
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">
       <div class="mdl-card__supporting-text">
         Load a profile below: <br />
         <!-- TODO: add dynamic list of users -->
@@ -593,7 +596,7 @@
             <label class="mdl-textfield__label" for="sample4">HIVE Username</label>
             <input type="text" name="hive" class="mdl-textfield__input">
           </div>
-          Userlist:<br />           
+          Userlist:<br />
           <a href="../?hive=sn0n">@sn0n</a><br />
           <a href="../?hive=blokz">@blokz</a><br />
         </form>
