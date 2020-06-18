@@ -188,7 +188,6 @@
 
         // TODO: set loop for each & display inline popup
         var recent1 = JSON.parse(JSON.stringify(result[0]));
-        console.log("recent")
         console.log(recent1);
         var recent1date = recent1.created.slice(0, 10);
         content = "1. <a onClick='DisplayPost(`"+marked(recent1.body)+"`)'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
