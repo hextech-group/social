@@ -25,44 +25,39 @@
 
 <body>
 
-  <script src="https://cdn.jsdelivr.net/npm/hivesigner"></script>
-
-<button onclick="hivelogin()">hivesigner login</button> 
-
+  Logged in as: <span id="loggedinas"></span>
+<script src="https://cdn.jsdelivr.net/npm/hivesigner"></script>
 <script>
 
-state = "/";
-var client = new hivesigner.Client({
-  app: 'blokz',
-  callbackURL: 'http://127.0.0.1:3000/dashboard/',
-  scope: ['vote','comment','comment_options'],
-});
-
-var params = {};
-
-// The "username" parameter is required prior to log in for "Hive Keychain" users.
-if (hivesigner.useHiveKeychain) {
-  params = { username: 'sn0n' };
-}
-
-var link = client.getLoginURL(state);
-console.log("your login link is: " + link)
+    var client = new hivesigner.Client({
+        app: 'blokz',
+        callbackURL: 'http://127.0.0.1:3000/dashboard/',
+        scope: ['vote', 'comment', 'comment_options'],
+    });
 
 
-function hivelogin() {
-client.login(params, function(err, token) {
-  console.log(err, token)
+    let params = (new URL(location)).searchParams;
+    const token = params.get('access_token') || localStorage.getItem('sc_token');
+    if (token) {
+        const self = this;
+        this.isInit = false;
+        client.setAccessToken(token);
 
-});
-}
+        client.me(function (err, result) {
+            if (result) self.username = result.name;
+            if (err) self.error = err;
+            localStorage.setItem('sc_token', token);
+            self.isInit = true;
+            console.log(err, result);
+            document.getElementById("loggedinas").innerHTML = result.name;
+        });
+    } else {
+        this.isInit = true;
+    }
 
+
+    //     
 </script>
-
-
-
-
-
-
   <span style="padding-left: 10px; float: left">
   <button id="blokztop"  class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
     <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>

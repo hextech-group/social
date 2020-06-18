@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-pink.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@hiveio/hive-js/dist/hive.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hivesigner"></script>
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
@@ -103,169 +104,289 @@
 </div>
 
 
+
+
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="HivePost"></p>
+    </p>
+  </div>
+</div>
+
+
+
+
 <script>
 
-// MAIN BODY OF DISPLAYING A PROFILE
-window.onload = function loading() {
+  //modal window infos
 
 
-//check if user is set
-if (typeof user !== 'undefined') {
+  // Get the modal
+  var modal = document.getElementById("myModal");
 
-  // gets posting_json_metadata for generic profile data for user
-  hive.api.call('database_api.find_accounts', { accounts: [user] }, (err, res) => {
-    posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
-    // TODO: -- remove testing notes ^>^
-    console.log("posting_json: " + posting_json);
-    // display avater
-    document.getElementById("profimg").src = JSON.parse(posting_json).profile.profile_image;
-    // display cover image
-    document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
-  });
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
 
-  // get recent posts
-  hive.api.getDiscussionsByAuthorBeforeDate(user, null, now, 5, (err, result) => {
-    // TODO: set loop for each & display inline popup
-    var recent1 = JSON.parse(JSON.stringify(result[0]));
-    console.log(recent1);
-    var recent1date = recent1.created.slice(0, 10);
-    document.getElementById("recent1").innerHTML = "1. <a href='http://peakd.com/@" + user + "/" + recent1.permlink + "' target='_blank'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
-    var recent2 = JSON.parse(JSON.stringify(result[1]));
-    // TODO: -- remove testing notes ^>^
-    console.log(recent2);
-    var recent2date = recent2.created.slice(0, 10);
-    document.getElementById("recent2").innerHTML = "2. <a href='http://peakd.com/@" + user + "/" + recent2.permlink + "' target='_blank'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
-    var recent3 = JSON.parse(JSON.stringify(result[2]));
-    // TODO: -- remove testing notes ^>^
-    console.log(recent3);
-    var recent3date = recent3.created.slice(0, 10);
-    document.getElementById("recent3").innerHTML = "3. <a href='http://peakd.com/@" + user + "/" + recent3.permlink + "' target='_blank'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
-    document.getElementById("recentM").innerHTML = "<br /><div>View More on <a href='http://peakd.com/@" + user + "/' target='_blank'>peakd.com/@" + user + "</a></div><hr />";
-  });
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
 
-  // show link to peakd profile
-  document.getElementById("hiveuser").innerHTML = "<a href='http://peakd.com/@" + user + "' target='_blank'>@" + user + "</a>";
+  // When the user clicks the button, open the modal 
+  //btn.onclick = function () {
+  //  modal.style.display = "block";
+  //}
 
-  // fetch blokzprofile post from hive
-  hive.api.getDiscussionsByAuthorBeforeDate(user, 'blokzprofile', now, 1, (err, result) => {
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
 
-    // user has a blokz/profile
-    if (result.length >= 1) {
-      console.log("meep :" + result);
-      var blokify = JSON.parse(JSON.stringify(result[0].body));
-      var blokzmeta = JSON.parse((result[0].json_metadata));
-      console.log(blokify);
-      var bitff = JSON.parse(JSON.stringify(blokzmeta));
-      console.log("blokzmeta: " + bitff.app);
-      console.log(bitff.interests);
-      document.getElementById("name").innerHTML = bitff.name;
-      document.getElementById("article").innerHTML = bitff.article;
-      document.getElementById("usertitle").innerHTML = bitff.usertitle;
-      var profage = year.getFullYear() - bitff.birthyear;
-      document.getElementById("age").innerHTML = profage;
-      document.getElementById("location").innerHTML = bitff.location;
-      document.getElementById("gender").innerHTML = bitff.gender;
-      document.getElementById("favsite").innerHTML = "<a href='" + bitff.favsite + "' target='_blank'>" + bitff.favsite + "</a>";
-      // interests
-      var skills = bitff.interests;
-      skillsLog = skills.split(',');
-      skillsLog.forEach(function (entry) {
-        console.log(entry);
-        entryy = entry.replace(/\s+/g, '');
-        entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
-        entryy = entryy.toLowerCase();
-        // creat chips for each interest
-        var vadd = document.createElement('button');
-        vadd.className = "mdl-chip";
-        vadd.id = entryy;
-        vadd.setAttribute("onclick", "window.open('https://peakd.com/created/" + entryy + "','_blank');");
-        document.getElementById("interests").appendChild(vadd);
-        var sadd = document.createElement('span');
-        sadd.className = "mdl-chip__text";
-        sadd.id = entryy + "2";
-        document.getElementById(entryy).appendChild(sadd);
-        var t = document.createTextNode(entryy);
-        document.getElementById(entryy + "2").appendChild(t);
-        // ENDNEW
-      });
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+  //end modal
 
-      // favorite steemians
-      var favs = bitff.favorites;
-      favsLog = favs.split(',');
-      favsLog.forEach(function (entry) {
-        console.log("show: " + entry);
-        entryy = entry.replace(/\s+/g, '');
-        entryy = entryy.toLowerCase();
-        // CURRENT TODO: FRIEND IMAGE
-        console.log("CAUGHT: " + entryy);
-        var favfriend = document.createElement("div");
-        favfriend.id = entryy + "_";
-        favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
-        favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
-        document.getElementById("favorites").appendChild(favfriend);
-        var para = document.createElement("div");                 // Create a <p> element
-        para.id = favfriend.id + "sub";
-        var ffs = document.createElement("div");
-        ffs.id = favfriend.id;
-        var ffsName = document.createElement("div");
-        ffsName.id = favfriend.id + "ffsName";
-        var ff = favfriend.id + "NEW";   // placeholder
-        document.getElementById(entryy + "_").appendChild(para);
-        document.getElementById(ffs.id).appendChild(ffsName);
-        var image = document.createElement("img");
-        var imageParent = document.getElementById(para.id);
-        image.className = "avatar";
-        image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
-        imageParent.appendChild(image);
-        document.getElementById(entryy + "_").appendChild(ffsName);
-        ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
+  function DisplayPost(content) {
+    modal.style.display = "block";
+    document.getElementById("HivePost").innerHTML = content;
+  }
 
-      }); // finished displaying blokzprofile
-      
-    } else {
+  // MAIN BODY OF DISPLAYING A PROFILE
+  window.onload = function loading() {
 
-      // LOAD GENERIC posting_json_metadata for non blokz/profile user
-      console.log("user does not exist! or something went wrong")
+    //check if user is set
+    if (typeof user !== 'undefined') {
+
+      // gets posting_json_metadata for generic profile data for user
       hive.api.call('database_api.find_accounts', { accounts: [user] }, (err, res) => {
         posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+        // TODO: -- remove testing notes ^>^
         console.log("posting_json: " + posting_json);
+        // display avater
         document.getElementById("profimg").src = JSON.parse(posting_json).profile.profile_image;
+        // display cover image
         document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
-        if (JSON.parse(posting_json).profile.website !== undefined) {
-          document.getElementById("favsite").innerHTML = "<a href='" + JSON.parse(posting_json).profile.website + "' target='_blank'>" + JSON.parse(posting_json).profile.website + "</a>";
-        } else {
-          document.getElementById("strongWebsite").style.display = "none";
-        }
-        if (JSON.parse(posting_json).profile.location !== undefined) {
-          document.getElementById("location").innerHTML = JSON.parse(posting_json).profile.location;
-        } else {
-          document.getElementById("strongLocation").style.display = "none";
-        }
-        document.getElementById("usertitle").innerHTML = JSON.parse(posting_json).profile.about;
-        document.getElementById("name").innerHTML = JSON.parse(posting_json).profile.name;
-        document.getElementById("strongAge").style.display = "none";
-        document.getElementById("strongGender").style.display = "none";
-        document.getElementById("strongFriends").style.display = "none";
-        document.getElementById("strongAbout").style.display = "none";
-        document.getElementById("strongFollow").style.display = "none";
-
-
-        //console.log("Location: " +JSON.parse(posting_json).profile.location);
-
       });
-      // finished displaying posting_json_metadata for non blokz/profile user
+
+      // get recent posts
+      hive.api.getDiscussionsByAuthorBeforeDate(user, null, now, 10, (err, result) => {
+
+        // testing for loop for posts. 
+        // data for each post in a loop
+
+        for (var i = 0; i < result.length; i++) {
+          console.log(" for loop data : " + JSON.stringify(result[i]));
+          thisPost = JSON.parse(JSON.stringify(result[i]));
+          console.log(thisPost.author);
+          console.log("i is " + i);
+        }
+
+
+        // TODO: set loop for each & display inline popup
+        var recent1 = JSON.parse(JSON.stringify(result[0]));
+        console.log("recent")
+        console.log(recent1);
+        var recent1date = recent1.created.slice(0, 10);
+        content = "1. <a onClick='DisplayPost(`"+marked(recent1.body)+"`)'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
+        document.getElementById("recent1").innerHTML = content;
+        //document.getElementById("HivePost").innerHTML = marked(recent1.body);
+        console.log("TESTING RECENT POST: " + recent1.body);
+
+
+        var recent2 = JSON.parse(JSON.stringify(result[1]));
+        console.log("recent 2")
+        console.log(recent2);
+        var recent2date = recent2.created.slice(0, 10);
+        content2 = "2. <a onClick='DisplayPost(`"+marked(recent2.body)+"`)'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
+        document.getElementById("recent2").innerHTML = content2;
+        //document.getElementById("HivePost").innerHTML = marked(recent1.body);
+        console.log("TESTING RECENT POST: " + recent2.body);
+
+
+
+        var recent3 = JSON.parse(JSON.stringify(result[2]));
+        console.log(recent3);
+        var recent3date = recent3.created.slice(0, 10);
+        content3 = "3. <a onClick='DisplayPost(`"+marked(recent3.body)+"`)'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
+        document.getElementById("recent3").innerHTML = content3;
+        //document.getElementById("HivePost").innerHTML = marked(recent1.body);
+        console.log("TESTING RECENT POST: " + recent3.body);
+
+
+
+
+        // view more on peakd
+        document.getElementById("recentM").innerHTML = "<br /><div>View More on <a href='http://peakd.com/@" + user + "/' target='_blank'>peakd.com/@" + user + "</a></div><hr />";
+      });
+
+      // show link to peakd profile
+      document.getElementById("hiveuser").innerHTML = "<a href='http://peakd.com/@" + user + "' target='_blank'>@" + user + "</a>";
+
+      // fetch blokzprofile post from hive
+      hive.api.getDiscussionsByAuthorBeforeDate(user, 'blokzprofile', now, 1, (err, result) => {
+
+        // user has a blokz/profile
+        if (result.length >= 1) {
+          console.log("meep :" + result);
+          var blokify = JSON.parse(JSON.stringify(result[0].body));
+          var blokzmeta = JSON.parse((result[0].json_metadata));
+          console.log(blokify);
+          var bitff = JSON.parse(JSON.stringify(blokzmeta));
+          console.log("blokzmeta: " + bitff.app);
+          console.log(bitff.interests);
+          document.getElementById("name").innerHTML = bitff.name;
+          document.getElementById("article").innerHTML = bitff.article;
+          document.getElementById("usertitle").innerHTML = bitff.usertitle;
+          var profage = year.getFullYear() - bitff.birthyear;
+          document.getElementById("age").innerHTML = profage;
+          document.getElementById("location").innerHTML = bitff.location;
+          document.getElementById("gender").innerHTML = bitff.gender;
+          document.getElementById("favsite").innerHTML = "<a href='" + bitff.favsite + "' target='_blank'>" + bitff.favsite + "</a>";
+          // interests
+          var skills = bitff.interests;
+          skillsLog = skills.split(',');
+          skillsLog.forEach(function (entry) {
+            console.log(entry);
+            entryy = entry.replace(/\s+/g, '');
+            entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
+            entryy = entryy.toLowerCase();
+            // creat chips for each interest
+            var vadd = document.createElement('button');
+            vadd.className = "mdl-chip";
+            vadd.id = entryy;
+            vadd.setAttribute("onclick", "window.open('https://peakd.com/created/" + entryy + "','_blank');");
+            document.getElementById("interests").appendChild(vadd);
+            var sadd = document.createElement('span');
+            sadd.className = "mdl-chip__text";
+            sadd.id = entryy + "2";
+            document.getElementById(entryy).appendChild(sadd);
+            var t = document.createTextNode(entryy);
+            document.getElementById(entryy + "2").appendChild(t);
+            // ENDNEW
+          });
+
+          // favorite steemians
+          var favs = bitff.favorites;
+          favsLog = favs.split(',');
+          favsLog.forEach(function (entry) {
+            console.log("show: " + entry);
+            entryy = entry.replace(/\s+/g, '');
+            entryy = entryy.toLowerCase();
+            // CURRENT TODO: FRIEND IMAGE
+            console.log("CAUGHT: " + entryy);
+            var favfriend = document.createElement("div");
+            favfriend.id = entryy + "_";
+            favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
+            favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
+            document.getElementById("favorites").appendChild(favfriend);
+            var para = document.createElement("div");                 // Create a <p> element
+            para.id = favfriend.id + "sub";
+            var ffs = document.createElement("div");
+            ffs.id = favfriend.id;
+            var ffsName = document.createElement("div");
+            ffsName.id = favfriend.id + "ffsName";
+            var ff = favfriend.id + "NEW";   // placeholder
+            document.getElementById(entryy + "_").appendChild(para);
+            document.getElementById(ffs.id).appendChild(ffsName);
+            var image = document.createElement("img");
+            var imageParent = document.getElementById(para.id);
+            image.className = "avatar";
+            image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
+            imageParent.appendChild(image);
+            document.getElementById(entryy + "_").appendChild(ffsName);
+            ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
+
+          }); // finished displaying blokzprofile
+
+        } else {
+
+          // LOAD GENERIC posting_json_metadata for non blokz/profile user
+          console.log("user does not exist! or something went wrong")
+          hive.api.call('database_api.find_accounts', { accounts: [user] }, (err, res) => {
+            posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+            console.log("posting_json: " + posting_json);
+            document.getElementById("profimg").src = JSON.parse(posting_json).profile.profile_image;
+            document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
+            if (JSON.parse(posting_json).profile.website !== undefined) {
+              document.getElementById("favsite").innerHTML = "<a href='" + JSON.parse(posting_json).profile.website + "' target='_blank'>" + JSON.parse(posting_json).profile.website + "</a>";
+            } else {
+              document.getElementById("strongWebsite").style.display = "none";
+            }
+            if (JSON.parse(posting_json).profile.location !== undefined) {
+              document.getElementById("location").innerHTML = JSON.parse(posting_json).profile.location;
+            } else {
+              document.getElementById("strongLocation").style.display = "none";
+            }
+            document.getElementById("usertitle").innerHTML = JSON.parse(posting_json).profile.about;
+            document.getElementById("name").innerHTML = JSON.parse(posting_json).profile.name;
+            document.getElementById("strongAge").style.display = "none";
+            document.getElementById("strongGender").style.display = "none";
+            document.getElementById("strongFriends").style.display = "none";
+            document.getElementById("strongAbout").style.display = "none";
+            document.getElementById("strongFollow").style.display = "none";
+
+
+            //console.log("Location: " +JSON.parse(posting_json).profile.location);
+
+          });
+          // finished displaying posting_json_metadata for non blokz/profile user
+        }
+      });
+    } else {
+
+      // TODO: splash page w/ user input
+      console.log("IT WORKS!! user not set");
+      document.getElementById("gridd").style.display = "none";
+      this.console.log("Please click the blokz logo below");
+
     }
+  };
+
+
+  // hivesigner integrations
+  state = "/";
+  var client = new hivesigner.Client({
+    app: 'blokz',
+    callbackURL: 'http://127.0.0.1:3000/',
+    scope: ['vote', 'comment', 'comment_options'],
   });
-} else {
 
-  // TODO: splash page w/ user input
-  console.log("IT WORKS!! user not set");
-  document.getElementById("gridd").style.display = "none";
-  this.console.log("Please click the blokz logo below");
 
-}
-};
+  // login
+  var link = client.getLoginURL(state);
+  console.log("your login link is: " + link)
 
+
+  function hivelogin() {
+    client.login(params, function (err, token) {
+      console.log(err, token)
+
+    });
+  }
+  // done login
+
+  let params = (new URL(location)).searchParams;
+  const token = params.get('access_token') || localStorage.getItem('sc_token');
+  if (token) {
+    const self = this;
+    this.isInit = false;
+    client.setAccessToken(token);
+
+    client.me(function (err, result) {
+      if (result) self.username = result.name;
+      if (err) self.error = err;
+      localStorage.setItem('sc_token', token);
+      self.isInit = true;
+      console.log(err, result);
+      document.getElementById("loggedin").innerHTML = "Logged in as " + result.name;
+    });
+  } else {
+    this.isInit = true;
+  }
 
 </script>
 
@@ -277,8 +398,11 @@ if (typeof user !== 'undefined') {
 
 <div id="blokzmenuPOP" class="external" style="display: none;">
   <main class="mdl-layout__content">
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">   
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">
       <div class="mdl-card__supporting-text">
+        <div id="loggedin"><button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px"
+              width="16px" /> hivesigner login</button></div>
+        <hr />
         Load a profile below: <br />
         <!-- TODO: add dynamic list of users -->
         <form id="frm1" action="/">
@@ -286,7 +410,7 @@ if (typeof user !== 'undefined') {
             <label class="mdl-textfield__label" for="sample4">HIVE Username</label>
             <input type="text" name="hive" class="mdl-textfield__input">
           </div>
-          Userlist:<br />           <a href="./?hive=sn0n">@sn0n</a><br />
+          Userlist:<br /> <a href="./?hive=sn0n">@sn0n</a><br />
           <a href="./?hive=blokz">@blokz</a><br />
         </form>
         <hr />

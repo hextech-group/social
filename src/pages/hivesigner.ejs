@@ -7,7 +7,7 @@
 state = "/";
 var client = new hivesigner.Client({
   app: 'blokz',
-  callbackURL: 'http://127.0.0.1:3000',
+  callbackURL: 'http://127.0.0.1:3000/dashboard/',
   scope: ['vote','comment','comment_options'],
 });
 
@@ -21,7 +21,6 @@ if (hivesigner.useHiveKeychain) {
 var link = client.getLoginURL(state);
 console.log("your login link is: " + link)
 
-// https://hivesigner.com/oauth2/authorize?client_id=peakd.app&redirect_uri=https%3A%2F%2Fpeakd.com%2Fcallback%2Fhivesigner&scope=vote,comment,comment_options,offline,custom_json,claim_reward_balance&response_type=code&state=/
 
 function hivelogin() {
 client.login(params, function(err, token) {
