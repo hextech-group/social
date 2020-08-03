@@ -30,10 +30,13 @@
 
 <script>
 
+
+pageURL = window.location.origin;
+
 state = "/";
 var client = new hivesigner.Client({
   app: 'blokz',
-  callbackURL: 'http://127.0.0.1:3000/dashboard/',
+  callbackURL: pageURL,
   scope: ['vote','comment','comment_options'],
 });
 
