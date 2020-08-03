@@ -1,20 +1,13 @@
-<div class="demo-card-square mdl-card mdl-shadow--2dp; width: 100%">
-  <div class="mdl-card__actions mdl-card--border " id="profileEdit">
-    <!-- Circles which indicates the steps of the form: -->
-    <div style="text-align:center;margin-top:5px;margin-bottom:20px;">
-      <div class="step" style="text-align: center"></div>
-      <div class="step" style="text-align: center"></div>
-      <div class="step" style="text-align: center"></div>
-    </div>
-    <!-- One "tab" for each step in the form: -->
-    <div class="slider" style="width: 80%;">
+
+<div style="padding: 3em; margin: auto; justify-content: center; max-width: 800px; text-align: left; border: 1px solid black; background-color: whitesmoke;">
       <div class="mdl-textfield mdl-js-textfield">
         <small>Hive Username</small><input class="mdl-textfield__input" type="text" id="hiveuser"
           onchange="hiveuserUp()">
         <label class="mdl-textfield__label" for="username"></label>
       </div>
-    </div>
-    <div class="slider" style="width: 80%;"><br />
+
+      <hr />
+ 
       <div class="mdl-textfield mdl-js-textfield">
         <small>Real Name</small><input class="mdl-textfield__input" type="text" id="name">
         <label class="mdl-textfield__label" for="realname" id="nameLabel"></label>
@@ -133,26 +126,22 @@
         <small>Bio/About</small><textarea class="mdl-textfield__input" type="text" rows="10" id="article"></textarea>
         <label class="mdl-textfield__label" for="article" id="articleLabel"></label>
       </div>
-    </div>
-    <div class="slider" id="subbie" style="width: 80%; padding: 20px;">
+
+      <div>
       Submit using : <br />
       <button onclick="blokz_keychain()">hive keychain</button>
-      <br />
+      <br /></div>
       <div class="mdl-textfield mdl-js-textfield">
         <small>or alternatively, Your Private Posting Key:</small><input class="mdl-textfield__input" type="password"
           id="postingKey">
         <label class="mdl-textfield__label" for="postingKey"></label>
+      
         <!-- <button onclick="blokz_hivesigner()">hivesigner</button> -->
       </div>
+      <div>
+        <button type="button" id="nextBtn" onclick="updateProfile()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple"> Update Profile</button>
+      </div>
     </div>
-    <br />
-  </div>
-  <div class="mdl-card__actions mdl-card--border " style="margin: 20px; padding: 20px">
-    <button type="button" id="prevBtn" onclick="nextPrev(-1)"
-      class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Previous</button>
-    <button type="button" id="nextBtn" onclick="nextPrev(1)"
-      class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Next</button>
-  </div>
 </div>
 
 <script>
@@ -190,7 +179,7 @@
 
   // uses private posting key to update profile
   function updateProfile() {
-    var data = "<img src='https://blokz.github.io/images/logo512.png'><br />A blokz profile, please click <a href='https://blokz.github.io/profile/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>blokz.github.io/profile/?hive=" + document.getElementById('hiveuser').value + "</a> to view.";
+    var data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here:<br /> <a href='https://personal.community/profile/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a>";
     var article = document.getElementById('article').value;
     var name = document.getElementById('name').value;
     var favsite = document.getElementById('favsite').value;
@@ -209,7 +198,7 @@
       'blokzprofile', //firsttag
       document.getElementById('hiveuser').value,
       'blokzprofile', //permlink
-      'My Blokz Profile',
+      'My Personal.Community Profile',
       data,
       // json meta
       {
@@ -245,7 +234,7 @@
     console.log("keyring installed");
 
     // build profile data
-    var body = "<img src='https://blokz.github.io/images/logo512.png'><br />A blokz profile, please click <a href='https://blokz.github.io/profile/?hive=" + document.getElementById('steemagent').value + "' target='_blank'>blokz.github.io/profile/?hive=" + document.getElementById('steemagent').value + "</a> to view.";
+    var body = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here: <a href='https://personal.community/profile/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a> to view.";
     var article = document.getElementById('article').value;
     var name = document.getElementById('name').value;
     var usertitle = document.getElementById('usertitle').value;
@@ -297,7 +286,7 @@
     };
     comment_options = JSON.stringify(comment_options);
 
-    steem_keychain.requestPost(account_name, 'My Blokz Profile', body, '', '', json_mm, "blokzprofile", comment_options, function (response) {
+    steem_keychain.requestPost(account_name, 'My Personal Community Profile', body, '', '', json_mm, "blokzprofile", comment_options, function (response) {
       console.log(response);
     });
 
@@ -307,7 +296,7 @@
   };
 
   function blokz_keychain() {
-    var data = "<img src='https://blokz.github.io/images/logo512.png'><br />A blokz profile, please click <a href='https://blokz.github.io/profile/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>blokz.github.io/profile/?hive=" + document.getElementById('hiveuser').value + "</a> to view.";
+    var data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here: <a href='https://personal.community/profile/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a> to view.";
     var article = document.getElementById('article').value;
     var name = document.getElementById('name').value;
     var favsite = document.getElementById('favsite').value;
@@ -318,11 +307,7 @@
     var interests = document.getElementById('interests').value;
     var favorites = document.getElementById('favorites').value;
     console.log("proof: " + favsite + article + name + usertitle + birthyear + gender + location + interests + favorites);
-    var client = new hivesigner.Client({
-      app: 'blokz',
-      callbackURL: '127.0.0.1',
-      scope: ['vote', 'comment']
-    });
+
     var params = {};
     // The "username" parameter is required prior to log in for "Hive Keychain" users.
     if (hivesigner.useHiveKeychain) {
@@ -333,9 +318,9 @@
     parentPermlink = "blokzprofile";
     author = document.getElementById('hiveuser').value;
     permlink = "blokzprofile";
-    title = "My Blokz Profile";
+    title = "My Personal Community Profile";
     body = data;
-    client.comment(parentAuthor, parentPermlink, author, permlink, title, body, {
+    comment(parentAuthor, parentPermlink, author, permlink, title, body, {
       tags: ['blokz'],
       app: 'blokz',
       article: article,

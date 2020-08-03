@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-pink.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@hiveio/hive-js/dist/hive.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hivesigner"></script>
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
@@ -25,7 +24,7 @@
 
 <body>
 
-  <div style="background-color:white; padding-bottom: 100px" id="gridd">
+  <div style="background-color:white; padding-bottom: 0px; min-height: 100vh;" id="gridd">
   <!-- profileCover -->
   <div class="preopreo" id="coverimage">&nbsp;</div>
   <div style="text-align: center; margin: -64px auto;">
@@ -76,11 +75,12 @@
                 <div style="text-align: left; padding-right: 5px"></div>
                 <strong id="strongWebsite">Website:</strong><br />
                 <div id="favsite" class="favsite"></div><br />
-                <div style="text-align: left;">
-                  <strong>Recent Posts:</strong>
-                  <div id="recent1"></div>
-                  <div id="recent2"></div>
-                  <div id="recent3"></div>
+
+                <div>
+                  <h3><strong>Recent Posts:</strong></h3><hr />
+                  <div id="recent1link"></div>
+                  <div id="recent2link"></div>
+                  <div id="recent3link"></div>
                   <div id="recentM"></div>
                 </div>
 
@@ -103,8 +103,14 @@
   </div>
 </div>
 
+<div style="justify-content: center;">
+  <div style="font-size: 3em; text-align: center; padding: 1em;">Recent Posts:</div>
 
-
+  <div id="recent1" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
+  <div id="recent2" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
+  <div id="recent3" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
+  <div id="recentM"></div>
+</div>
 
 
 <div id="myModal" class="modal">
@@ -117,38 +123,19 @@
 
 
 
+<script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
 
 <script>
+        var md = new Remarkable();
+        md.set({
+          html: true,
+          breaks: true,
+          xhtmlOut: true,
+          linkify: true
+        });
 
-  //modal window infos
 
 
-  // Get the modal
-  var modal = document.getElementById("myModal");
-
-  // Get the button that opens the modal
-  var btn = document.getElementById("myBtn");
-
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
-
-  // When the user clicks the button, open the modal 
-  //btn.onclick = function () {
-  //  modal.style.display = "block";
-  //}
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-    modal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-  //end modal
 
   function DisplayPost(content) {
     modal.style.display = "block";
@@ -190,7 +177,12 @@
         var recent1 = JSON.parse(JSON.stringify(result[0]));
         console.log(recent1);
         var recent1date = recent1.created.slice(0, 10);
-        content = "1. <a onClick='DisplayPost(`"+marked(recent1.body)+"`)'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
+        post1 = md.render(recent1.body).replace("\n", "");
+        post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
+        console.log("Looking fo this: " + post1);
+        linktocontent = "1. <a href='#recent1'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
+        document.getElementById("recent1link").innerHTML = linktocontent;
+        content = "<h1>" + recent1.title + "</h1> <small>Posted on " + recent1date + "</small><br />" + post1 + "<hr /";
         document.getElementById("recent1").innerHTML = content;
         //document.getElementById("HivePost").innerHTML = marked(recent1.body);
         console.log("TESTING RECENT POST: " + recent1.body);
@@ -200,7 +192,12 @@
         console.log("recent 2")
         console.log(recent2);
         var recent2date = recent2.created.slice(0, 10);
-        content2 = "2. <a onClick='DisplayPost(`"+marked(recent2.body)+"`)'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
+
+        post2 = md.render(recent2.body).replace("\n", "");
+        post2 = post2.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
+        linktocontent = "2. <a href='#recent2'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
+        document.getElementById("recent2link").innerHTML = linktocontent;
+        content2 = "<h1>" + recent2.title + "</h1> <small>Posted on " + recent2date + "</small><br />" + post2 + "<hr /";
         document.getElementById("recent2").innerHTML = content2;
         //document.getElementById("HivePost").innerHTML = marked(recent1.body);
         console.log("TESTING RECENT POST: " + recent2.body);
@@ -210,7 +207,12 @@
         var recent3 = JSON.parse(JSON.stringify(result[2]));
         console.log(recent3);
         var recent3date = recent3.created.slice(0, 10);
-        content3 = "3. <a onClick='DisplayPost(`"+marked(recent3.body)+"`)'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
+
+        post3 = md.render(recent3.body).replace("\n", "");
+        post3 = post3.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
+        linktocontent = "3. <a href='#recent3'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
+        document.getElementById("recent3link").innerHTML = linktocontent;
+        content3 = "<h1>" + recent3.title + "</h1> <small>Posted on " + recent3date + "</small><br />" + post3 + "<hr /";
         document.getElementById("recent3").innerHTML = content3;
         //document.getElementById("HivePost").innerHTML = marked(recent1.body);
         console.log("TESTING RECENT POST: " + recent3.body);
@@ -340,17 +342,20 @@
       // TODO: splash page w/ user input
       console.log("IT WORKS!! user not set");
       document.getElementById("gridd").style.display = "none";
-      this.console.log("Please click the blokz logo below");
+      console.log("Please click the blokz logo below");
 
     }
   };
 
 
   // hivesigner integrations
+
+  pageURL = window.location.origin;
+
   state = "/";
   var client = new hivesigner.Client({
     app: 'blokz',
-    callbackURL: 'http://127.0.0.1:3000/',
+    callbackURL: pageURL,
     scope: ['vote', 'comment', 'comment_options'],
   });
 
@@ -386,6 +391,8 @@
   } else {
     this.isInit = true;
   }
+
+
 
 </script>
 

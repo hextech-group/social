@@ -1,5 +1,11 @@
-<title><%= page.title ? `${page.title} | ` : '' %><%= site.title %></title>
-<meta name="description" content="<%= page.description || site.description %>"/>
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+
+<head>
+
+  <title>blokz/profile powered by HIVE</title>
+<meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
@@ -13,3 +19,23 @@
 <link rel="shortcut icon" href="../favicon.png"/>
 <link rel="stylesheet" href="../css/styles.css?ver=1.01">
 <script src="../js/blokz.js?ver=1.02"></script>
+
+</head>
+
+<body>
+
+  
+  <span style="padding-left: 10px; float: left">
+  <button id="blokztop"  class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+    <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
+  </button>
+</span>
+
+<!-- show menu button -->
+<button id="blokzmenu" onclick="blokzmenu()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <img src="../favicon.png">
+</button>
+
+</body>
+
+</html>
