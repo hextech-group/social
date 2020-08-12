@@ -80,20 +80,19 @@
 
 
 
-<div style="justify-content: center;" id="blog">
+<div style="justify-content: center; margin: 1em; margin-bottom: 5em;" id="blog">
   <div style="font-size: 3em; text-align: center; padding: 1em;">Recent Posts:</div>
 
   <div id="recent1"
-    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+    style="box-shadow: 2px 2px; word-wrap: break-word; margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
   </div>
   <div id="recent2"
-    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+    style="box-shadow: 2px 2px;word-wrap: break-word; margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
   </div>
   <div id="recent3"
-    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+    style="box-shadow: 2px 2px;word-wrap: break-word; margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
   </div>
-  <div id="recentM"></div>
-</div>
+  </div>
 
 
 
@@ -138,7 +137,7 @@
         for (var i = 0; i < result.length; i++) {
           console.log(" for loop data : " + JSON.stringify(result[i]));
           thisPost = JSON.parse(JSON.stringify(result[i]));
-          console.log(thisPost.author);
+          console.log("who dis " + thisPost.author);
           console.log("i is " + i);
         }
 
@@ -191,7 +190,7 @@
 
 
         // view more on peakd
-        document.getElementById("recentM").innerHTML = "<br /><div>View More on <a href='http://peakd.com/@" + user + "/' target='_blank'>peakd.com/@" + user + "</a></div><hr />";
+        document.getElementById("recentM").innerHTML = "<br /><div>View More on <a href='http://peakd.com/@" + thisPost.author + "/' target='_blank'>peakd.com/@" + thisPost.author + "</a></div><hr />";
       });
 
       // show link to peakd profile
@@ -312,7 +311,7 @@
       // TODO: splash page w/ user input
 
      splash();
-     
+
     }
   };
 

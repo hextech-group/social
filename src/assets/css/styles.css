@@ -1,55 +1,4 @@
 
-  /* The Modal (background) */
-  .modal {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
-    z-index: 1;
-    /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%;
-    /* Full width */
-    height: 100%;
-    /* Full height */
-    background-color: #f0f0f8;
-    /* Black w/ opacity */
-  }
-
-  /* Modal Content */
-  .modal-content {
-    background-color: #fff;
-    margin: 40px auto;
-    padding: 10px;
-    padding-bottom: 75px;
-    border: 1px solid #e7e7f1;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.24), 0 6px 20px 0 rgba(0, 0, 0, 0.42);
-    width: 80%;
-    height: 60%;
-    overflow: scroll;
-  }
-
-  /* The Close Button */
-  .close {
-    color: #E31337;
-    right: 15px;
-    float: right;
-    top: 15px;
-    position: absolute;
-    font-size: 28px;
-    font-weight: bold;
-  }
-
-  .close:hover,
-  .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-
-
   .demo-card-wide.mdl-card {
     width: 100%;
     margin: 10px auto;  
@@ -149,7 +98,9 @@ body {
   padding: 0;
 }
 
-
+code, pre {
+  overflow: auto;
+}
 
 acronym, .titleTip {
   border-bottom: 1px dotted rgb(153,153,153);

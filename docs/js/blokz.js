@@ -123,13 +123,14 @@ function splash() {
   document.getElementById("blog").style.display = "none";
   console.log("Please click the blokz logo below");
 
-  var html = `<div id='splash'>To get started, input your hive username in the box below and hit Go` + 
+  var html = `<div id='splash'>To get started, input your hive username in the box below and submit.` + 
   `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">`+
   `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">Load Profile</label>`+
   `  <input type="text" name="hive" class="mdl-textfield__input">`+
   `</div></form>`+
    `<hr />` +
-   `for HiveSigner and everything else, Click the <a href='https://blokz.io/'>blokz.io</a> icon on the bottom right. </div>` ;
+   `to login with HiveSigner and everything else, Click the <a href='https://blokz.io/'>blokz.io</a> icon on the bottom right.<br /> ` +
+   `<hr />This site was made with &#10084; by the guy at blokz, <a href="../?hive=sn0n">@sn0n</a></div>` ;
 
   var tempElement = document.createElement('splash');
   tempElement.innerHTML = html;
