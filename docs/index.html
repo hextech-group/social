@@ -18,7 +18,7 @@
 
 <link rel="shortcut icon" href="../favicon.png"/>
 <link rel="stylesheet" href="../css/styles.css?ver=1.01">
-<script src="../js/blokz.js?ver=1.02"></script>
+<script src="../js/blokz.js?ver=1.42"></script>
 
 </head>
 
@@ -98,7 +98,7 @@
         </div>
       </div>
 
-      
+
 
     </div>
   </div>
@@ -109,9 +109,15 @@
 <div style="justify-content: center;" id="blog">
   <div style="font-size: 3em; text-align: center; padding: 1em;">Recent Posts:</div>
 
-  <div id="recent1" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
-  <div id="recent2" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
-  <div id="recent3" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
+  <div id="recent1"
+    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+  </div>
+  <div id="recent2"
+    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+  </div>
+  <div id="recent3"
+    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+  </div>
   <div id="recentM"></div>
 </div>
 
@@ -121,20 +127,20 @@
 <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
 
 <script>
-        var md = new Remarkable();
-        md.set({
-          html: true,
-          breaks: true,
-          xhtmlOut: true,
-          linkify: true
-        });
+  var md = new Remarkable();
+  md.set({
+    html: true,
+    breaks: true,
+    xhtmlOut: true,
+    linkify: true
+  });
 
   // MAIN BODY OF DISPLAYING A PROFILE
   window.onload = function loading() {
 
 
 
-    
+
     //check if user is set
     if (typeof user !== 'undefined') {
 
@@ -331,17 +337,8 @@
 
       // TODO: splash page w/ user input
 
-      console.log("IT WORKS!! user not set");
-      document.getElementById("gridd").style.display = "none";
-      document.getElementById("blog").style.display = "none";
-      console.log("Please click the blokz logo below");
-
-      var html = `<div id='splash'>To get started click the icon on the bottom right. </div>`;
-
-var tempElement = document.createElement('splash');
-tempElement.innerHTML = html;
-document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
-
+     splash();
+     
     }
   };
 
@@ -349,12 +346,6 @@ document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
 
 
 </script>
-
-
-
-
-
-
   <span style="padding-left: 10px; float: left">
   <button id="blokztop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
     <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
@@ -385,20 +376,20 @@ document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
 
         <br />
         <hr />
-        Load a profile below: <br />
+        <br />
         <!-- TODO: add dynamic list of users -->
-        <form id="frm1" action="/">
+        <form id="frm1" action="/"> 
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
-            <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE Username</label>
+            <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">Load Profile</label>
             <input type="text" name="hive" class="mdl-textfield__input">
           </div>
-          <br />
-          Dev Examples: <br /> <a href="../?hive=sn0n" style="font-size: 1.25em;">@sn0n</a><br />
-          <a href="../?hive=blokz" style="font-size: 1.25em;">@blokz</a><br />
+        
         </form>
-        <hr />
+        <br />
         <!-- todo update dynamic-->
         <a href="../profile_update/" style="font-size: 1.25em;">Update Profile</a>
+        <hr />
+        This site made with &#10084; by the guy at blokz, <br /> <a href="../?hive=sn0n" style="font-size: 1.25em;">@sn0n</a>
       </div>
     </div>
   </main>

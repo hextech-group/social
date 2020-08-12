@@ -72,7 +72,7 @@
         </div>
       </div>
 
-      
+
 
     </div>
   </div>
@@ -83,9 +83,15 @@
 <div style="justify-content: center;" id="blog">
   <div style="font-size: 3em; text-align: center; padding: 1em;">Recent Posts:</div>
 
-  <div id="recent1" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
-  <div id="recent2" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
-  <div id="recent3" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
+  <div id="recent1"
+    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+  </div>
+  <div id="recent2"
+    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+  </div>
+  <div id="recent3"
+    style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
+  </div>
   <div id="recentM"></div>
 </div>
 
@@ -95,20 +101,20 @@
 <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
 
 <script>
-        var md = new Remarkable();
-        md.set({
-          html: true,
-          breaks: true,
-          xhtmlOut: true,
-          linkify: true
-        });
+  var md = new Remarkable();
+  md.set({
+    html: true,
+    breaks: true,
+    xhtmlOut: true,
+    linkify: true
+  });
 
   // MAIN BODY OF DISPLAYING A PROFILE
   window.onload = function loading() {
 
 
 
-    
+
     //check if user is set
     if (typeof user !== 'undefined') {
 
@@ -305,17 +311,8 @@
 
       // TODO: splash page w/ user input
 
-      console.log("IT WORKS!! user not set");
-      document.getElementById("gridd").style.display = "none";
-      document.getElementById("blog").style.display = "none";
-      console.log("Please click the blokz logo below");
-
-      var html = `<div id='splash'>To get started click the icon on the bottom right. </div>`;
-
-var tempElement = document.createElement('splash');
-tempElement.innerHTML = html;
-document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
-
+     splash();
+     
     }
   };
 
@@ -323,8 +320,3 @@ document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
 
 
 </script>
-
-
-
-
-

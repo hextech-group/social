@@ -38,8 +38,10 @@ if (getQueryVariable("hive") !== false) {
   console.log(user + " connected");
 }
 
-function login() {
-
+function login(username) {
+  localStorage.setItem("hive", username);
+  url = "../?hive=" + username;
+  window.location.href = url;
 }
 
 
@@ -79,6 +81,7 @@ function hivelogin() {
 // done login
 function logout() {
   localStorage.removeItem('sc_token');
+  localStorage.removeItem('hive');
   url = "../#";
   window.location.href = url;
 }
@@ -99,7 +102,38 @@ if (token) {
     self.isInit = true;
     console.log(err, result);
     document.getElementById("loggedin").innerHTML = "Logged in as <a href='../?hive=" + result.name + "'>" + result.name + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
+
+    if (getQueryVariable("access_token") !== false) {
+      console.log("TOKEN FOUND: " + getQueryVariable("access_token"));
+      hivesigner.setAccessToken = (getQueryVariable("access_token"));
+      login(username)
+    }
+
   });
 } else {
   this.isInit = true;
+}
+
+
+
+function splash() {
+
+  console.log("IT WORKS!! user not set");
+  document.getElementById("gridd").style.display = "none";
+  document.getElementById("blog").style.display = "none";
+  console.log("Please click the blokz logo below");
+
+  var html = `<div id='splash'>To get started, input your hive username in the box below and hit Go` + 
+  `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">`+
+  `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">Load Profile</label>`+
+  `  <input type="text" name="hive" class="mdl-textfield__input">`+
+  `</div></form>`+
+   `<hr />` +
+   `for HiveSigner and everything else, Click the <a href='https://blokz.io/'>blokz.io</a> icon on the bottom right. </div>` ;
+
+  var tempElement = document.createElement('splash');
+  tempElement.innerHTML = html;
+  document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
+
+
 }
