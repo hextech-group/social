@@ -449,3 +449,52 @@ dd {
   bottom:25px;
   left:25px;
 }
+
+
+
+#regForm {
+  background-color: #ffffff;
+  margin: 100px auto;
+  font-family: Raleway;
+  padding: 40px;
+  width: 70%;
+  min-width: 300px;
+}
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+  background-color: #ffdddd;
+}
+
+
+
+
+
+.demo-card-square.mdl-card {
+  width: 100%;
+}
+
+.demo-card-square>.mdl-card__title {
+  color: #fff;
+  height: 176px;
+  background: url('https://i.imgur.com/Gjr80cA.jpg') center / cover;
+}
+
+.demo-card-square>.mdl-card__menu {
+  color: #fff;
+}
+
+.profimg {
+
+  border-radius: 50%;
+  border: 1px solid #00adee;
+}
+
+#splash {
+  justify-content: center;
+  margin: auto;
+  max-width: 600px;
+  background-color: whitesmoke;
+  margin-top: 2em;
+  padding: 10px;
+}

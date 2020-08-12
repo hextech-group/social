@@ -26,7 +26,7 @@
 
   
   <span style="padding-left: 10px; float: left">
-  <button id="blokztop"  class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+  <button id="blokztop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
     <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
   </button>
 </span>
@@ -35,6 +35,44 @@
 <button id="blokzmenu" onclick="blokzmenu()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
   <img src="../favicon.png">
 </button>
+
+
+
+
+<!-- Floating Action Button Popup Card -->
+
+<div id="blokzmenuPOP" class="external" style="display: none;">
+  <main class="mdl-layout__content">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">
+      <div class="mdl-card__supporting-text">
+        <div id="loggedin">
+
+          <button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px" width="16px" />
+            hivesigner login
+          </button>
+
+        </div>
+
+        <br />
+        <hr />
+        Load a profile below: <br />
+        <!-- TODO: add dynamic list of users -->
+        <form id="frm1" action="/">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
+            <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE Username</label>
+            <input type="text" name="hive" class="mdl-textfield__input">
+          </div>
+          <br />
+          Dev Examples: <br /> <a href="../?hive=sn0n" style="font-size: 1.25em;">@sn0n</a><br />
+          <a href="../?hive=blokz" style="font-size: 1.25em;">@blokz</a><br />
+        </form>
+        <hr />
+        <!-- todo update dynamic-->
+        <a href="../profile_update/" style="font-size: 1.25em;">Update Profile</a>
+      </div>
+    </div>
+  </main>
+</div>
 
 </body>
 

@@ -72,12 +72,15 @@
         </div>
       </div>
 
+      
 
     </div>
   </div>
 </div>
 
-<div style="justify-content: center;">
+
+
+<div style="justify-content: center;" id="blog">
   <div style="font-size: 3em; text-align: center; padding: 1em;">Recent Posts:</div>
 
   <div id="recent1" style="margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;"></div>
@@ -86,14 +89,6 @@
   <div id="recentM"></div>
 </div>
 
-
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p id="HivePost"></p>
-    </p>
-  </div>
-</div>
 
 
 
@@ -108,17 +103,12 @@
           linkify: true
         });
 
-
-
-
-  function DisplayPost(content) {
-    modal.style.display = "block";
-    document.getElementById("HivePost").innerHTML = content;
-  }
-
   // MAIN BODY OF DISPLAYING A PROFILE
   window.onload = function loading() {
 
+
+
+    
     //check if user is set
     if (typeof user !== 'undefined') {
 
@@ -314,57 +304,21 @@
     } else {
 
       // TODO: splash page w/ user input
+
       console.log("IT WORKS!! user not set");
       document.getElementById("gridd").style.display = "none";
+      document.getElementById("blog").style.display = "none";
       console.log("Please click the blokz logo below");
+
+      var html = `<div id='splash'>To get started click the icon on the bottom right. </div>`;
+
+var tempElement = document.createElement('splash');
+tempElement.innerHTML = html;
+document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
 
     }
   };
 
-
-  // hivesigner integrations
-
-  pageURL = window.location.origin;
-
-  state = "/";
-  var client = new hivesigner.Client({
-    app: 'blokz',
-    callbackURL: pageURL,
-    scope: ['vote', 'comment', 'comment_options'],
-  });
-
-
-  // login
-  var link = client.getLoginURL(state);
-  console.log("your login link is: " + link)
-
-
-  function hivelogin() {
-    client.login(params, function (err, token) {
-      console.log(err, token)
-
-    });
-  }
-  // done login
-
-  let params = (new URL(location)).searchParams;
-  const token = params.get('access_token') || localStorage.getItem('sc_token');
-  if (token) {
-    const self = this;
-    this.isInit = false;
-    client.setAccessToken(token);
-
-    client.me(function (err, result) {
-      if (result) self.username = result.name;
-      if (err) self.error = err;
-      localStorage.setItem('sc_token', token);
-      self.isInit = true;
-      console.log(err, result);
-      document.getElementById("loggedin").innerHTML = "Logged in as " + result.name;
-    });
-  } else {
-    this.isInit = true;
-  }
 
 
 
@@ -374,29 +328,3 @@
 
 
 
-<!-- Floating Action Button Popup Card -->
-
-<div id="blokzmenuPOP" class="external" style="display: none;">
-  <main class="mdl-layout__content">
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">
-      <div class="mdl-card__supporting-text">
-        <div id="loggedin" style="font-size: 1.25em;"><button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px"
-              width="16px" /> hivesigner login</button></div>
-        <hr />
-        Load a profile below: <br />
-        <!-- TODO: add dynamic list of users -->
-        <form id="frm1" action="/">
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
-            <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE Username</label>
-            <input type="text" name="hive" class="mdl-textfield__input">
-          </div>
-          Userlist:<br /> <a href="./?hive=sn0n" style="font-size: 1.25em;">@sn0n</a><br />
-          <a href="./?hive=blokz" style="font-size: 1.25em;">@blokz</a><br />
-        </form>
-        <hr />
-        <!-- todo update dynamic-->
-        <a href="./profile_update/" style="font-size: 1.25em;">Update Profile</a>
-      </div>
-    </div>
-  </main>
-</div>

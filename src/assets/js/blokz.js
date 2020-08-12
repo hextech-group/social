@@ -38,6 +38,10 @@ if (getQueryVariable("hive") !== false) {
   console.log(user + " connected");
 }
 
+function login() {
+
+}
+
 
 function blokzmenu() {
   var x = document.getElementById("blokzmenuPOP");
@@ -46,4 +50,56 @@ function blokzmenu() {
   } else {
     x.style.display = "none";
   }
+}
+
+
+// hivesigner integrations
+
+pageURL = window.location.origin;
+
+state = "/";
+var client = new hivesigner.Client({
+  app: 'blokz',
+  callbackURL: pageURL,
+  scope: ['vote', 'comment', 'comment_options'],
+});
+
+
+// login
+var link = client.getLoginURL(state);
+console.log("your login link is: " + link)
+
+
+function hivelogin() {
+  client.login(params, function (err, token) {
+    console.log(err, token)
+
+  });
+}
+// done login
+function logout() {
+  localStorage.removeItem('sc_token');
+  url = "../#";
+  window.location.href = url;
+}
+
+let params = (new URL(location)).searchParams;
+const token = params.get('access_token') || localStorage.getItem('sc_token');
+if (token) {
+  const self = this;
+  this.isInit = false;
+  client.setAccessToken(token);
+
+  client.me(function (err, result) {
+    if (result) self.username = result.name;
+    if (err) self.error = err;
+    
+    localStorage.setItem("hive", username);
+    localStorage.setItem('sc_token', token);
+    self.isInit = true;
+    console.log(err, result);
+    document.getElementById("loggedin").innerHTML = "Logged in as <a href='../?hive=" + result.name + "'>" + result.name + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
+  });
+} else {
+  this.isInit = true;
 }
