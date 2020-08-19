@@ -1,0 +1,92 @@
+<div id="recent"
+    style="padding: 2em; margin: 5em; max-width: 800px; justify-content: center; margin: auto; background-color: white;">
+</div>
+
+<script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
+<script>
+  var md = new Remarkable();
+  md.set({
+    html: true,
+    breaks: true,
+    xhtmlOut: true,
+    linkify: true
+  });
+
+    if (getQueryVariable("tag") !== false) {
+        tag = getQueryVariable("tag");
+    } else if (getQueryVariable("post") !== false) {
+        tag = "null";
+        post = "true"
+    } else {
+        tag = "blokz"
+    }
+
+
+    window.onload = function loading() {
+        // sample link : 
+        // https://peakd.com/@morning/steem-api-guide-how-to-get-recent-posts-getdiscussionsbycreated-load-more-and-pagination
+        // https://peakd.com/                   @sn0n/blokzprofile
+        // http://127.0.0.1:3000/browser/?post= @sn0n/blokzprofile
+        var oldestPermLink = "";
+
+        if (tag !== "null") {
+            hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
+                if (err === null) {
+                    var i, len = result.length;
+
+                    document.getElementById("recent").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'> " + tag + "</div>";
+                    for (i = 0; i < len; i++) {
+                        var discussion = result[i];
+                        console.log(i, discussion);
+                        console.log("who dun it " + discussion.author);
+                        console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
+                        document.getElementById("recent").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + "<br />";
+                    }
+                } else {
+                    console.log(err);
+                }
+            });
+        } else if (post === "true") {
+
+
+            var letting = getQueryVariable("post").split("/");
+
+            author = letting[0].replace("@", '');
+            permlink = letting[1];
+
+            console.log("letting : " + author + permlink);
+            hive.api.getContent(author, permlink, function (err, result) {
+                console.log(err, result);
+
+                post1 = md.render(result.body).replace("\n", "");
+        post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
+
+        document.getElementById("recent").innerHTML += "<h3>" + result.title + "</h3><hr />";
+
+                document.getElementById("recent").innerHTML += md.render(post1);
+
+                document.getElementById("recent").innerHTML += "<hr /><h3>Posted by <a href='../?hive="+result.author+"'>@" + result.author + "</a></h3>";
+                document.getElementById("recent").innerHTML += "<p>on " + result.created + "</p>";
+
+ 
+            });
+
+
+
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+</script>

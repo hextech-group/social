@@ -42,24 +42,32 @@
 
       <div id="profilecardmini">
         <div class="mdl-grid">
-          <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--5-col-desktop">
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--5-col-desktop">
             <div class="mdl-card__actions">
               <span class="">
                 <!-- -->
-                <div style="border-right: 1px dashed; text-align: left; padding-right: 5px; min-width: 222px"
+                <div style="text-align: left; padding-right: 5px; min-width: 222px"
                   id="strongLeft">
-                  <strong id="strongLocation">Location:</strong>
-                  <div style="text-align: center" id="location"></div><br />
-                  <strong id="strongAge">Age:</strong>
-                  <div style="text-align: center" id="age"></div><br />
-                  <strong id="strongGender">Gender:</strong>
-                  <div style="text-align: center" id="gender"></div><br />
 
-                  <strong id="strongAbout">About Me:</strong>
-                  <div id="article" class="biofull"></div><br />
-                  <strong id="strongFollow">#Interests & Communities:</strong>
-                  <div id="interests" class="interests"></div>
 
+                  <div>
+                    <strong>Recent Posts:</strong>
+                    <div id="recent1link" style="padding-left: 1em;"></div>
+                    <div id="recent2link" style="padding-left: 1em;"></div>
+                    <div id="recent3link" style="padding-left: 1em;"></div>
+                    <div id="recentM" style="padding-left: 1em;"></div>
+                  </div>
+
+                  <strong id="myCommunities">Communities: </strong><br />
+                  <div id="communities" style="padding-left: 1em;">coming soon...</div>
+                  <br />
+
+
+                  <strong id="strongFriends">Top Friends: <br /><small style="color: gray; font-weight: 75">(Click Name or
+                    Avatar to open)</small>
+                  <div id="favorites"></div>
+                </strong>
+                
 
 
                 </div>
@@ -68,26 +76,30 @@
             </div>
           </div>
 
-          <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-tablet mdl-cell--7-col-desktop">
+          <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--7-col-desktop">
             <div class="mdl-card__actions">
               <span class="" style="text-align: left; padding-right: 5px">
                 <!-- -->
-                <div style="text-align: left; padding-right: 5px"></div>
                 <strong id="strongWebsite">Website:</strong><br />
-                <div id="favsite" class="favsite"></div><br />
+                <div id="favsite" class="favsite" style="padding-left: 1em;"></div><br />
 
-                <div>
-                  <strong>Recent Posts:</strong>
-                  <div id="recent1link"></div>
-                  <div id="recent2link"></div>
-                  <div id="recent3link"></div>
-                  <div id="recentM"></div>
-                </div>
+                <strong id="strongAge">Age</strong>
+                <div style="padding-left: 1em;" id="age"></div>
+                <strong id="strongGender">Gender</strong>
+                <div style="padding-left: 1em;" id="gender"></div>
 
-                <strong id="strongFriends">Top Friends: <br /><small style="color: gray; font-weight: 75">(Click Name or
-                    Avatar to open)</small>
-                  <div id="favorites"></div>
-                </strong>
+                <strong id="strongLocation">Location</strong>
+                <div style="padding-left: 1em;" id="location"></div><br />
+
+
+                <strong id="strongFollow">#Interests & Skills</strong>
+                <div id="interests" class="interests" style="padding-left: 1em;"></div>
+
+
+                <strong id="strongAbout">About Me</strong>
+                <div id="article" class="biofull"></div><br />
+
+               
 
 
             </div>
@@ -106,19 +118,6 @@
 
 
 
-<div style="justify-content: center; margin: 1em; margin-bottom: 5em;" id="blog">
-  <div style="font-size: 3em; text-align: center; padding: 1em;">Recent Posts:</div>
-
-  <div id="recent1"
-    style="box-shadow: 2px 2px; word-wrap: break-word; margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
-  </div>
-  <div id="recent2"
-    style="box-shadow: 2px 2px;word-wrap: break-word; margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
-  </div>
-  <div id="recent3"
-    style="box-shadow: 2px 2px;word-wrap: break-word; margin: 2em auto; max-width: 800px; padding: 1em; justify-content: center; text-align: left; border: 1px solid white; background-color: white;">
-  </div>
-  </div>
 
 
 
@@ -175,10 +174,9 @@
         post1 = md.render(recent1.body).replace("\n", "");
         post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
         console.log("Looking fo this: " + post1);
-        linktocontent = "1. <a href='#recent1'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
+        linktocontent = "1. <a href='browser/?post=" + recent1.author + "/" + recent1.permlink +"'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
         document.getElementById("recent1link").innerHTML = linktocontent;
-        content = "<h1>" + recent1.title + "</h1> <small>Posted on " + recent1date + "</small><br />" + post1 + "<hr /";
-        document.getElementById("recent1").innerHTML = content;
+
         //document.getElementById("HivePost").innerHTML = marked(recent1.body);
         console.log("TESTING RECENT POST: " + recent1.body);
 
@@ -190,10 +188,9 @@
 
         post2 = md.render(recent2.body).replace("\n", "");
         post2 = post2.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
-        linktocontent = "2. <a href='#recent2'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
+        linktocontent = "2. <a href='browser/?post=" + recent2.author + "/" + recent2.permlink +"'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
         document.getElementById("recent2link").innerHTML = linktocontent;
-        content2 = "<h1>" + recent2.title + "</h1> <small>Posted on " + recent2date + "</small><br />" + post2 + "<hr /";
-        document.getElementById("recent2").innerHTML = content2;
+
         //document.getElementById("HivePost").innerHTML = marked(recent1.body);
         console.log("TESTING RECENT POST: " + recent2.body);
 
@@ -205,10 +202,9 @@
 
         post3 = md.render(recent3.body).replace("\n", "");
         post3 = post3.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
-        linktocontent = "3. <a href='#recent3'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
+        linktocontent = "3. <a href='browser/?post=" + recent3.author + "/" + recent3.permlink +"'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
         document.getElementById("recent3link").innerHTML = linktocontent;
-        content3 = "<h1>" + recent3.title + "</h1> <small>Posted on " + recent3date + "</small><br />" + post3 + "<hr /";
-        document.getElementById("recent3").innerHTML = content3;
+
         //document.getElementById("HivePost").innerHTML = marked(recent1.body);
         console.log("TESTING RECENT POST: " + recent3.body);
 
@@ -216,7 +212,7 @@
 
 
         // view more on peakd
-        document.getElementById("recentM").innerHTML = "<br /><div>View More on <a href='http://peakd.com/@" + thisPost.author + "/' target='_blank'>peakd.com/@" + thisPost.author + "</a></div><hr />";
+        document.getElementById("recentM").innerHTML = "<div>View More on <a href='http://peakd.com/@" + thisPost.author + "/' target='_blank'>peakd.com/@" + thisPost.author + "</a></div><br />";
       });
 
       // show link to peakd profile
@@ -254,7 +250,7 @@
             var vadd = document.createElement('button');
             vadd.className = "mdl-chip";
             vadd.id = entryy;
-            vadd.setAttribute("onclick", "window.open('https://peakd.com/created/" + entryy + "','_blank');");
+            vadd.setAttribute("onclick", "window.location.href='../browser/?tag=" + entryy + "';");
             document.getElementById("interests").appendChild(vadd);
             var sadd = document.createElement('span');
             sadd.className = "mdl-chip__text";
@@ -324,6 +320,8 @@
             document.getElementById("strongFriends").style.display = "none";
             document.getElementById("strongAbout").style.display = "none";
             document.getElementById("strongFollow").style.display = "none";
+            document.getElementById("age").style.display = "none";
+            document.getElementById("gender").style.display = "none";
 
 
             //console.log("Location: " +JSON.parse(posting_json).profile.location);
@@ -336,7 +334,7 @@
 
       // TODO: splash page w/ user input
 
-     splash();
+      splash();
 
     }
   };

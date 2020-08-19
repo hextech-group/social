@@ -16,7 +16,7 @@
   }
   
   .profimg {
-   border: 3px solid white;
+   border: 5px solid white;
     border-radius: 50%;
     background-color: black;
   }
@@ -435,11 +435,6 @@ input.invalid {
   color: #fff;
 }
 
-.profimg {
-
-  border-radius: 50%;
-  border: 1px solid #00adee;
-}
 
 #splash {
   justify-content: center;

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+
+<head>
+
+  <title>$HIVE powered personal.community </title>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-pink.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/@hiveio/hive-js/dist/hive.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hivesigner"></script>
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+
+<link rel="shortcut icon" href="../favicon.png"/>
+<link rel="stylesheet" href="../css/styles.css?ver=2.42">
+<script src="../js/blokz.js?ver=2.42"></script>
+
+</head>
+
+<body>
+
+  <div id="recent"
+    style="padding: 2em; margin: 5em; max-width: 800px; justify-content: center; margin: auto; background-color: white;">
+</div>
+
+<script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
+<script>
+  var md = new Remarkable();
+  md.set({
+    html: true,
+    breaks: true,
+    xhtmlOut: true,
+    linkify: true
+  });
+
+    if (getQueryVariable("tag") !== false) {
+        tag = getQueryVariable("tag");
+    } else if (getQueryVariable("post") !== false) {
+        tag = "null";
+        post = "true"
+    } else {
+        tag = "blokz"
+    }
+
+
+    window.onload = function loading() {
+        // sample link : 
+        // https://peakd.com/@morning/steem-api-guide-how-to-get-recent-posts-getdiscussionsbycreated-load-more-and-pagination
+        // https://peakd.com/                   @sn0n/blokzprofile
+        // http://127.0.0.1:3000/browser/?post= @sn0n/blokzprofile
+        var oldestPermLink = "";
+
+        if (tag !== "null") {
+            hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
+                if (err === null) {
+                    var i, len = result.length;
+
+                    document.getElementById("recent").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'> " + tag + "</div>";
+                    for (i = 0; i < len; i++) {
+                        var discussion = result[i];
+                        console.log(i, discussion);
+                        console.log("who dun it " + discussion.author);
+                        console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
+                        document.getElementById("recent").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + "<br />";
+                    }
+                } else {
+                    console.log(err);
+                }
+            });
+        } else if (post === "true") {
+
+
+            var letting = getQueryVariable("post").split("/");
+
+            author = letting[0].replace("@", '');
+            permlink = letting[1];
+
+            console.log("letting : " + author + permlink);
+            hive.api.getContent(author, permlink, function (err, result) {
+                console.log(err, result);
+
+                post1 = md.render(result.body).replace("\n", "");
+        post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
+
+        document.getElementById("recent").innerHTML += "<h3>" + result.title + "</h3><hr />";
+
+                document.getElementById("recent").innerHTML += md.render(post1);
+
+                document.getElementById("recent").innerHTML += "<hr /><h3>Posted by <a href='../?hive="+result.author+"'>@" + result.author + "</a></h3>";
+                document.getElementById("recent").innerHTML += "<p>on " + result.created + "</p>";
+
+ 
+            });
+
+
+
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+</script>
+  <span style="padding-left: 10px; float: left">
+  <button id="blokztop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+    <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
+  </button>
+</span>
+
+<!-- show menu button -->
+<button id="blokzmenu" onclick="blokzmenu()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <img src="../favicon.png">
+</button>
+
+
+
+
+<!-- Floating Action Button Popup Card -->
+
+<div id="blokzmenuPOP" class="external" style="display: none;">
+  <main class="mdl-layout__content">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="background-color: #e7e7f1;">
+      <div class="mdl-card__supporting-text">
+        <div id="loggedin">
+
+          <button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px" width="16px" />
+            hivesigner login
+          </button>
+
+        </div>
+
+        <br />
+        <hr />
+        <br />
+        <!-- TODO: add dynamic list of users -->
+        <form id="frm1" action="/"> 
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
+            <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">Load Profile</label>
+            <input type="text" name="hive" class="mdl-textfield__input">
+          </div>
+        
+        </form>
+        <br />
+        <!-- todo update dynamic-->
+        <a href="../profile_update/" style="font-size: 1.25em;">Update Profile</a>
+        <hr />
+        This site made with &#10084; by the guy at blokz, <br /> <a href="../?hive=sn0n" style="font-size: 1.25em;">@sn0n</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+
+</html>
