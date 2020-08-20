@@ -120,7 +120,6 @@ function splash() {
 
   console.log("IT WORKS!! user not set");
   document.getElementById("gridd").style.display = "none";
-  document.getElementById("blog").style.display = "none";
   console.log("Please click the blokz logo below");
 
   var html = `<div id='splash'>To get started, input your hive username in the box below and submit.` + 
