@@ -68,7 +68,12 @@
                 document.getElementById("recent").innerHTML += "<hr /><h3>Posted by <a href='../?hive="+result.author+"'>@" + result.author + "</a></h3>";
                 document.getElementById("recent").innerHTML += "<p>on " + result.created.slice(0, 10) + "</p>";
 
- 
+ // todo : comments
+                hive.api.getContentReplies(author, permlink, function(err, result) {
+  console.log(err, result);
+});
+
+
             });
 
 
