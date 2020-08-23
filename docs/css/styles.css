@@ -80,6 +80,15 @@
 margin-bottom: 0px
 }
 
+#comm {
+  border: 1px solid grey;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+#comm:nth-child(odd) {
+  background: #eee;
+}
 
 
 /*************************************
@@ -443,4 +452,8 @@ input.invalid {
   background-color: whitesmoke;
   margin-top: 2em;
   padding: 10px;
+}
+
+#comments {
+  background-color: grey;
 }
