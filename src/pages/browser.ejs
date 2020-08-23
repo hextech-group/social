@@ -1,16 +1,16 @@
-<div id="recent"
+<div id="display"
     style="padding: 2em; margin: 5em; max-width: 800px; justify-content: center; margin: auto; background-color: white;">
 </div>
 
 <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
 <script>
-  var md = new Remarkable();
-  md.set({
-    html: true,
-    breaks: true,
-    xhtmlOut: true,
-    linkify: true
-  });
+    var md = new Remarkable();
+    md.set({
+        html: true,
+        breaks: true,
+        xhtmlOut: true,
+        linkify: true
+    });
 
     if (getQueryVariable("tag") !== false) {
         tag = getQueryVariable("tag");
@@ -34,13 +34,14 @@
                 if (err === null) {
                     var i, len = result.length;
 
-                    document.getElementById("recent").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'> " + tag + "</div>";
+                    document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'> " + tag + "</div>";
                     for (i = 0; i < len; i++) {
                         var discussion = result[i];
                         console.log(i, discussion);
                         console.log("who dun it " + discussion.author);
                         console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
-                        document.getElementById("recent").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + "<br />";
+                        document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + " on " + discussion.created.slice(0, 10) + "<br />";
+
                     }
                 } else {
                     console.log(err);
@@ -59,19 +60,43 @@
                 console.log(err, result);
 
                 post1 = md.render(result.body).replace("\n", "");
-        post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
+                post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
 
-        document.getElementById("recent").innerHTML += "<h3>" + result.title + "</h3><hr />";
+                document.getElementById("display").innerHTML += "<h3>" + result.title + "</h3><hr />";
 
-                document.getElementById("recent").innerHTML += md.render(post1);
+                document.getElementById("display").innerHTML += md.render(post1);
 
-                document.getElementById("recent").innerHTML += "<hr /><h3>Posted by <a href='../?hive="+result.author+"'>@" + result.author + "</a></h3>";
-                document.getElementById("recent").innerHTML += "<p>on " + result.created.slice(0, 10) + "</p>";
+                document.getElementById("display").innerHTML += "<hr /><h3>Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a></h3>";
+                document.getElementById("display").innerHTML += "<p>on " + result.created.slice(0, 10) + "</p>";
 
- // todo : comments
-                hive.api.getContentReplies(author, permlink, function(err, result) {
-  console.log(err, result);
-});
+
+                document.getElementById("display").innerHTML += "<hr /> tags: <br />";
+
+
+                jsonTAGS = JSON.parse(result.json_metadata);
+                jsonTAGS.tags.forEach(myFunction);
+                function myFunction(item, index) {
+                    document.getElementById("display").innerHTML += "<a href='?tag=" + item + "'>" + item + "</a> &nbsp;";
+                }
+
+                // todo : comments
+                hive.api.getContentReplies(author, permlink, function (err, result) {
+                    console.log(err, result);
+                    comments = JSON.stringify(result[0].author);
+
+                    for (var i = 0; i < result.length; i++) {
+                        console.log(" for loop data : " + JSON.stringify(result[i]));
+                        thisPost = JSON.parse(JSON.stringify(result[i]));
+                        console.log("who dis " + thisPost.author);
+                        console.log("i is " + i);
+                        document.getElementById("display").innerHTML += "<hr />" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink +"'>says</a>: " + md.render(result[i].body) + "</hr>";
+
+                    }
+
+
+
+                    console.log("comment from: " + comments);
+                });
 
 
             });
