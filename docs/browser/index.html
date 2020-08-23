@@ -28,7 +28,7 @@
     style="padding: 1em; margin: 2em; max-width: 800px; justify-content: center; background-color: white; box-shadow: 1px 1px;">
 </div>
 <div id="comments"
-style="padding: 1em; margin: 2em; max-width: 800px; justify-content: center; background-color: white; box-shadow: 1px 1px;">
+    style="padding: 1em; margin: 2em; max-width: 800px; justify-content: center; background-color: white; box-shadow: 1px 1px;">
 
 </div>
 
@@ -116,24 +116,32 @@ style="padding: 1em; margin: 2em; max-width: 800px; justify-content: center; bac
 
                 hive.api.getContentReplies(author, permlink, function (err, result) {
                     console.log(err, result);
-                    comments = JSON.stringify(result[0].author);
+                    if (result.length > 0) {
+                        console.log("testing number " + result.length)
 
-                    for (var i = 0; i < result.length; i++) {
-                        console.log(" for loop data : " + JSON.stringify(result[i]));
-                        thisPost = JSON.parse(JSON.stringify(result[i]));
-                        console.log("who dis " + thisPost.author);
-                        console.log("i is " + i);
-                        document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink +"'>says</a>: " + md.render(result[i].body) + "</div>";
+                        comments = JSON.stringify(result[0].author);
 
-                        // if parent_author is listed, put on top of post
+                        for (var i = 0; i < result.length; i++) {
+                            console.log(" for loop data : " + JSON.stringify(result[i]));
+                            thisPost = JSON.parse(JSON.stringify(result[i]));
+                            console.log("who dis " + thisPost.author);
+                            console.log("i is " + i);
+                            document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: " + md.render(result[i].body) + "</div>";
+
+                            // if parent_author is listed, put on top of post
+
+                        }
+
+
+                        console.log("comment from: " + comments);
+                    } else {
+                        console.log("no comments");
+                        document.getElementById("comments").innerHTML += "no comments to show";
 
                     }
-
-                   
-                    console.log("comment from: " + comments);
                 });
 
-               
+
             });
 
 
