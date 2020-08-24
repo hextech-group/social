@@ -46,6 +46,7 @@
                         console.log("who dun it " + discussion.author);
                         console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
                         document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + " on " + discussion.created.slice(0, 10) + "<br />";
+                        document.getElementById("comments").style.display = "none";
 
                     }
                 } else {

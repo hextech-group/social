@@ -396,13 +396,14 @@ dd {
   float: right;
   position: fixed; 
   bottom: 63px;
-  right: 96px;
+  right: 73px;
 }
 
 #blokzmenu {
   position:fixed;
   bottom:25px;
   right:25px;
+  border: 3px solid whitesmoke;
 }
 #blokztop {
   position:fixed;
