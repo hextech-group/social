@@ -444,6 +444,9 @@ input.invalid {
   color: #fff;
 }
 
+img {
+  max-width: 100%;
+}
 
 #splash {
   justify-content: center;

@@ -129,7 +129,7 @@ function splash() {
   `</div></form>`+
    `<hr />` +
    `to login with HiveSigner and everything else, Click the <a href='https://blokz.io/'>blokz.io</a> icon on the bottom right.<br /> ` +
-   `<hr />This site was made with &#10084; by the guy at blokz, <a href="../?hive=sn0n">@sn0n</a></div>` ;
+   `<hr />Made with &#10084; by <a href="../?hive=sn0n">@sn0n</a></div>` ;
 
   var tempElement = document.createElement('splash');
   tempElement.innerHTML = html;

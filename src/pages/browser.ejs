@@ -65,16 +65,16 @@
                 console.log(err, result);
 
                 post1 = md.render(result.body).replace("\n", "");
-                post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
+                //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
 
-                document.getElementById("display").innerHTML += "<h3>" + result.title + "</h3><hr />";
+                document.getElementById("display").innerHTML += "<h6>" + result.title  + "</h6>";
+
+                document.getElementById("display").innerHTML += "<br />Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a>";
+           
+     document.getElementById("display").innerHTML += "<br />on " + result.created.slice(0, 10) + "<hr>";
+
 
                 document.getElementById("display").innerHTML += md.render(post1);
-
-                document.getElementById("display").innerHTML += "<hr /><h3>Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a></h3>";
-                document.getElementById("display").innerHTML += "<p>on " + result.created.slice(0, 10) + "</p>";
-
-
                 document.getElementById("display").innerHTML += "<hr /> tags: <br />";
 
 
