@@ -98,7 +98,7 @@
                 post1 = md.render(result.body).replace("\n", "");
                 //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
 
-                document.getElementById("display").innerHTML += "<h6>" + result.title  + "</h6>";
+                document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 400%; line-height: 100%; padding: .1em;'>" + result.title  + "</div>";
 
                 document.getElementById("display").innerHTML += "<br />Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a>";
            

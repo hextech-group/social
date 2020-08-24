@@ -32,7 +32,7 @@
   <!-- profileCover -->
   <div class="preopreo" id="coverimage">&nbsp;</div>
   <div style="text-align: center; margin: -64px auto;">
-    <img src="/images/avatar.png" height="128" width="128" class="profimg" id="profimg">
+    <img src="../images/avatar.png" height="128" width="128" class="profimg" id="profimg">
   </div>
   <div style="margin-top: 72px;">
     <div class="bio" id="bio">
@@ -44,7 +44,7 @@
       <span id="hiveuser">&nbsp;</span>
 
       <br />
-      <strong id="strongFollow">#Interests & Skills</strong>
+     
       <div id="interests" class="interests" style="padding-left: 1em;"></div>
 
 
@@ -263,7 +263,7 @@
             sadd.className = "mdl-chip__text";
             sadd.id = entryy + "2";
             document.getElementById(entryy).appendChild(sadd);
-            var t = document.createTextNode(entryy);
+            var t = document.createTextNode("#" + entryy);
             document.getElementById(entryy + "2").appendChild(t);
             // ENDNEW
           });

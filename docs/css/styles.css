@@ -90,6 +90,13 @@ margin-bottom: 0px
   background: #eee;
 }
 
+button {
+  font-weight: bold;
+}
+
+.mdl-chip {
+  margin: 2px;
+}
 
 /*************************************
  * TITLE: Sinorca Screen Stylesheet  *
