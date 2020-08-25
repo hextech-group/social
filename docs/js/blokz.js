@@ -1,4 +1,3 @@
-// TODO: This is part of the 'age' code, clean up later
 const year = new Date();
 const now = new Date().toISOString().split('.')[0];
 tag = "null";
@@ -7,9 +6,9 @@ userLatest = undefined;
 pageURL = window.location.origin;
 state = "/";
 let params = (new URL(location)).searchParams;
-hiveuser = undefined;
 const token = params.get('access_token') || localStorage.getItem('sc_token');
 update = false;
+hiveuser = undefined;
 
 var md = new Remarkable();
 md.set({
@@ -24,18 +23,13 @@ var client = new hivesigner.Client({
   callbackURL: pageURL,
   scope: ['vote', 'comment', 'comment_options', 'custom_json'],
 });
-// offline,comment,vote,comment_option,custom_json
 
-
-// login functions
 var link = client.getLoginURL(state);
 console.log("your login link is: " + link)
-
 
 function hivelogin() {
   client.login(params, function (err, token) {
     console.log(err, token)
-
   });
 }
 
@@ -46,7 +40,6 @@ function logout() {
   window.location.href = url;
 }
 
-// checks for url variables like ?hive=sn0n
 function getQueryVariable(variable) {
   var query = window.location.search.substring(1);
   var vars = query.split("&");
@@ -72,13 +65,10 @@ function blokzmenu() {
   }
 }
 
-function myFunction(item, index) {
-
+function genTags(item, index) {
   document.getElementById("display").innerHTML += "<a href='?tag=" + item + "'>" + item + "</a> &nbsp;";
-
 }
 
-// search username on entering into form
 function hiveuserUp() {
   console.log("TRIGGERED!!!");
   let hiveuserUP = document.getElementById("hiveuser").value;
@@ -110,7 +100,6 @@ function hiveuserUp() {
   });
 }
 
-
 // uses private posting key to update profile
 function updateProfile() {
   var data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here:<br /> <a href='https://personal.community/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a>";
@@ -125,7 +114,6 @@ function updateProfile() {
   var interests = document.getElementById('interests').value;
   var favorites = document.getElementById('favorites').value;
   console.log("proof: " + favsite + article + name + usertitle + birthyear + gender + location + interests + favorites);
-
   hive.broadcast.comment(
     document.getElementById('postingKey').value,
     '', //author
@@ -161,13 +149,7 @@ function updateProfile() {
 }
 
 
-// steem keychain integrations
-
 function blokz_hivesigner() {
-
-
-
-
   pageURL = window.location.origin;
   state = "/";
   var client = new hivesigner.Client({
@@ -175,14 +157,9 @@ function blokz_hivesigner() {
     callbackURL: pageURL,
     scope: ['vote', 'comment', 'comment_options'],
   });
-
   var params = {};
-
-
   // build profile data
   var data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here: <a href='https://personal.community/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a> to view.";
-
-  var body = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here: <a href='https://personal.community/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a> to view.";
   var article = document.getElementById('article').value;
   var name = document.getElementById('name').value;
   var usertitle = document.getElementById('usertitle').value;
@@ -421,7 +398,7 @@ window.onload = function loading() {
       document.getElementById("display").innerHTML += md.render(post1);
       document.getElementById("display").innerHTML += "<hr /> tags: <br />";
       jsonTAGS = JSON.parse(result.json_metadata);
-      jsonTAGS.tags.forEach(myFunction);
+      jsonTAGS.tags.forEach(genTags);
       // todo : comments
       document.getElementById("comments").innerHTML += "<h3>Comments</h3>";
       hive.api.getContentReplies(author, permlink, function (err, result) {
@@ -641,8 +618,13 @@ window.onload = function loading() {
           } else {
             document.getElementById("strongLocation").style.display = "none";
           }
-          document.getElementById("usertitle").innerHTML = JSON.parse(posting_json).profile.about;
-          document.getElementById("name").innerHTML = JSON.parse(posting_json).profile.name;
+          if (JSON.parse(posting_json).profile.about !== undefined) {
+          titleset = JSON.parse(posting_json).profile.about;
+          } else {
+          titleset = "";
+          }
+          document.getElementById("usertitle").innerHTML = titleset;
+          document.getElementById("name").innerHTML = hiveuser;
           document.getElementById("strongAge").style.display = "none";
           document.getElementById("strongGender").style.display = "none";
           document.getElementById("strongFriends").style.display = "none";
@@ -662,9 +644,10 @@ window.onload = function loading() {
 
     document.getElementById("comments").style.display = "none";
     document.getElementById("display").style.display = "none";
-  } else if (update === true) {
-    console.log("welcome to updating a profile");
 
+  } else if (update === true) {
+
+    console.log("welcome to updating a profile");
 
   } else {
 
@@ -675,7 +658,3 @@ window.onload = function loading() {
   };
 
 };
-
-
-
-
