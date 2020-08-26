@@ -36,6 +36,11 @@ function hivelogin() {
 function logout() {
   localStorage.removeItem('sc_token');
   localStorage.removeItem('hive');
+  setTimeout(continueExecution, 2000);
+
+}
+function continueExecution()
+{
   url = "../#";
   window.location.href = url;
 }
@@ -327,13 +332,20 @@ function splash() {
 
   document.getElementById("gridd").style.display = "none";
   console.log("Please click the blokz logo below");
-  var html = `<div id='splash'>To get started, input your hive username in the box below and submit.` +
+  var html = `<div id='splash'><img src='../images/logo192.png'><br />browse site as :` +
     `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">` +
-    `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">Load Profile</label>` +
+    `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">username</label>` +
     `  <input type="text" name="hive" class="mdl-textfield__input">` +
     `</div></form>` +
-    `<hr />` +
-    `to login with HiveSigner and everything else, Click the <a href='https://blokz.io/'>blokz.io</a> icon on the bottom right.<br /> ` +
+    `<br />or login with <br />` +
+    `<div id="loggedin">` +
+
+    `      <button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px" width="16px" />` +
+    `        hivesigner` +
+    `      </button>` +
+
+    `    </div>` +
+    `<hr />Click the <a href='https://blokz.io/'>blokz.io</a> icon on the bottom right to navigate site.<br /> ` +
     `<hr />Made with &#10084; by <a href="../?hive=sn0n">@sn0n</a></div>`;
   var tempElement = document.createElement('splash');
   tempElement.innerHTML = html;
