@@ -366,7 +366,7 @@ window.onload = function loading() {
   var oldestPermLink = "";
 
   if (tag !== "null") {
-
+    document.getElementById("gridd").style.display = "none";
     hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
 
       if (err === null) {
@@ -395,7 +395,7 @@ window.onload = function loading() {
     });
 
   } else if (post === "true") {
-
+    document.getElementById("gridd").style.display = "none";
     var letting = getQueryVariable("post").split("/");
     author = letting[0].replace("@", '');
     permlink = letting[1];
@@ -440,7 +440,7 @@ window.onload = function loading() {
     });
 
   } else if (userLatest !== undefined) {
-
+    document.getElementById("gridd").style.display = "none";
     console.log("user connected for showing their latest posts : " + userLatest);
     // get recent posts
     hive.api.getDiscussionsByAuthorBeforeDate(userLatest, null, now, 20, (err, result) => {
@@ -452,13 +452,14 @@ window.onload = function loading() {
         thisPost = JSON.parse(JSON.stringify(result[i]));
         console.log("who dis " + userLatest);
         console.log("i is " + i);
-        // http://127.0.0.1:3000/browser/?post=yabapmatt/some-thoughts-on-the-future
+        // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
         document.getElementById("display").innerHTML += "<a href='?post=" + userLatest + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + userLatest + " on " + thisPost.created.slice(0, 10) + "<br />";
         document.getElementById("comments").style.display = "none";
       }
     });
 
   } else if (hiveuser !== undefined) {
+
 
     // gets posting_json_metadata for generic profile data for user
     hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
@@ -491,7 +492,7 @@ window.onload = function loading() {
       post1 = md.render(recent1.body).replace("\n", "");
       post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
       console.log("Looking fo this: " + post1);
-      linktocontent = "1. <a href='browser/?post=" + recent1.author + "/" + recent1.permlink + "'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
+      linktocontent = "1. <a href='/?post=" + recent1.author + "/" + recent1.permlink + "'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
       document.getElementById("recent1link").innerHTML = linktocontent;
 
       //document.getElementById("HivePost").innerHTML = marked(recent1.body);
@@ -505,7 +506,7 @@ window.onload = function loading() {
 
       post2 = md.render(recent2.body).replace("\n", "");
       post2 = post2.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
-      linktocontent = "2. <a href='browser/?post=" + recent2.author + "/" + recent2.permlink + "'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
+      linktocontent = "2. <a href='/?post=" + recent2.author + "/" + recent2.permlink + "'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
       document.getElementById("recent2link").innerHTML = linktocontent;
 
       //document.getElementById("HivePost").innerHTML = marked(recent1.body);
@@ -519,7 +520,7 @@ window.onload = function loading() {
 
       post3 = md.render(recent3.body).replace("\n", "");
       post3 = post3.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
-      linktocontent = "3. <a href='browser/?post=" + recent3.author + "/" + recent3.permlink + "'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
+      linktocontent = "3. <a href='/?post=" + recent3.author + "/" + recent3.permlink + "'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
       document.getElementById("recent3link").innerHTML = linktocontent;
 
       //document.getElementById("HivePost").innerHTML = marked(recent1.body);
@@ -529,7 +530,7 @@ window.onload = function loading() {
 
 
       // view more on peakd
-      document.getElementById("recentM").innerHTML = "<a href='../browser/?userLatest=" + thisPost.author + "'>View More</a><br /><br />";
+      document.getElementById("recentM").innerHTML = "<a href='../?userLatest=" + thisPost.author + "'>View More</a><br /><br />";
     });
 
     // show link to peakd profile
@@ -567,7 +568,7 @@ window.onload = function loading() {
           var vadd = document.createElement('button');
           vadd.className = "mdl-chip";
           vadd.id = entryy;
-          vadd.setAttribute("onclick", "window.location.href='../browser/?tag=" + entryy + "';");
+          vadd.setAttribute("onclick", "window.location.href='/?tag=" + entryy + "';");
           document.getElementById("interests").appendChild(vadd);
           var sadd = document.createElement('span');
           sadd.className = "mdl-chip__text";
@@ -650,7 +651,9 @@ window.onload = function loading() {
 
         });
         // finished displaying posting_json_metadata for non blokz/profile user
+      
       }
+      
     });
     document.title = hiveuser + "'s personal.community profile";
 
@@ -658,7 +661,7 @@ window.onload = function loading() {
     document.getElementById("display").style.display = "none";
 
   } else if (update === true) {
-
+    document.getElementById("gridd").style.display = "none";
     console.log("welcome to updating a profile");
 
   } else {
