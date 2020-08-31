@@ -10,6 +10,7 @@ const token = params.get('access_token') || localStorage.getItem('sc_token');
 update = false;
 hiveuser = undefined;
 
+var oldestPermLink = "";
 var md = new Remarkable();
 md.set({
   html: true,
@@ -39,8 +40,7 @@ function logout() {
   setTimeout(continueExecution, 2000);
 
 }
-function continueExecution()
-{
+function continueExecution() {
   url = "../#";
   window.location.href = url;
 }
@@ -53,6 +53,17 @@ function getQueryVariable(variable) {
     if (pair[0] == variable) { return pair[1]; }
   }
   return (false);
+}
+
+function hidecomm() {
+
+  document.getElementById("comments").style.display = "none";
+  document.getElementById("display").style.display = "none";
+}
+
+function updatePage() {
+  console.log("welcome to updating a profile");
+  hidecomm();
 }
 
 function login(username) {
@@ -153,6 +164,25 @@ function updateProfile() {
   );
 }
 
+function userRecent() {
+  document.getElementById("gridd").style.display = "none";
+  console.log("user connected for showing their latest posts : " + userLatest);
+  // get recent posts
+  hive.api.getDiscussionsByAuthorBeforeDate(userLatest, null, now, 20, (err, result) => {
+    // testing for loop for posts. 
+    // data for each post in a loop
+    document.getElementById("display").innerHTML += "most recent posts of <h1><a href='../?hive=" + userLatest + "'>" + userLatest + "</a></h1>";
+    for (var i = 0; i < result.length; i++) {
+      console.log(" for loop data : " + JSON.stringify(result[i]));
+      thisPost = JSON.parse(JSON.stringify(result[i]));
+      console.log("who dis " + userLatest);
+      console.log("i is " + i);
+      // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
+      document.getElementById("display").innerHTML += "<a href='?post=" + userLatest + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + userLatest + " on " + thisPost.created.slice(0, 10) + "<br />";
+      document.getElementById("comments").style.display = "none";
+    }
+  });
+}
 
 function blokz_hivesigner() {
   pageURL = window.location.origin;
@@ -266,12 +296,7 @@ if (getQueryVariable("access_token") !== false) {
   hivesigner.setAccessToken = (getQueryVariable("access_token"));
 }
 
-if (localStorage.getItem("hive") !== null) {
-  hiveuser = localStorage.getItem("hive");
-  console.log(typeof hiveuser)
-} else {
-  console.log("user does not exist! or something went wrong");
-}
+
 
 if (getQueryVariable("steem") !== false) {
   steemuser = getQueryVariable("steem");
@@ -298,12 +323,6 @@ if (getQueryVariable("tag") !== false) {
   hiveuser = undefined;
 }
 
-
-
-
-
-
-
 if (token) {
   const self = this;
   this.isInit = false;
@@ -325,7 +344,6 @@ if (token) {
 } else {
   this.isInit = true;
 }
-
 
 
 function splash() {
@@ -358,13 +376,6 @@ function splash() {
 // MAIN BODY OF DISPLAYING A PROFILE
 window.onload = function loading() {
 
-
-
-
-
-
-  var oldestPermLink = "";
-
   if (tag !== "null") {
     document.getElementById("gridd").style.display = "none";
     hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
@@ -372,7 +383,6 @@ window.onload = function loading() {
       if (err === null) {
 
         var i, len = result.length;
-
         document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'> " + tag + "</div>";
 
         for (i = 0; i < len; i++) {
@@ -395,6 +405,7 @@ window.onload = function loading() {
     });
 
   } else if (post === "true") {
+
     document.getElementById("gridd").style.display = "none";
     var letting = getQueryVariable("post").split("/");
     author = letting[0].replace("@", '');
@@ -440,26 +451,9 @@ window.onload = function loading() {
     });
 
   } else if (userLatest !== undefined) {
-    document.getElementById("gridd").style.display = "none";
-    console.log("user connected for showing their latest posts : " + userLatest);
-    // get recent posts
-    hive.api.getDiscussionsByAuthorBeforeDate(userLatest, null, now, 20, (err, result) => {
-      // testing for loop for posts. 
-      // data for each post in a loop
-      document.getElementById("display").innerHTML += "most recent posts of <h1><a href='../?hive=" + userLatest + "'>" + userLatest + "</a></h1>";
-      for (var i = 0; i < result.length; i++) {
-        console.log(" for loop data : " + JSON.stringify(result[i]));
-        thisPost = JSON.parse(JSON.stringify(result[i]));
-        console.log("who dis " + userLatest);
-        console.log("i is " + i);
-        // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
-        document.getElementById("display").innerHTML += "<a href='?post=" + userLatest + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + userLatest + " on " + thisPost.created.slice(0, 10) + "<br />";
-        document.getElementById("comments").style.display = "none";
-      }
-    });
+    userRecent();
 
   } else if (hiveuser !== undefined) {
-
 
     // gets posting_json_metadata for generic profile data for user
     hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
@@ -494,51 +488,35 @@ window.onload = function loading() {
       console.log("Looking fo this: " + post1);
       linktocontent = "1. <a href='/?post=" + recent1.author + "/" + recent1.permlink + "'>" + recent1.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent1date + "<br />";
       document.getElementById("recent1link").innerHTML = linktocontent;
-
       //document.getElementById("HivePost").innerHTML = marked(recent1.body);
       console.log("TESTING RECENT POST: " + recent1.body);
-
-
       var recent2 = JSON.parse(JSON.stringify(result[1]));
       console.log("recent 2")
       console.log(recent2);
       var recent2date = recent2.created.slice(0, 10);
-
       post2 = md.render(recent2.body).replace("\n", "");
       post2 = post2.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
       linktocontent = "2. <a href='/?post=" + recent2.author + "/" + recent2.permlink + "'>" + recent2.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent2date + "<br />";
       document.getElementById("recent2link").innerHTML = linktocontent;
-
       //document.getElementById("HivePost").innerHTML = marked(recent1.body);
       console.log("TESTING RECENT POST: " + recent2.body);
-
-
-
       var recent3 = JSON.parse(JSON.stringify(result[2]));
       console.log(recent3);
       var recent3date = recent3.created.slice(0, 10);
-
       post3 = md.render(recent3.body).replace("\n", "");
       post3 = post3.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
       linktocontent = "3. <a href='/?post=" + recent3.author + "/" + recent3.permlink + "'>" + recent3.title + "</a> <br /><span>&nbsp;</span>Posted on " + recent3date + "<br />";
       document.getElementById("recent3link").innerHTML = linktocontent;
-
       //document.getElementById("HivePost").innerHTML = marked(recent1.body);
       console.log("TESTING RECENT POST: " + recent3.body);
-
-
-
-
       // view more on peakd
       document.getElementById("recentM").innerHTML = "<a href='../?userLatest=" + thisPost.author + "'>View More</a><br /><br />";
     });
 
     // show link to peakd profile
     document.getElementById("hiveuser").innerHTML = "<a href='http://peakd.com/@" + hiveuser + "' target='_blank'>@" + hiveuser + "</a>";
-
     // fetch blokzprofile post from hive
     hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
-
       // user has a blokz/profile
       if (result.length >= 1) {
         console.log("meep :" + result);
@@ -632,9 +610,9 @@ window.onload = function loading() {
             document.getElementById("strongLocation").style.display = "none";
           }
           if (JSON.parse(posting_json).profile.about !== undefined) {
-          titleset = JSON.parse(posting_json).profile.about;
+            titleset = JSON.parse(posting_json).profile.about;
           } else {
-          titleset = "";
+            titleset = "";
           }
           document.getElementById("usertitle").innerHTML = titleset;
           document.getElementById("name").innerHTML = hiveuser;
@@ -651,24 +629,20 @@ window.onload = function loading() {
 
         });
         // finished displaying posting_json_metadata for non blokz/profile user
-      
+
       }
-      
+
     });
     document.title = hiveuser + "'s personal.community profile";
 
-    document.getElementById("comments").style.display = "none";
-    document.getElementById("display").style.display = "none";
+    hidecomm();
 
   } else if (update === true) {
-    document.getElementById("gridd").style.display = "none";
-    console.log("welcome to updating a profile");
-
+    updatePage();
   } else {
 
     splash();
-    document.getElementById("comments").style.display = "none";
-    document.getElementById("display").style.display = "none";
+    hidecomm();
 
   };
 
