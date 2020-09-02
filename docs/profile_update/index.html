@@ -30,28 +30,42 @@
 <body>
 
   <script>
-
   update = true;
-  
 </script>
 
+<!-- playground -->
+<link rel="stylesheet" href="../css/mdl-chips-input.css">
+<script src="../js/mdl-chips-input.js" type="application/javascript"></script>
+
+
+
+<!-- // playground -->
+
+
 <div id="display"
-    style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center;  background-color: white; box-shadow: 1px 1px;">
+  style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center;  background-color: white; box-shadow: 1px 1px;">
 </div>
 <div id="comments"
-    style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; background-color: white; box-shadow: 1px 1px;">
+  style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; background-color: white; box-shadow: 1px 1px;">
 
 </div>
 
 
 <div
-  style="padding: 3em; margin: auto; justify-content: center; max-width: 800px; text-align: left; border: 1px solid black; background-color: whitesmoke;">
+  style="padding: 3em; margin: auto; justify-content: center; max-width: 800px; text-align: left; border: 1px solid black; background-color: whitesmoke;"
+  id="upprofile">
   <div class="mdl-textfield mdl-js-textfield">
     <small>Hive Username</small><input class="mdl-textfield__input" type="text" id="hiveuser" onchange="hiveuserUp()">
     <label class="mdl-textfield__label" for="username"></label>
   </div>
 
   <hr />
+
+
+
+
+
+
 
   <div class="mdl-textfield mdl-js-textfield">
     <small>Real Name</small><input class="mdl-textfield__input" type="text" id="name">
@@ -155,18 +169,31 @@
     <small>Gender</small><input class="mdl-textfield__input" type="text" id="gender">
     <label class="mdl-textfield__label" for="gender" id="genderLabel"></label>
   </div><br />
-  <div class="mdl-textfield mdl-js-textfield">
-    <small>Interests (comma to seperate)</small><input class="mdl-textfield__input" type="text" id="interests">
-    <label class="mdl-textfield__label" for="skills" id="interestsLabel"></label>
+
+
+
+  <small>Interests</small><br />
+  <div class="mdl-textfield mdl-js-textfield mdl-chipfield" id="interests">
+    <input type="hidden" class="mdl-chipfield__input" name="interests" id="interest" value="">
+    <input class="mdl-textfield__input" type="text" id="my-input-0">
+    <label class="mdl-textfield__label" for="my-input-0"></label>
   </div><br />
+
+
+
+
   <div class="mdl-textfield mdl-js-textfield">
     <small>Location</small><input class="mdl-textfield__input" type="text" id="location">
     <label class="mdl-textfield__label" for="location" id="locationLabel"></label>
   </div><br />
-  <div class="mdl-textfield mdl-js-textfield">
-    <small>Favorite Users (comma to seperate)</small><input class="mdl-textfield__input" type="text" id="favorites">
-    <label class="mdl-textfield__label" for="skills" id="favoritesLabel"></label>
+
+  <small>Favorite Users</small><br />
+  <div class="mdl-textfield mdl-js-textfield mdl-chipfield" id="favorites">
+    <input type="hidden" class="mdl-chipfield__input" name="favorites" id="favorite" value="">
+    <input class="mdl-textfield__input" type="text" id="my-input-1">
+    <label class="mdl-textfield__label" for="my-input-0"></label>
   </div><br />
+
   <div class="mdl-textfield mdl-js-textfield">
     <small>Bio/About</small><textarea class="mdl-textfield__input" type="text" rows="10" id="article"></textarea>
     <label class="mdl-textfield__label" for="article" id="articleLabel"></label>
@@ -178,7 +205,7 @@
       <br /></div>-->
 
     <div class="mdl-textfield mdl-js-textfield">
-      <small>Your Private Posting Key:</small><input class="mdl-textfield__input" type="password" id="postingKey">
+      <small>Private Posting Key:</small><input class="mdl-textfield__input" type="password" id="postingKey">
       <label class="mdl-textfield__label" for="postingKey"></label>
 
     </div>
@@ -187,19 +214,15 @@
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
         data-upgraded=",MaterialButton,MaterialRipple"> Update Profile</button>
     </div>
-    <div>
+    <!-- 
+      <div>
       or use: <br />
       <button onclick="blokz_hivesigner()">hivesigner</button>
     </div>
+    -->
 
   </div>
 </div>
-
-
-
-
-
-
   <div style="height: 75px">&nbsp;</div>
 
 

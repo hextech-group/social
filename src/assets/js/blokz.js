@@ -1,3 +1,30 @@
+// playground 
+
+function loadChips() {
+  function ready(fn) {
+    if (document.readyState != 'loading') {
+      fn();
+    } else {
+      document.addEventListener('DOMContentLoaded', fn);
+    }
+  }
+  ready(function () {
+    new window['MaterialChipInput'](document.getElementById('interests'));
+    new window['MaterialChipInput'](document.getElementById('favorites'));
+  });
+}
+
+console.log("start");
+
+setTimeout(() => {
+
+}, 2000);
+
+console.log('complete');
+
+// end playground
+
+
 const year = new Date();
 const now = new Date().toISOString().split('.')[0];
 tag = "null";
@@ -34,6 +61,7 @@ function hivelogin() {
   });
 }
 
+
 function logout() {
   localStorage.removeItem('sc_token');
   localStorage.removeItem('hive');
@@ -63,6 +91,18 @@ function hidecomm() {
 
 function updatePage() {
   console.log("welcome to updating a profile");
+  if (localStorage.getItem("hive") !== null) {
+    hiveuser = localStorage.getItem("hive");
+    console.log(typeof hiveuser)
+    console.log(hiveuser);
+
+    document.getElementById("hiveuser").value = hiveuser;
+    hiveuserUp()
+  } else {
+    console.log("user does not exist! or something went wrong");
+
+    document.getElementById('upprofile').innerHTML = "<h3> Please verify username using hivesigner first</h3>";
+  }
   hidecomm();
 }
 
@@ -107,9 +147,10 @@ function hiveuserUp() {
       document.getElementById("birthyear").value = bitff.birthyear;
       document.getElementById("location").value = bitff.location;
       document.getElementById("gender").value = bitff.gender;
-      document.getElementById("interests").value = bitff.interests;
-      document.getElementById("favorites").value = bitff.favorites;
+      document.getElementById("interest").value = bitff.interests;
+      document.getElementById("favorite").value = bitff.favorites;
       document.getElementById("favsite").value = bitff.favsite;
+      loadChips();
     } else {
       reject(err);
     }
@@ -127,9 +168,14 @@ function updateProfile() {
   //var sign = document.getElementById('sign').value;
   var gender = document.getElementById('gender').value;
   var location = document.getElementById('location').value;
-  var interests = document.getElementById('interests').value;
-  var favorites = document.getElementById('favorites').value;
+  var interests = document.getElementById('interest').value;
+  var favorites = document.getElementById('favorite').value;
+
+
   console.log("proof: " + favsite + article + name + usertitle + birthyear + gender + location + interests + favorites);
+
+  upwho = document.getElementById('hiveuser').value;
+
   hive.broadcast.comment(
     document.getElementById('postingKey').value,
     '', //author
@@ -154,9 +200,14 @@ function updateProfile() {
     },
     function (err, result) {
       if (err)
-        alert('failure ' + err);
+        document.getElementById('upprofile').innerHTML = "<h3>something went wrong...</h3>" + err;
       else
-        alert('Profile Updated');
+        document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
+
+      setTimeout(() => {
+        url = "../?hive=" + upwho;
+        window.location.href = url;
+      }, 8000);
 
       // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
       // window.location.href = '../';
@@ -277,12 +328,7 @@ function blokz_hivesigner() {
   var link = client.getLoginURL(state);
   console.log("your login link is: " + link)
 
-  function hivelogin() {
-    client.login(params, function (err, token) {
-      console.log(err, token)
 
-    });
-  }
 
   //TODO BLOCK
 
@@ -298,6 +344,7 @@ if (getQueryVariable("access_token") !== false) {
 
 
 
+
 if (getQueryVariable("steem") !== false) {
   steemuser = getQueryVariable("steem");
   localStorage.setItem("steem", steemuser);
@@ -306,7 +353,6 @@ if (getQueryVariable("steem") !== false) {
 
 if (getQueryVariable("hive") !== false) {
   hiveuser = getQueryVariable("hive");
-  localStorage.setItem("hive", hiveuser);
   console.log(hiveuser + " connected");
 }
 
@@ -343,6 +389,47 @@ if (token) {
   });
 } else {
   this.isInit = true;
+}
+
+function nonBlokzUser() {
+  // LOAD GENERIC posting_json_metadata for non blokz/profile user
+  console.log("user does not exist! or something went wrong")
+  hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
+    posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+    console.log("posting_json: " + posting_json);
+    document.getElementById("profimg").src = JSON.parse(posting_json).profile.profile_image;
+    document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
+    if (JSON.parse(posting_json).profile.website !== undefined) {
+      document.getElementById("favsite").innerHTML = "<a href='" + JSON.parse(posting_json).profile.website + "' target='_blank'>" + JSON.parse(posting_json).profile.website + "</a>";
+    } else {
+      document.getElementById("strongWebsite").style.display = "none";
+    }
+    if (JSON.parse(posting_json).profile.location !== undefined) {
+      document.getElementById("location").innerHTML = JSON.parse(posting_json).profile.location;
+    } else {
+      document.getElementById("strongLocation").style.display = "none";
+    }
+    if (JSON.parse(posting_json).profile.about !== undefined) {
+      titleset = JSON.parse(posting_json).profile.about;
+    } else {
+      titleset = "";
+    }
+    document.getElementById("usertitle").innerHTML = titleset;
+    document.getElementById("name").innerHTML = hiveuser;
+    document.getElementById("strongAge").style.display = "none";
+    document.getElementById("strongGender").style.display = "none";
+    document.getElementById("strongFriends").style.display = "none";
+    document.getElementById("strongAbout").style.display = "none";
+    // document.getElementById("strongFollow").style.display = "none";
+    document.getElementById("age").style.display = "none";
+    document.getElementById("gender").style.display = "none";
+
+
+    //console.log("Location: " +JSON.parse(posting_json).profile.location);
+
+  });
+  // finished displaying posting_json_metadata for non blokz/profile user
+
 }
 
 
@@ -519,21 +606,21 @@ window.onload = function loading() {
     hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
       // user has a blokz/profile
       if (result.length >= 1) {
-        console.log("meep :" + result);
+        console.log("meep :" + JSON.stringify(result));
         var blokify = JSON.parse(JSON.stringify(result[0].body));
         var blokzmeta = JSON.parse((result[0].json_metadata));
-        console.log(blokify);
+        console.log("what is blokify " + blokify);
         var bitff = JSON.parse(JSON.stringify(blokzmeta));
         console.log("blokzmeta: " + bitff.app);
         console.log(bitff.interests);
-        document.getElementById("name").innerHTML = bitff.name;
-        document.getElementById("article").innerHTML = bitff.article;
-        document.getElementById("usertitle").innerHTML = bitff.usertitle;
-        var profage = year.getFullYear() - bitff.birthyear;
+        document.getElementById("name").innerHTML = blokzmeta.name;
+        document.getElementById("article").innerHTML = blokzmeta.article;
+        document.getElementById("usertitle").innerHTML = blokzmeta.usertitle;
+        var profage = year.getFullYear() - blokzmeta.birthyear;
         document.getElementById("age").innerHTML = profage;
-        document.getElementById("location").innerHTML = bitff.location;
-        document.getElementById("gender").innerHTML = bitff.gender;
-        document.getElementById("favsite").innerHTML = "<a href='" + bitff.favsite + "' target='_blank'>" + bitff.favsite + "</a>";
+        document.getElementById("location").innerHTML = blokzmeta.location;
+        document.getElementById("gender").innerHTML = blokzmeta.gender;
+        document.getElementById("favsite").innerHTML = "<a href='" + blokzmeta.favsite + "' target='_blank'>" + blokzmeta.favsite + "</a>";
         // interests
         var skills = bitff.interests;
         skillsLog = skills.split(',');
@@ -592,43 +679,7 @@ window.onload = function loading() {
 
       } else {
 
-        // LOAD GENERIC posting_json_metadata for non blokz/profile user
-        console.log("user does not exist! or something went wrong")
-        hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
-          posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
-          console.log("posting_json: " + posting_json);
-          document.getElementById("profimg").src = JSON.parse(posting_json).profile.profile_image;
-          document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
-          if (JSON.parse(posting_json).profile.website !== undefined) {
-            document.getElementById("favsite").innerHTML = "<a href='" + JSON.parse(posting_json).profile.website + "' target='_blank'>" + JSON.parse(posting_json).profile.website + "</a>";
-          } else {
-            document.getElementById("strongWebsite").style.display = "none";
-          }
-          if (JSON.parse(posting_json).profile.location !== undefined) {
-            document.getElementById("location").innerHTML = JSON.parse(posting_json).profile.location;
-          } else {
-            document.getElementById("strongLocation").style.display = "none";
-          }
-          if (JSON.parse(posting_json).profile.about !== undefined) {
-            titleset = JSON.parse(posting_json).profile.about;
-          } else {
-            titleset = "";
-          }
-          document.getElementById("usertitle").innerHTML = titleset;
-          document.getElementById("name").innerHTML = hiveuser;
-          document.getElementById("strongAge").style.display = "none";
-          document.getElementById("strongGender").style.display = "none";
-          document.getElementById("strongFriends").style.display = "none";
-          document.getElementById("strongAbout").style.display = "none";
-          document.getElementById("strongFollow").style.display = "none";
-          document.getElementById("age").style.display = "none";
-          document.getElementById("gender").style.display = "none";
-
-
-          //console.log("Location: " +JSON.parse(posting_json).profile.location);
-
-        });
-        // finished displaying posting_json_metadata for non blokz/profile user
+        nonBlokzUser();
 
       }
 
