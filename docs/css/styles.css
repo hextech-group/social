@@ -87,7 +87,11 @@ margin-bottom: 0px
 }
 
 #comm:nth-child(odd) {
-  background: #eee;
+  background: #ddd;
+}
+
+#comm:nth-child(even) {
+  background: #bbb;
 }
 
 button {
@@ -109,7 +113,6 @@ button {
 
 body {
   color: black;  
-  background-color: rgb(100,135,220);
   margin: 0;
   padding: 0;
 }
@@ -182,46 +185,6 @@ acronym, .titleTip {
 }
 
 
-/* ##### Side Bar ##### */
-
-#side-bar {
-  width: 15em;
-  float: left;
-  clear: left;
-  border-right: 1px solid rgb(153,153,153);
-}
-
-#side-bar div {
-  border-bottom: 1px solid rgb(153,153,153);
-}
-
-.sideBarTitle {
-  font-weight: bold;
-  margin: 0 0 0.5em 2.5mm;
-  padding: 0 0 0 0;
-}
-
-#side-bar ul {
-  list-style-type: none;
-  list-style-position: outside;
-  margin: 0;
-  padding: 0 0 1.1em 0;
-}
-
-#side-bar li {
-  margin: 0;
-  padding: 0.1ex 0;  /* Circumvents a rendering bug (?) in MSIE 6.0 */
-}
-
-#side-bar a, .thisPage {
-  color: rgb(0,102,204);
-  background-color: transparent;
-  text-decoration: none;
-  margin: 0;
-  padding: 0.75em 1ex 0.75em 5mm;
-  display: block;
-}
-
 .thisPage {
   color: black;
   background-color: white;
@@ -230,31 +193,8 @@ acronym, .titleTip {
   border-bottom: 1px solid rgb(153,153,153);
 }
 
-#side-bar a:hover {
-  color: white;
-  background-color: rgb(100,135,220);
-  text-decoration: none;
-}
 
-.sideBarText {
-  line-height: 1.5em;
-  margin: 0 0 1em 0;
-  padding: 0 1.5ex 0 2.5mm;
-  display: block;
-}
 
-#side-bar .sideBarText a {
-  text-decoration: underline;
-  margin: 0;
-  padding: 0;
-  display: inline;
-}
-
-#side-bar .sideBarText a:hover {
-  color: rgb(0,102,204);
-  background-color: transparent;
-  text-decoration: none;
-}
 
 .lighterBackground {
   color: inherit;
@@ -279,7 +219,6 @@ acronym, .titleTip {
 }
 
 #main-copy a {
-  color: rgb(0,102,204);
   background-color: transparent;
   text-decoration: underline;
 }
@@ -358,9 +297,6 @@ dd {
   margin-bottom: 15px;
 }
 
-.mdl-card__title {
- background: rgb(100,135,220);
-}
 
 .mdl-card__media {
   margin: 0;
@@ -412,7 +348,7 @@ dd {
   position:fixed;
   bottom:25px;
   right:25px;
-  border: 3px solid whitesmoke;
+  border: 1px solid whitesmoke;
 }
 #blokztop {
   position:fixed;
@@ -457,5 +393,5 @@ img {
 }
 
 #comments {
-  background-color: grey;
+  background-color: #ddd;
 }
