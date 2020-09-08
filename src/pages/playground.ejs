@@ -1,0 +1,12 @@
+<script src="../js/aes256.min.js"></script>
+
+<script>
+// encryption
+var encrypted = AES256.encrypt('{"private posting key":"p5jfwwef872h3u23h92i3h23u2hf"}', 'ass word and another word means');
+console.log("Encryption: " + encrypted);
+
+// decryption
+console.log("decryption " + AES256.decrypt(encrypted, 'ass word and another word means'));
+</script>
+
+Check Terminal

@@ -103,7 +103,7 @@ function updatePage() {
   } else {
     console.log("user does not exist! or something went wrong");
 
-    document.getElementById('upprofile').innerHTML = "<h3> Please verify username using hivesigner first</h3>";
+    document.getElementById('upprofile').innerHTML = "<h3>Please inpute a username on the <a href='../'>homepage</a></h3>";
   }
   hidecomm();
 }
@@ -113,6 +113,7 @@ function login(username) {
   let url = "../?hive=" + username;
   window.location.href = url;
 }
+
 
 function blokzmenu() {
   let x = document.getElementById("blokzmenuPOP");
@@ -354,9 +355,13 @@ if (getQueryVariable("steem") !== false) {
 }
 
 if (getQueryVariable("hive") !== false) {
+  if (localStorage.getItem("hive") === null) {
+    localStorage.setItem("hive", getQueryVariable("hive"));
+  }
   hiveuser = getQueryVariable("hive");
   console.log(hiveuser + " connected");
 }
+
 
 if (getQueryVariable("tag") !== false) {
   tag = getQueryVariable("tag");
@@ -456,20 +461,19 @@ function splash() {
 
   document.getElementById("gridd").style.display = "none";
   console.log("Please click the blokz logo below");
-  var html = `<div id='splash'><img src='../images/logo192.png'><hr />View Profile` +
+  var html = `<div id='splash'>` +
     `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">` +
-    `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">username</label>` +
+    `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE Username</label>` +
     `  <input type="text" name="hive" class="mdl-textfield__input">` +
     `</div></form>` +
-    `<br />or login with <br />` +
-    `<div id="loggedin">` +
+    //`<br />or login with <br />` +
+    //`<div id="loggedin">` +
+    //`      <button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px" width="16px" />` +
+    //`        hivesigner` +
+    //`      </button>` +
 
-    `      <button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px" width="16px" />` +
-    `        hivesigner` +
-    `      </button>` +
-
-    `    </div>` +
-    `<hr />Click the <a href='https://blokz.io/'>blokz.io</a> icon on the bottom right to navigate site.<br /> ` +
+    //`    </div>` +
+    `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu<br /> ` +
     `<hr />Made with &#10084; by <a href="../?hive=sn0n">@sn0n</a></div>`;
   var tempElement = document.createElement('splash');
   tempElement.innerHTML = html;
@@ -481,6 +485,13 @@ function splash() {
 
 // MAIN BODY OF DISPLAYING A PROFILE
 window.onload = function loading() {
+
+
+  console.log("TYPECASTING :" + localStorage.getItem("hive"))
+  if (localStorage.getItem("hive") !== null) {
+    let loggedinas = localStorage.getItem("hive");
+    document.getElementById("loggedin").innerHTML = "Browsing site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
+  }
 
   if (tag !== "null") {
     document.getElementById("gridd").style.display = "none";
@@ -583,7 +594,7 @@ window.onload = function loading() {
         console.log("who dis " + hiveuser);
         console.log("i is " + i);
         // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
-        document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + hiveuser + " on " + thisPost.created.slice(0, 10) + "<br />";
+        document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + hiveuser + " on " + thisPost.created.slice(0, 10) + "<hr />";
 
       }
     });
