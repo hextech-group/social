@@ -378,7 +378,9 @@ input.invalid {
 }
 
 
-
+a {
+  color: #E31337;
+}
 
 
 
@@ -388,11 +390,9 @@ img {
 
 #splash {
   justify-content: center;
-  height: 20vh;
-  vertical-align: middle;
   margin: auto;
   text-align: center;
-  max-width: 300px;
+  max-width: 420px;
   background-color: whitesmoke;
   margin-top: 2em;
   padding: 10px;

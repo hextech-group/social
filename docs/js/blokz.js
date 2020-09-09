@@ -103,7 +103,7 @@ function updatePage() {
   } else {
     console.log("user does not exist! or something went wrong");
 
-    document.getElementById('upprofile').innerHTML = "<h3>Please inpute a username on the <a href='../'>homepage</a></h3>";
+    document.getElementById('upprofile').innerHTML = "<strong>Please inpute a username on the <a href='../'>homepage</a></strong>";
   }
   hidecomm();
 }
@@ -461,9 +461,9 @@ function splash() {
 
   document.getElementById("gridd").style.display = "none";
   console.log("Please click the blokz logo below");
-  var html = `<div id='splash'>` +
+  var html = `<div id='splash'><strong>Welcome to <h3>personal.community</h3>To Get Started,<br /> Please input your hive username in the input box below</strong>` +
     `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">` +
-    `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE Username</label>` +
+    `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE username</label>` +
     `  <input type="text" name="hive" class="mdl-textfield__input">` +
     `</div></form>` +
     //`<br />or login with <br />` +
@@ -473,7 +473,7 @@ function splash() {
     //`      </button>` +
 
     //`    </div>` +
-    `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu<br /> ` +
+    `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu.<br /> This is used to navigate site past this page<br /> ` +
     `<hr />Made with &#10084; by <a href="../?hive=sn0n">@sn0n</a></div>`;
   var tempElement = document.createElement('splash');
   tempElement.innerHTML = html;
@@ -486,6 +486,9 @@ function splash() {
 // MAIN BODY OF DISPLAYING A PROFILE
 window.onload = function loading() {
 
+  if (update !== true) {
+    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/' style='font-size: 1.25em;'>Update Profile</a>";
+  }
 
   console.log("TYPECASTING :" + localStorage.getItem("hive"))
   if (localStorage.getItem("hive") !== null) {
@@ -600,33 +603,9 @@ window.onload = function loading() {
     });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // show link to peakd profile
-    document.getElementById("hiveuser").innerHTML = "<a href='http://peakd.com/@" + hiveuser + "' target='_blank'>@" + hiveuser + "</a>";
+    // TODO : remove link 
+    document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_blank'>@" + hiveuser + "</a> <sup class='material-icons' style='font-size: 75%;'>launch</sup>  ";
     // fetch blokzprofile post from hive
     hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
       // user has a blokz/profile
