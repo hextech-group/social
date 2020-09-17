@@ -564,7 +564,10 @@ window.onload = function loading() {
             let thisPost = JSON.parse(JSON.stringify(result[i]));
             console.log("who dis " + thisPost.author);
             console.log("i is " + i);
-            document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: " + md.render(result[i].body) + "</div>";
+            let sanicomm = md.render(md.render(result[i].body));
+            sanicomm = sanitizeHtml(sanicomm)
+            document.getElementById("display").innerHTML += sani;
+            document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: " +sanicomm + "</div>";
             // if parent_author is listed, put on top of post
           }
           console.log("comment from: " + comments);
