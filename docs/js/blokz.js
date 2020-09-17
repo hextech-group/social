@@ -35,12 +35,12 @@ let userLatest = undefined;
 let pageURL = window.location.origin;
 let state = "/";
 let params = (new URL(location)).searchParams;
-let  token = params.get('access_token') || localStorage.getItem('sc_token');
+let token = params.get('access_token') || localStorage.getItem('sc_token');
 let update = false;
 let hiveuser = undefined;
 
-let  oldestPermLink = "";
-let  md = new Remarkable();
+let oldestPermLink = "";
+let md = new Remarkable();
 md.set({
   html: true,
   breaks: true,
@@ -48,13 +48,14 @@ md.set({
   linkify: true
 });
 
-let  client = new hivesigner.Client({
+/*
+let client = new hivesigner.Client({
   app: 'blokz',
   callbackURL: pageURL,
   scope: ['vote', 'comment', 'comment_options', 'custom_json'],
 });
 
-let  link = client.getLoginURL(state);
+let link = client.getLoginURL(state);
 console.log("your login link is: " + link)
 
 function hivelogin() {
@@ -62,7 +63,7 @@ function hivelogin() {
     console.log(err, token)
   });
 }
-
+*/
 
 function logout() {
   localStorage.removeItem('sc_token');
@@ -76,10 +77,10 @@ function continueExecution() {
 }
 
 function getQueryVariable(variable) {
-  let  query = window.location.search.substring(1);
-  let  vars = query.split("&");
+  let query = window.location.search.substring(1);
+  let vars = query.split("&");
   for (let i = 0; i < vars.length; i++) {
-    let  pair = vars[i].split("=");
+    let pair = vars[i].split("=");
     if (pair[0] == variable) { return pair[1]; }
   }
   return (false);
@@ -137,12 +138,12 @@ function hiveuserUp() {
     if (result) {
       console.log("results are in:");
       console.log(result);
-      let  blokify = JSON.parse(JSON.stringify(result[0].body));
-      let  blokzmeta = JSON.parse((result[0].json_metadata));
+      let blokify = JSON.parse(JSON.stringify(result[0].body));
+      let blokzmeta = JSON.parse((result[0].json_metadata));
       console.log(blokify);
       console.log("blokzmeta: " + blokzmeta);
       console.log(blokzmeta.blokz);
-      let  bitff = JSON.parse(JSON.stringify(blokzmeta));
+      let bitff = JSON.parse(JSON.stringify(blokzmeta));
       console.log(bitff);
       document.getElementById("name").value = bitff.name;
       document.getElementById("article").value = bitff.article;
@@ -238,6 +239,7 @@ function userRecent() {
   });
 }
 
+/*
 function blokz_hivesigner() {
   let pageURL = window.location.origin;
   let state = "/";
@@ -338,13 +340,13 @@ function blokz_hivesigner() {
   // 
   // hivesigner code
 };
-
+ 
 
 if (getQueryVariable("access_token") !== undefined) {
   console.log("TOKEN FOUND: " + getQueryVariable("access_token"));
   hivesigner.setAccessToken = (getQueryVariable("access_token"));
 }
-
+*/
 
 
 
@@ -376,6 +378,7 @@ if (getQueryVariable("tag") !== false) {
   hiveuser = undefined;
 }
 
+/*
 if (token) {
   const self = this;
   this.isInit = false;
@@ -397,6 +400,7 @@ if (token) {
 } else {
   this.isInit = true;
 }
+*/
 
 function nonBlokzUser() {
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
@@ -486,6 +490,10 @@ function splash() {
 // MAIN BODY OF DISPLAYING A PROFILE
 window.onload = function loading() {
 
+
+
+
+
   if (update !== true) {
     document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/' style='font-size: 1.25em;'>Update Profile</a>";
   }
@@ -538,7 +546,9 @@ window.onload = function loading() {
       document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 400%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
       document.getElementById("display").innerHTML += "<br />Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a>";
       document.getElementById("display").innerHTML += "<br />on " + result.created.slice(0, 10) + "<hr>";
-      document.getElementById("display").innerHTML += md.render(post1);
+      let sani = md.render(post1);
+      sani = sanitizeHtml(sani)
+      document.getElementById("display").innerHTML += sani;
       document.getElementById("display").innerHTML += "<hr /> tags: <br />";
       let jsonTAGS = JSON.parse(result.json_metadata);
       jsonTAGS.tags.forEach(genTags);

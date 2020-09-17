@@ -1,12 +1,41 @@
 <script src="../js/aes256.min.js"></script>
+<script src="../js/wordlist.js"></script>
 
 <script>
+let first, second, third, fourth, fifth, sixth, phrase = ""
+window.onload = function loading() {
+
+
+
+for (let i = 0; i < 6; i++) {
+  first = Math.floor(Math.random() * 6 + 1); 
+  second = Math.floor(Math.random() * 6 + 1); 
+  third = Math.floor(Math.random() * 6 + 1); 
+  fourth = Math.floor(Math.random() * 6 + 1); 
+  fifth = Math.floor(Math.random() * 6 + 1); 
+  dice = first + "" + second + "" + third + "" + fourth + "" + fifth;
+  console.log("dice :" + dice);
+  console.log("random word " + WordList[dice]);
+  phrase += WordList[dice];
+  document.getElementById("passphrase").innerHTML += "<span style='padding-left: 1em'>" + WordList[dice] + "</span>";
+}
+
+
+
+console.log("testing phrase : " + phrase)
+
 // encryption
-var encrypted = AES256.encrypt('{"private posting key":"p5jfwwef872h3u23h92i3h23u2hf"}', 'ass word and another word means');
-console.log("Encryption: " + encrypted);
+var encrypted = AES256.encrypt('{"private posting key":"5Jsupersecretprivatepostingkey"}', phrase);
+document.getElementById("passphrase").innerHTML += "<hr /><div>Encrypted:</div><div style='overflow-wrap: break-word; max-width: 200px; margin: auto'>" + encrypted + "</div>";
 
 // decryption
-console.log("decryption " + AES256.decrypt(encrypted, 'ass word and another word means'));
+document.getElementById("passphrase").innerHTML += "<div style='margin-top: 20px'>Decrypted:</div>" + AES256.decrypt(encrypted, phrase);
+
+};
+
+
+
 </script>
 
-Check Terminal
+<div id="passphrase" style="font-size: 1.25em; padding: 20px; border: 1px solid black; background-color: white; text-align: center; margin: auto; transform: translate(-50%, -50%); position: absolute; top: 50%; left: 50%;">
+    <h3 style="text-align: left;">Your Word List: </h3></div>
