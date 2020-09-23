@@ -480,7 +480,9 @@ window.onload = function loading() {
 
     // show link to peakd profile
     // TODO : remove link 
-    document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_blank'>@" + hiveuser + "</a> <sup class='material-icons' style='font-size: 75%;'>launch</sup>  ";
+    document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_blank'><img src='../images/peakd.png'></a>  ";
+    document.getElementById("hiveuser").innerHTML += "<a href='http://hivestats.io/@" + hiveuser + "' target='_blank'><img src='../images/hivestats.ico'></a>  ";
+    document.getElementById("hiveuser").innerHTML += "<a href='https://hive-engine.com/?p=balances&a=" + hiveuser + "' target='_blank'><img src='../images/hive_engine.png' height='32px' width='32px'></a>  ";
     // fetch blokzprofile post from hive
     hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
       // user has a blokz/profile
