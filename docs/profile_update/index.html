@@ -5,9 +5,9 @@
 <head>
 
   <title>$HIVE powered personal.community </title>
-<meta name="description" content=""/>
+<meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-light_blue.min.css" />
@@ -20,11 +20,11 @@
 
 
 <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
-<script type="text/javascript"  src="../js/sanitize-html.js"></script>
+<script type="text/javascript" src="../js/sanitize-html.js"></script>
 
-<link rel="shortcut icon" href="../favicon.png"/>
-<link rel="stylesheet" href="../css/styles.css?ver=4.42">
-<script src="../js/blokz.js?ver=4.42"></script>
+<link rel="shortcut icon" href="../favicon.png" />
+<link rel="stylesheet" href="../css/styles.css?ver=4.420">
+<script src="../js/blokz.js?ver=4.420"></script>
 
 </head>
 
@@ -224,17 +224,15 @@
 
   </div>
 </div>
-  
-
-
-
-  <button id="blokztop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="background-color: #ddd;">
-    <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
-  </button>
+  <button id="blokztop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab"
+  style="background-color: #ddd;">
+  <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
+</button>
 
 
 <!-- show menu button -->
-<button id="blokzmenu" onclick="blokzmenu()" class="mdl-button mdl-js-button mdl-button--fab" style="background-color: #ddd">
+<button id="blokzmenu" onclick="blokzmenu()" class="mdl-button mdl-js-button mdl-button--fab"
+  style="background-color: #ddd">
   <img src="../favicon.png">
 </button>
 
@@ -244,31 +242,32 @@
 <!-- Floating Action Button Popup Card -->
 
 <div id="blokzmenuPOP" class="external" style="display: none;">
-  
-    <div style="background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px; padding: 5px;">
-      <a class="material-icons" href="../" style="text-decoration: none;">home</a>
-        <div id="loggedin">
 
-        </div>
-        <form id="frm1" action="/"> 
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
-            <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">Goto Profile</label>
-            <input type="text" name="hive" class="mdl-textfield__input">
-          </div>
-        </form>
-     
-        <!-- TODO: add dynamic list of users -->
+  <div style="background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px; padding: 5px;">
+    <a class="material-icons" href="../" style="text-decoration: none;">home</a>
+    <div id="loggedin">
 
-        <br />
-        <!-- todo update dynamic-->
-        <div id="showUpdate"></div>
-
-        
-        <hr />
-        personal.community is a <a href="../?hive=blokz"><img src="../images/favicon.png" style="height:16px" />blokz.io</a> project
-     
     </div>
- 
+    <form id="frm1" action="/">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
+        <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">Goto Profile</label>
+        <input type="text" name="hive" class="mdl-textfield__input">
+      </div>
+    </form>
+
+    <!-- TODO: add dynamic list of users -->
+
+    <br />
+    <!-- todo update dynamic-->
+    <div id="showUpdate"></div>
+
+
+    <hr />
+    personal.community is a <a href="../?hive=blokz"><img src="../images/favicon.png" style="height:16px" />blokz.io</a>
+    project
+
+  </div>
+
 </div>
 
 </body>
