@@ -235,7 +235,8 @@ function fetchpost() {
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
     document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 400%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
     document.getElementById("display").innerHTML += "<br />Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a>";
-    let whenagain = Date(result.created.slice(0, 10))
+    let whenagain = new Date(result.created.slice(0, 10)).toDateString(); 
+    whenagain = whenagain.split('GMT'); 
     document.getElementById("display").innerHTML += "<br />on " + whenagain + "<hr>";
     let sani = md.render(post1);
     sani = sanitizeHtml(sani, {
@@ -413,7 +414,7 @@ window.onload = function loading() {
       if (err === null) {
 
         var i, len = result.length;
-        document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div>";
+        document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
 
         for (i = 0; i < len; i++) {
 
@@ -421,7 +422,9 @@ window.onload = function loading() {
           console.log(i, discussion);
           console.log("who dun it " + discussion.author);
           console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
-          document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + " on " + discussion.created.slice(0, 10) + "<br />";
+          let whenbytag = new Date(discussion.created.slice(0, 10)).toDateString(); 
+          whenbytag = whenbytag.split('GMT'); 
+          document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + " on " + whenbytag + "<br /><br />";
           document.getElementById("comments").style.display = "none";
 
         }
@@ -460,13 +463,13 @@ window.onload = function loading() {
       // data for each post in a loop
       //document.getElementById("blog").innerHTML += "most recent posts of <h1><a href='../?hive=" + hiveuser + "'>" + hiveuser + "</a></h1>";
       for (var i = 0; i < result.length; i++) {
-        // console.log(" for loop data : " + JSON.stringify(result[i]));
+        console.log(" for loop data : " + JSON.stringify(result[i]));
         console.log("who dis " + hiveuser);
         console.log("i is " + i);
         // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
         reactionCount = result[i].active_votes.length;
         console.log('post created on : ' + result[i].created);
-        postedon = new Date(result[i].created).toDateString(); 
+        let postedon = new Date(result[i].created.slice(0, 10)).toDateString(); 
         postedon = postedon.split('GMT'); 
         document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + result[i].permlink + "'>"
           + result[i].title + "</a><br /> by " + hiveuser + " on " + postedon + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactionCount + "<hr />";
