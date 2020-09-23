@@ -20,7 +20,9 @@ let params = (new URL(location)).searchParams;
 let token = params.get('access_token') || localStorage.getItem('sc_token');
 let update = false;
 let hiveuser = undefined;
-
+let reactionCount;
+let postedon;
+let thisPost;
 let oldestPermLink = "";
 let md = new Remarkable();
 md.set({
@@ -214,7 +216,8 @@ function userRecent() {
       console.log("who dis " + userLatest);
       console.log("i is " + i);
       // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
-      document.getElementById("display").innerHTML += "<a href='?post=" + userLatest + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + userLatest + " on " + thisPost.created.slice(0, 10) + "<br />";
+      let whenlatest = Date(thisPost.created.slice(0, 10));
+      document.getElementById("display").innerHTML += "<a href='?post=" + userLatest + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + userLatest + " on " + whenlatest + "<br />";
       document.getElementById("comments").style.display = "none";
     }
   });
@@ -232,13 +235,14 @@ function fetchpost() {
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
     document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 400%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
     document.getElementById("display").innerHTML += "<br />Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a>";
-    document.getElementById("display").innerHTML += "<br />on " + result.created.slice(0, 10) + "<hr>";
+    let whenagain = Date(result.created.slice(0, 10))
+    document.getElementById("display").innerHTML += "<br />on " + whenagain + "<hr>";
     let sani = md.render(post1);
     sani = sanitizeHtml(sani, {
-      allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub' ],
+      allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub'],
       allowedAttributes: {
-        'img': [ 'src' ],
-        'a': [ 'href' ]
+        'img': ['src'],
+        'a': ['href']
       },
       allowedIframeHostnames: ['www.youtube.com']
     })
@@ -260,8 +264,15 @@ function fetchpost() {
           console.log("who dis " + thisPost.author);
           console.log("i is " + i);
           let sanicomm = md.render(md.render(result[i].body));
-          sanicomm = sanitizeHtml(sanicomm);
-          document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: " + sanicomm + "</div>";
+          sanicomm = sanitizeHtml(sanicomm, {
+            allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub'],
+            allowedAttributes: {
+              'img': ['src'],
+              'a': ['href']
+            },
+            allowedIframeHostnames: ['www.youtube.com']
+          });
+          document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: <div style='padding:2em'>" + sanicomm + "</div></div>";
           // if parent_author is listed, put on top of post
         }
         console.log("comment from: " + comments);
@@ -281,29 +292,7 @@ function fetchpost() {
 
 
 
-/*
-if (token) {
-  const self = this;
-  this.isInit = false;
-  client.setAccessToken(token);
-  client.me(function (err, result) {
-    if (result) self.username = result.name;
-    if (err) self.error = err;
-    localStorage.setItem("hive", username);
-    localStorage.setItem('sc_token', token);
-    self.isInit = true;
-    console.log(err, result);
-    document.getElementById("loggedin").innerHTML = "Logged in as <a href='../?hive=" + result.name + "'>" + result.name + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
-    if (getQueryVariable("access_token") !== false) {
-      console.log("TOKEN FOUND: " + getQueryVariable("access_token"));
-      hivesigner.setAccessToken = (getQueryVariable("access_token"));
-      login(username)
-    }
-  });
-} else {
-  this.isInit = true;
-}
-*/          
+
 function nonBlokzUser() {
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   console.log("user does not exist! or something went wrong")
@@ -321,13 +310,12 @@ function nonBlokzUser() {
     }
     if (JSON.parse(posting_json).profile.location !== undefined) {
       let saniloc = JSON.parse(posting_json).profile.location;
-      let sanilocaltion = sanitizeHtml(saniloc);
-      document.getElementById("location").innerHTML = sanilocaltion;
+      let sanilocation = sanitizeHtml(saniloc);
+      document.getElementById("location").innerHTML = sanilocation;
     } else {
       document.getElementById("strongLocation").style.display = "none";
     }
     if (JSON.parse(posting_json).profile.about !== undefined) {
-
       let saniabo = JSON.parse(posting_json).profile.about;
       let saniabout = sanitizeHtml(saniabo);
       titleset = saniabout;
@@ -337,27 +325,18 @@ function nonBlokzUser() {
 
 
     document.getElementById("toptab").style.display = "none";
-
-
-    // display testing
     document.getElementById("strongLocation").style.display = "none";
     document.getElementById("strongAbout").style.display = "none";
-
     document.getElementById("location").style.display = "none";
     document.getElementById("comments").style.display = "none";
     document.getElementById("nonuser").innerHTML = "<h3> no personal.community page setup</h3>";
     document.getElementById("nonuser").style.textAlign = "center"
-
-
-
     document.getElementById("usertitle").innerHTML = titleset;
     document.getElementById("name").innerHTML = hiveuser;
-
     document.getElementById("strongInterests").style.display = "none";
     document.getElementById("strongAge").style.display = "none";
     document.getElementById("strongGender").style.display = "none";
     document.getElementById("strongAbout").style.display = "none";
-    // document.getElementById("strongFollow").style.display = "none";
     document.getElementById("age").style.display = "none";
     document.getElementById("gender").style.display = "none";
 
@@ -405,17 +384,14 @@ if (getQueryVariable("hive") !== false) {
 if (getQueryVariable("tag") !== false) {
   tag = getQueryVariable("tag");
   hiveuser = undefined;
-} 
+}
 
 if (getQueryVariable("post") !== false) {
   post = "true";
   hiveuser = undefined;
 }
 
-if (getQueryVariable("userLatest") !== false) {
-  userLatest = getQueryVariable("userLatest");
-  hiveuser = undefined;
-}
+
 
 // MAIN BODY OF DISPLAYING A PROFILE
 window.onload = function loading() {
@@ -466,7 +442,7 @@ window.onload = function loading() {
     userRecent();
 
   } else if (hiveuser !== undefined) {
-    console.log(hiveuser)
+    console.log("fetching profile for : " + hiveuser)
 
     // gets posting_json_metadata for generic profile data for user
     hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
@@ -479,17 +455,21 @@ window.onload = function loading() {
       document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
     });
 
-    hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 20, (err, result) => {
+    hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 10, (err, result) => {
       // testing for loop for posts. 
       // data for each post in a loop
       //document.getElementById("blog").innerHTML += "most recent posts of <h1><a href='../?hive=" + hiveuser + "'>" + hiveuser + "</a></h1>";
       for (var i = 0; i < result.length; i++) {
-        console.log(" for loop data : " + JSON.stringify(result[i]));
-        let thisPost = JSON.parse(JSON.stringify(result[i]));
+        // console.log(" for loop data : " + JSON.stringify(result[i]));
         console.log("who dis " + hiveuser);
         console.log("i is " + i);
         // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
-        document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + hiveuser + " on " + thisPost.created.slice(0, 10) + "<hr />";
+        reactionCount = result[i].active_votes.length;
+        console.log('post created on : ' + result[i].created);
+        postedon = new Date(result[i].created).toDateString(); 
+        postedon = postedon.split('GMT'); 
+        document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + result[i].permlink + "'>"
+          + result[i].title + "</a><br /> by " + hiveuser + " on " + postedon + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactionCount + "<hr />";
 
       }
     });
