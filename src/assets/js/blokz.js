@@ -79,6 +79,7 @@ function updatePage() {
 }
 
 function login(username) {
+  username = document.getElementById('login').value;
   localStorage.setItem("hive", username);
   let url = "../?hive=" + username;
   window.location.href = url;
@@ -354,16 +355,12 @@ function splash() {
 
   document.getElementById("gridd").style.display = "none";
   console.log("Please click the blokz logo below");
-  var html = `<div id='splash'><strong>Welcome to <br /><img src="../images/logo192.png"><h3>personal.community</h3>To Get Started,<br /> Please input your hive username in the input box below</strong>` +
+  var html = `<div id='splash'><strong>Welcome to <br /><img src="../images/logo192.png"><h3>personal.community</h3>To get started, <br /> input a username and submit to goto profile</strong>` +
     `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">` +
     `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE username</label>` +
     `  <input type="text" name="hive" class="mdl-textfield__input">` +
     `</div></form>` +
-    //`<br />or login with <br />` +
-    //`<div id="loggedin">` +
-    //`      <button onclick="hivelogin()"><img src="../images/hivesigner.svg" height="16px" width="16px" />` +
-    //`        hivesigner` +
-    //`      </button>` +
+   
 
     //`    </div>` +
     `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu.<br /> This is used to navigate site past this page<br /> ` +
@@ -376,9 +373,17 @@ function splash() {
 
 if (getQueryVariable("hive") !== false) {
   if (localStorage.getItem("hive") === null) {
-    localStorage.setItem("hive", getQueryVariable("hive"));
+   // localStorage.setItem("hive", getQueryVariable("hive"));
   }
   hiveuser = getQueryVariable("hive");
+  console.log(hiveuser + " connected");
+}
+
+if (getQueryVariable("loginas") !== false) {
+  if (localStorage.getItem("hive") === null) {
+   localStorage.setItem("hive", getQueryVariable("loginas"));
+  }
+  hiveuser = getQueryVariable("loginas");
   console.log(hiveuser + " connected");
 }
 
@@ -397,15 +402,20 @@ if (getQueryVariable("post") !== false) {
 // MAIN BODY OF DISPLAYING A PROFILE
 window.onload = function loading() {
 
-  if (update !== true) {
-    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/' style='font-size: 1.25em;'>Update Profile</a>";
-  }
+
 
   console.log("TYPECASTING :" + localStorage.getItem("hive"))
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
     document.getElementById("loggedin").innerHTML = "Browsing site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
+
   }
+
+
+  if (update !== true && localStorage.getItem("hive") !== null) {
+    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
+  }
+
 
   if (tag !== "null") {
     document.getElementById("gridd").style.display = "none";
@@ -480,10 +490,11 @@ window.onload = function loading() {
 
     // show link to peakd profile
     // TODO : remove link 
-    document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_blank'><img src='../images/peakd.png'></a> &#8226; ";
-    document.getElementById("hiveuser").innerHTML += "<a href='http://hivestats.io/@" + hiveuser + "' target='_blank'><img src='../images/hivestats.ico'></a> &#8226; ";
-    document.getElementById("hiveuser").innerHTML += "<a href='https://hive-engine.com/?p=balances&a=" + hiveuser + "' target='_blank'><img src='../images/hive_engine.png' height='32px' width='32px'></a> &#8226; ";
-    document.getElementById("hiveuser").innerHTML += "<a href='https://dcity.io/city?c=" + hiveuser + "' target='_blank'><img src='../images/dcity.png' height='32px' width='151px'></a>  ";
+    document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_peakd'><img src='../images/peakd.png'></a> &#8226; ";
+    document.getElementById("hiveuser").innerHTML += "<a href='http://hivestats.io/@" + hiveuser + "' target='_hivestats'><img src='../images/hivestats.ico'></a> &#8226; ";
+    document.getElementById("hiveuser").innerHTML += "<a href='https://hive-engine.com/?p=balances&a=" + hiveuser + "' target='_hiveengine'><img src='../images/hive_engine.png' height='32px' width='32px'></a> &#8226; ";
+    document.getElementById("hiveuser").innerHTML += "<a href='https://dcity.io/city?c=" + hiveuser + "' target='_dcity'><img src='../images/dcity.png' height='32px' width='151px'></a>  ";
+    // https://hiveblocks.com/@
     // fetch blokzprofile post from hive
     hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
       // user has a blokz/profile
