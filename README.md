@@ -2,7 +2,7 @@
 A $HIVE powered social profile. 
 
 Static Site files are located in ./docs/ upon building,
-https://personal community/ runs on GitHub pages using this repo.  
+https://personal.community/ runs on GitHub pages using this repo.  
 
 Source files for editing are in ./src/
 
