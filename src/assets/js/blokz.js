@@ -355,7 +355,7 @@ function splash() {
 
   document.getElementById("gridd").style.display = "none";
   console.log("Please click the blokz logo below");
-  var html = `<div id='splash'><strong>Welcome to <br /><img src="../images/logo192.png"><h3>personal.community</h3>To get started, <br /> input a username and submit to goto profile</strong>` +
+  var html = `<div id='splash'><img src="../images/logo192.png"><br /><h6 style="margin-bottom: 2px; padding: 2px;">Welcome to </h6>	<h3>personal.community</h3>To get started, input a $HIVE username and submit to goto profile</strong>` +
     `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">` +
     `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE username</label>` +
     `  <input type="text" name="hive" class="mdl-textfield__input">` +
