@@ -223,6 +223,19 @@ function userRecent() {
     }
   });
 }
+let sanizited;
+function sanitize (sanitized) {
+  sanitized = sanitizeHtml(sanitized, {
+    allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub'],
+    allowedAttributes: {
+      'img': ['src'],
+      'a': ['href']
+    },
+    allowedIframeHostnames: ['www.youtube.com']
+  });
+  console.log("sanitize function complete");
+  return sanitized;
+}
 
 function fetchpost() {
   document.getElementById("gridd").style.display = "none";
@@ -239,17 +252,10 @@ function fetchpost() {
     let whenagain = new Date(result.created.slice(0, 10)).toDateString();
     whenagain = whenagain.split('GMT');
     document.getElementById("display").innerHTML += "<br />on " + whenagain + "<hr>";
-    let sani = md.render(post1);
-    sani = sanitizeHtml(sani, {
-      allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub'],
-      allowedAttributes: {
-        'img': ['src'],
-        'a': ['href']
-      },
-      allowedIframeHostnames: ['www.youtube.com']
-    })
-    document.getElementById("display").innerHTML += sani;
-    console.log("SANITATION TEST post output" + sani)
+    let sanipost = md.render(post1);
+    sanipost = sanitize(sanipost);
+    document.getElementById("display").innerHTML += sanipost;
+    console.log("SANITATION TEST post output" + sanipost);
     document.getElementById("display").innerHTML += "<hr /> tags: <br />";
     let jsonTAGS = JSON.parse(result.json_metadata);
     jsonTAGS.tags.forEach(genTags);
@@ -266,14 +272,7 @@ function fetchpost() {
           console.log("who dis " + thisPost.author);
           console.log("i is " + i);
           let sanicomm = md.render(md.render(result[i].body));
-          sanicomm = sanitizeHtml(sanicomm, {
-            allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub'],
-            allowedAttributes: {
-              'img': ['src'],
-              'a': ['href']
-            },
-            allowedIframeHostnames: ['www.youtube.com']
-          });
+          sanicomm = sanitize(sanicomm);
           document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: <div style='padding:2em'>" + sanicomm + "</div></div>";
           // if parent_author is listed, put on top of post
         }
@@ -305,21 +304,21 @@ function nonBlokzUser() {
     document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
     if (JSON.parse(posting_json).profile.website !== undefined) {
       let saniweb = JSON.parse(posting_json).profile.website;
-      let saniwebsite = sanitizeHtml(saniweb);
+      let saniwebsite = sanitize(saniweb);
       document.getElementById("favsite").innerHTML = "<a href='" + saniwebsite + "' target='_blank'>" + saniwebsite + "</a>";
     } else {
       document.getElementById("strongWebsite").style.display = "none";
     }
     if (JSON.parse(posting_json).profile.location !== undefined) {
       let saniloc = JSON.parse(posting_json).profile.location;
-      let sanilocation = sanitizeHtml(saniloc);
+      let sanilocation = sanitize(saniloc);
       document.getElementById("location").innerHTML = sanilocation;
     } else {
       document.getElementById("strongLocation").style.display = "none";
     }
     if (JSON.parse(posting_json).profile.about !== undefined) {
       let saniabo = JSON.parse(posting_json).profile.about;
-      let saniabout = sanitizeHtml(saniabo);
+      let saniabout = sanitize(saniabo);
       titleset = saniabout;
     } else {
       titleset = "";
@@ -354,7 +353,7 @@ function nonBlokzUser() {
 function splash() {
 
   document.getElementById("gridd").style.display = "none";
-  console.log("Please click the blokz logo below");
+  console.log("splash engaged");
   var html = `<div id='splash'><img src="../images/logo192.png"><br /><h6 style="margin-bottom: 2px; padding: 2px;">Welcome to </h6>	<h3>personal.community</h3>To get started, input a $HIVE username and submit to goto profile</strong>` +
     `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">` +
     `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE username</label>` +
@@ -404,7 +403,7 @@ window.onload = function loading() {
 
 
 
-  console.log("TYPECASTING :" + localStorage.getItem("hive"))
+  console.log("logged in as :" + localStorage.getItem("hive"))
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
     document.getElementById("loggedin").innerHTML = "Browsing site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
@@ -434,7 +433,7 @@ window.onload = function loading() {
           console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
           let whenbytag = new Date(discussion.created.slice(0, 10)).toDateString();
           whenbytag = whenbytag.split('GMT');
-          document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + discussion.permlink + "'>" + discussion.title + "</a><br /> by " + discussion.author + " on " + whenbytag + "<br /><br />";
+          document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + "<br /><br />";
           document.getElementById("comments").style.display = "none";
 
         }
@@ -506,16 +505,16 @@ window.onload = function loading() {
         var bitff = JSON.parse(JSON.stringify(blokzmeta));
         console.log("blokzmeta: " + bitff.app);
         console.log(bitff.interests);
-        document.getElementById("name").innerHTML = blokzmeta.name;
-        document.getElementById("article").innerHTML = blokzmeta.article;
-        document.getElementById("usertitle").innerHTML = blokzmeta.usertitle;
-        var profage = year.getFullYear() - blokzmeta.birthyear;
+        document.getElementById("name").innerHTML = sanitize(blokzmeta.name);
+        document.getElementById("article").innerHTML = sanitize(blokzmeta.article);
+        document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
+        var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
         document.getElementById("age").innerHTML = profage;
-        document.getElementById("location").innerHTML = blokzmeta.location;
-        document.getElementById("gender").innerHTML = blokzmeta.gender;
-        document.getElementById("favsite").innerHTML = "<a href='" + blokzmeta.favsite + "' target='_blank'>" + blokzmeta.favsite + "</a>";
+        document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
+        document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
+        document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
         // interests
-        var skills = bitff.interests;
+        var skills = sanitize(bitff.interests);
         let skillsLog = skills.split(',');
         skillsLog.forEach(function (entry) {
           console.log(entry);
@@ -538,7 +537,8 @@ window.onload = function loading() {
         });
 
         // favorite steemians
-        var favs = bitff.favorites;
+        var favs = sanitize(bitff.favorites);
+        console.log("favs : " + favs);
         let favsLog = favs.split(',');
         favsLog.forEach(function (entry) {
           console.log("show: " + entry);
