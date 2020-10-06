@@ -33,6 +33,33 @@ md.set({
 });
 
 
+
+
+  // Get the button that opens the modal
+  let btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  let span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  function modalOnclick() {
+    document.getElementById("myModal").style.display = "block";
+    console.log('button works')
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  function closeMe () {
+    document.getElementById("myModal").style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == document.getElementById("myModal")) {
+      document.getElementById("myModal").style.display = "none";
+    }
+  }
+
+
 function logout() {
   localStorage.removeItem('sc_token');
   localStorage.removeItem('hive');
@@ -202,6 +229,50 @@ function updateProfile() {
     }
   );
 }
+let reply
+function createPost(reply) {
+  let postTitle = document.getElementById('postTitle').value;
+  let ran = AES256.encrypt(postTitle, postTitle);
+  ran = ran.substring(1, 6);
+  console.log("ran is : " + ran);
+  let postpermLink = document.getElementById('postTitle').value.replace(/[^A-Za-z]+/g, '-') + "-" +ran.toLowerCase();;
+  console.log("perm link " + postpermLink);
+  let postData = document.getElementById('postBody').value;
+  console.log("document.getElementById('postingKey').value " + document.getElementById('postingKey').value);
+  console.log(hiveuser);
+
+  console.log("replying to : " + reply)
+  // let setTags = "['testing', 'blokz', 'test']";
+  hive.broadcast.comment(
+    document.getElementById('postingKey').value,
+    '', //author
+    'personalcommunity', //firsttag
+    hiveuser,
+    postpermLink, //permlink
+    postTitle,
+    postData,
+    {
+      tags: ['blog'],
+      app: 'blokz'
+    },
+    function (err, result) {
+      if (err)
+       console.log(err);
+      else
+       console.log('success');
+
+      /*setTimeout(() => {
+        let url = "../?hive=" + hiveuser;
+        window.location.href = url;
+      }, 8000); */
+
+      // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+      // window.location.href = '../';
+    }
+  ); // broadcast.comment
+
+}
+
 
 function userRecent() {
   document.getElementById("gridd").style.display = "none";
@@ -224,7 +295,7 @@ function userRecent() {
   });
 }
 let sanizited;
-function sanitize (sanitized) {
+function sanitize(sanitized) {
   sanitized = sanitizeHtml(sanitized, {
     allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub'],
     allowedAttributes: {
@@ -359,7 +430,7 @@ function splash() {
     `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE username</label>` +
     `  <input type="text" name="hive" class="mdl-textfield__input">` +
     `</div></form>` +
-   
+
 
     //`    </div>` +
     `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu.<br /> This is used to navigate site past this page<br /> ` +
@@ -372,7 +443,7 @@ function splash() {
 
 if (getQueryVariable("hive") !== false) {
   if (localStorage.getItem("hive") === null) {
-   // localStorage.setItem("hive", getQueryVariable("hive"));
+    // localStorage.setItem("hive", getQueryVariable("hive"));
   }
   hiveuser = getQueryVariable("hive");
   console.log(hiveuser + " connected");
@@ -380,7 +451,7 @@ if (getQueryVariable("hive") !== false) {
 
 if (getQueryVariable("loginas") !== false) {
   if (localStorage.getItem("hive") === null) {
-   localStorage.setItem("hive", getQueryVariable("loginas"));
+    localStorage.setItem("hive", getQueryVariable("loginas"));
   }
   hiveuser = getQueryVariable("loginas");
   console.log(hiveuser + " connected");
@@ -407,7 +478,7 @@ window.onload = function loading() {
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
     document.getElementById("loggedin").innerHTML = "Browsing site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
-
+    document.getElementById("loggedin").innerHTML += "<br /><button onclick='modalOnclick()'>New Post</button>";
   }
 
 
@@ -590,4 +661,8 @@ window.onload = function loading() {
 
   };
 
+
+
 };
+
+

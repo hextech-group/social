@@ -26,11 +26,46 @@
 <link rel="stylesheet" href="../css/styles.css?ver=4.420">
 <script src="../js/blokz.js?ver=4.420"></script>
 
+<script src="../js/aes256.min.js"></script>
+<script src="../js/wordlist.js"></script>
+
 </head>
 
 <body>
 
-  <div style="background-color:white; padding-bottom: 0px; min-height: 100vh;" id="gridd">
+  <div id="myModal" class="modal">
+
+  <div class="modal-content">
+    <div style='text-align: right; color: red; font-size: 2em;' onclick="closeMe()">&times;</div>
+    <div>
+      <div class="mdl-textfield mdl-js-textfield">
+        <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
+        <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
+      </div><br />
+
+      <div class="mdl-textfield mdl-js-textfield">
+        <small>Post Body</small><textarea class="mdl-textfield__input" type="text" rows="10" id="postBody"></textarea>
+        <label class="mdl-textfield__label" for="postBody" id="postBodyLabel"></label>
+      </div><br />
+
+
+      <div class="mdl-textfield mdl-js-textfield">
+        <small>Private Posting Key:</small><input class="mdl-textfield__input" type="password" id="postingKey">
+        <label class="mdl-textfield__label" for="postingKey"></label>
+  
+      </div>
+      <div>
+        <button type="button" id="nextBtn" onclick="createPost()"
+          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+          data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div style="background-color:white; padding-bottom: 0px; min-height: 100vh;" id="gridd">
 
 
 
@@ -95,6 +130,9 @@
 <div id="comments"
   style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
 </div>
+
+
+
   <button id="blokztop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab"
   style="background-color: #ddd;">
   <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
@@ -135,7 +173,7 @@
     </form>
 
     <!-- TODO: add dynamic list of users -->
-
+    
     <br />
     <!-- todo update dynamic-->
 

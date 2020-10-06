@@ -31,5 +31,5 @@ Ctrl+C to stop the server.
 
 will finalize release in ./docs/ directory, 
 these files can be hosted anywhere you like, 
-just upload the folder to your webhost,
+just upload the `./docs/' folder contents to your webhost root folder,
 and you are ready to go.
