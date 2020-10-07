@@ -249,9 +249,10 @@ function createPost(reply) {
     },
     function (err, result) {
       if (err)
-       console.log(err);
+       document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
       else
-       console.log('success');
+       document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post="+postingAs+"/"+postpermLink+"'>"+postpermLink+"</a></h3> click the x or outside the box to close<br />" + result;
+
 
       /*setTimeout(() => {
         let url = "../?hive=" + hiveuser;
@@ -262,6 +263,7 @@ function createPost(reply) {
       // window.location.href = '../';
     }
   ); // broadcast.comment
+
 
 }
 
