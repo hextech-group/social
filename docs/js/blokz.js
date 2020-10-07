@@ -227,7 +227,8 @@ function createPost(reply) {
   let ran = AES256.encrypt(postTitle, postTitle);
   ran = ran.substring(1, 6);
   // console.log("ran is : " + ran);
-  let postpermLink = document.getElementById('postTitle').value.replace(/[^A-Za-z]+/g, '-') + "-" +ran.toLowerCase();;
+  let permbuilder = document.getElementById('postTitle').value.replace(/[^A-Za-z]+/g, '-').toLowerCase();
+  let postpermLink = permbuilder + "-" +ran.toLowerCase();
   // console.log("perm link " + postpermLink);
   let postData = document.getElementById('postBody').value;
   // console.log("document.getElementById('postingKey').value " + document.getElementById('postingKey').value);
