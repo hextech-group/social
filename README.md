@@ -1,5 +1,5 @@
 # personal.community
-A $HIVE powered social profile. 
+A $HIVE powered social profile
 
 Static Site files are located in ./docs/ upon building,
 https://personal.community/ runs on GitHub pages using this repo.  
