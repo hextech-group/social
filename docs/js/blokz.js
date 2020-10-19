@@ -9,7 +9,6 @@ let userLatest = undefined;
 let pageURL = window.location.origin;
 let state = "/";
 let params = (new URL(location)).searchParams;
-let token = params.get('access_token') || localStorage.getItem('sc_token');
 let update = false;
 let hiveuser = undefined;
 let reactionCount;
@@ -53,7 +52,6 @@ md.set({
 
 
 function logout() {
-  localStorage.removeItem('sc_token');
   localStorage.removeItem('hive');
   setTimeout(continueExecution, 1000);
 
@@ -315,10 +313,10 @@ function fetchpost() {
     let post1 = md.render(result.body).replace("\n", "");
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
     document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 400%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
-    document.getElementById("display").innerHTML += "<br />Posted by <a href='../?hive=" + result.author + "'>@" + result.author + "</a>";
+    document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3>";
     let whenagain = new Date(result.created.slice(0, 10)).toDateString();
     whenagain = whenagain.split('GMT');
-    document.getElementById("display").innerHTML += "<br />on " + whenagain + "<hr>";
+    document.getElementById("display").innerHTML += "<br />" + whenagain + "<hr />";
     let sanipost = md.render(post1);
     sanipost = sanitize(sanipost);
     document.getElementById("display").innerHTML += sanipost;
@@ -340,7 +338,7 @@ function fetchpost() {
           // console.log("i is " + i);
           let sanicomm = md.render(md.render(result[i].body));
           sanicomm = sanitize(sanicomm);
-          document.getElementById("comments").innerHTML += "<div id='comm'>" + thisPost.author + " <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: <div style='padding:2em'>" + sanicomm + "</div></div>";
+          document.getElementById("comments").innerHTML += "<div id='comm'>  <button id='whodonit' onclick='blokzmenu()' class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + thisPost.author + "/avatar'></button> <strong>" + thisPost.author + "</strong> <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: <div style='padding:2em'>" + sanicomm + "</div></div>";
           // if parent_author is listed, put on top of post
         }
         // console.log("comment from: " + comments);
@@ -474,7 +472,8 @@ function buildprofile(hiveuser) {
       // TODO: -- remove testing notes ^>^
       // console.log("posting_json: " + posting_json);
       // display avater
-      document.getElementById("profimg").src = JSON.parse(posting_json).profile.profile_image;
+      let useravatar = "https://images.hive.blog/u/" + hiveuser + "/avatar";
+      document.getElementById("profimg").src = useravatar;
       // display cover image
       document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
     });
@@ -575,6 +574,7 @@ function buildprofile(hiveuser) {
           var image = document.createElement("img");
           var imageParent = document.getElementById(para.id);
           image.className = "avatar";
+          
           image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
           imageParent.appendChild(image);
           document.getElementById(entryy + "_").appendChild(ffsName);
@@ -631,7 +631,7 @@ window.onload = function loading() {
 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
-    document.getElementById("loggedin").innerHTML = "Using site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
+    document.getElementById("loggedin").innerHTML = "<div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div> Using site as <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a></div> ";
     document.getElementById("loggedin").innerHTML += "<br /><button onclick='modalOnclick()'>New Post</button>";
   }
 
