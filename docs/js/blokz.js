@@ -55,13 +55,14 @@ md.set({
 function logout() {
   localStorage.removeItem('sc_token');
   localStorage.removeItem('hive');
-  setTimeout(continueExecution, 2000);
+  setTimeout(continueExecution, 1000);
 
 }
 
 function continueExecution() {
-  let url = "../#";
+  let url = "../#loggedout";
   window.location.href = url;
+  location.reload;
 }
 
 function getQueryVariable(variable) {
@@ -361,6 +362,9 @@ function fetchpost() {
 
 
 function nonBlokzUser() {
+  if (hiveuser !== "undefined") {
+    hiveuser = localStorage.getItem("hive");
+  }
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {

@@ -65,8 +65,8 @@ https://github.com/mervick/aes-everywhere/tree/master/javascript
   
     } else {
       // encryption
-      var encrypted = AES256.encrypt("who", phrase);
-      document.getElementById("passphrase").innerHTML += '<hr /><div>Phrase we are encrypting: <br /> ' + encrypted + '</div>';
+      var encrypted = AES256.encrypt('{"private posting key":"5Jsupersecretprivatepostingkey"}', phrase);
+      document.getElementById("passphrase").innerHTML += '<hr /><div>Phrase we are encrypting: <br /> {"private posting key":"5Jsupersecretprivatepostingkey"}</div>';
       document.getElementById("passphrase").innerHTML += "<br /><div>Encrypted <small>w/phrase</small>:</div><div style='overflow-wrap: break-word; max-width: 200px; margin: auto'>" + encrypted + "</div>";
   
       // decryption
