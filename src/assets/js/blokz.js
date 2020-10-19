@@ -462,65 +462,9 @@ if (getQueryVariable("post") !== false) {
   hiveuser = undefined;
 }
 
+function buildprofile(hiveuser) {
 
-
-// MAIN BODY OF DISPLAYING A PROFILE
-window.onload = function loading() {
-
-
-
-  // console.log("logged in as :" + localStorage.getItem("hive"))
-  if (localStorage.getItem("hive") !== null) {
-    let loggedinas = localStorage.getItem("hive");
-    document.getElementById("loggedin").innerHTML = "Browsing site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
-    document.getElementById("loggedin").innerHTML += "<br /><button onclick='modalOnclick()'>New Post</button>";
-  }
-
-
-  if (update !== true && localStorage.getItem("hive") !== null) {
-    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
-  }
-
-
-  if (tag !== "null") {
-    document.getElementById("gridd").style.display = "none";
-    hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
-
-      if (err === null) {
-
-        var i, len = result.length;
-        document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
-
-        for (i = 0; i < len; i++) {
-
-          var discussion = result[i];
-          // console.log(i, discussion);
-          // console.log("who dun it " + discussion.author);
-          // console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
-          let whenbytag = new Date(discussion.created.slice(0, 10)).toDateString();
-          whenbytag = whenbytag.split('GMT');
-          document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + "<br /><br />";
-          document.getElementById("comments").style.display = "none";
-
-        }
-
-      } else {
-
-        console.log(err);
-
-      }
-
-    });
-
-  } else if (post === "true") {
-
-    fetchpost();
-
-  } else if (userLatest !== undefined) {
-    userRecent();
-
-  } else if (hiveuser !== undefined) {
-    // console.log("fetching profile for : " + hiveuser)
+      // console.log("fetching profile for : " + hiveuser)
 
     // gets posting_json_metadata for generic profile data for user
     hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
@@ -647,16 +591,68 @@ window.onload = function loading() {
     document.title = hiveuser + "'s personal.community profile";
 
 
+}
+
+function showtag(tag) {
+  document.getElementById("gridd").style.display = "none";
+  hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
+
+    if (err === null) {
+
+      var i, len = result.length;
+      document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
+
+      for (i = 0; i < len; i++) {
+
+        var discussion = result[i];
+        // console.log(i, discussion);
+        // console.log("who dun it " + discussion.author);
+        // console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
+        let whenbytag = new Date(discussion.created.slice(0, 10)).toDateString();
+        whenbytag = whenbytag.split('GMT');
+        document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + "<br /><br />";
+        document.getElementById("comments").style.display = "none";
+
+      }
+
+    } else {
+
+      console.log(err);
+
+    }
+
+  });
+}
+
+// MAIN BODY OF DISPLAYING A PROFILE
+window.onload = function loading() {
+
+  if (localStorage.getItem("hive") !== null) {
+    let loggedinas = localStorage.getItem("hive");
+    document.getElementById("loggedin").innerHTML = "Using site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
+    document.getElementById("loggedin").innerHTML += "<br /><button onclick='modalOnclick()'>New Post</button>";
+  }
+
+  if (update !== true && localStorage.getItem("hive") !== null) {
+    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
+  }
+
+  if (tag !== "null") {
+    showtag(tag);
+  } else if (post === "true") {
+    fetchpost();
+  } else if (userLatest !== undefined) {
+    userRecent();
+  } else if (hiveuser !== undefined) {
+    buildprofile(hiveuser)
   } else if (update === true) {
     updatePage();
+  } else if (localStorage.getItem("hive") !== null ) {
+    buildprofile(localStorage.getItem("hive"));
   } else {
-
     splash();
     hidecomm();
-
   };
-
-
 
 };
 
