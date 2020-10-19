@@ -62,7 +62,7 @@ function logout() {
 function continueExecution() {
   let url = "../#loggedout";
   window.location.href = url;
-  location.reload;
+  window.location.reload();
 }
 
 function getQueryVariable(variable) {
@@ -361,10 +361,8 @@ function fetchpost() {
 
 
 
-function nonBlokzUser() {
-  if (hiveuser !== "undefined") {
-    hiveuser = localStorage.getItem("hive");
-  }
+function nonBlokzUser(hiveuser) {
+
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
@@ -587,7 +585,7 @@ function buildprofile(hiveuser) {
 
       } else {
 
-        nonBlokzUser();
+        nonBlokzUser(hiveuser);
 
       }
       hidecomm();
