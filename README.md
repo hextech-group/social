@@ -33,3 +33,7 @@ will finalize release in ./docs/ directory,
 these files can be hosted anywhere you like, 
 just upload the `./docs/' folder contents to your webhost root folder,
 and you are ready to go.
+
+
+# TODO 
+lots... please open tickets and report bugs

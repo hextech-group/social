@@ -38,56 +38,11 @@ https://www.eff.org/dice
 https://github.com/mervick/aes-everywhere/tree/master/javascript
 -->
 
-<script>
-  let first, second, third, fourth, fifth, sixth, phrase = ""
-  window.onload = function loading() {
-
-
-
-    for (let i = 0; i < 6; i++) {
-      first = Math.floor(Math.random() * 6 + 1);
-      second = Math.floor(Math.random() * 6 + 1);
-      third = Math.floor(Math.random() * 6 + 1);
-      fourth = Math.floor(Math.random() * 6 + 1);
-      fifth = Math.floor(Math.random() * 6 + 1);
-      dice = first + "" + second + "" + third + "" + fourth + "" + fifth;
-      console.log("dice :" + dice);
-      console.log("random word " + WordList[dice]);
-      phrase += WordList[dice];
-      document.getElementById("passphrase").innerHTML += "<span style='padding-left: 1em'>" + WordList[dice] + "</span>";
-    }
-
-
-
-    console.log("testing phrase : " + phrase)
-
-    // encryption
-    var encrypted = AES256.encrypt('{"private posting key":"5Jsupersecretprivatepostingkey"}', phrase);
-    document.getElementById("passphrase").innerHTML += "<hr /><div>Encrypted:</div><div style='overflow-wrap: break-word; max-width: 200px; margin: auto'>" + encrypted + "</div>";
-
-    // decryption
-    document.getElementById("passphrase").innerHTML += "<div style='margin-top: 20px'>Decrypted:</div>" + AES256.decrypt(encrypted, phrase);
-
-  };
-
-
-
-</script>
-
-
-<div id="myModal" class="modal">
-
-  <div class="modal-content">
-    <span onclick="closeMe()">&times;</span>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nec commodo mauris, eget lacinia tellus. Curabitur in enim eu sem convallis tincidunt. Proin ac pellentesque dolor, in tincidunt odio. Duis molestie nec elit ac mattis. Phasellus placerat, nisi a fermentum ultrices, libero odio pharetra nisl, vel auctor arcu diam nec orci. Sed a ultrices enim. Aliquam malesuada libero ut lacus tincidunt, sed malesuada velit suscipit. Sed semper mattis leo, a rutrum dui vulputate ac. Curabitur ullamcorper ligula in odio hendrerit, ut auctor orci accumsan. Aenean faucibus egestas pulvinar. Ut eleifend pretium orci a auctor. Sed porta velit eget massa hendrerit malesuada. Phasellus enim tortor, fermentum non ex sit amet, dignissim mattis enim. Duis nec commodo dui. Aenean luctus ultrices sem, nec dapibus purus bibendum a. Quisque egestas hendrerit bibendum.
-     </p>
-  </div>
-
-</div>
 <div id="passphrase"
   style="font-size: 1.25em; padding: 20px; border: 1px solid black; background-color: white; text-align: center; margin: auto; transform: translate(-50%, -50%); position: absolute; top: 50%; left: 50%;">
   
-  <h3 style="text-align: left;">Your Word List: </h3>
+  <h3 style="text-align: left;">Passphrase <small>generated at random</small></h3>
+  
 </div>
 
 
@@ -97,6 +52,73 @@ https://github.com/mervick/aes-everywhere/tree/master/javascript
 
 
 
+<div style="background-color:white; padding-bottom: 0px; min-height: 100vh;" id="gridd"></div>
+<div id="display"
+  style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center;  background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
+</div>
+<div id="comments"
+  style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
+</div>
+
+
+
+
+<script>
+
+    let first, second, third, fourth, fifth, sixth, phrase = "";
+    window.onload = function loading() {
+  
+  
+  
+      for (let i = 0; i < 6; i++) {
+        first = Math.floor(Math.random() * 6 + 1);
+        second = Math.floor(Math.random() * 6 + 1);
+        third = Math.floor(Math.random() * 6 + 1);
+        fourth = Math.floor(Math.random() * 6 + 1);
+        fifth = Math.floor(Math.random() * 6 + 1);
+        dice = first + "" + second + "" + third + "" + fourth + "" + fifth;
+        console.log("dice :" + dice);
+        console.log("random word " + WordList[dice]);
+        phrase += WordList[dice];
+        document.getElementById("passphrase").innerHTML += "<span style='padding-left: 1em'>" + WordList[dice] + "</span>";
+      }
+  
+  
+  
+      console.log("testing phrase : " + phrase);
+      if (localStorage.getItem("hive") !== null ) {
+      let who = localStorage.getItem("hive");
+  
+          // encryption
+          var encrypted = AES256.encrypt(who, phrase);
+      document.getElementById("passphrase").innerHTML += '<hr /><div>Phrase we are encrypting: <br /> ' + who + '</div>';
+      document.getElementById("passphrase").innerHTML += "<br /><div>Encrypted <small>w/phrase</small>:</div><div style='overflow-wrap: break-word; max-width: 200px; margin: auto'>" + encrypted + "</div>";
+        console.log(encrypted);
+      // decryption
+      document.getElementById("passphrase").innerHTML += "<div style='margin-top: 20px'>Decrypted <small>w/phrase</small>:</div>" + AES256.decrypt(encrypted, phrase);
+  
+    } else {
+      // encryption
+      var encrypted = AES256.encrypt("who", phrase);
+      document.getElementById("passphrase").innerHTML += '<hr /><div>Phrase we are encrypting: <br /> ' + encrypted + '</div>';
+      document.getElementById("passphrase").innerHTML += "<br /><div>Encrypted <small>w/phrase</small>:</div><div style='overflow-wrap: break-word; max-width: 200px; margin: auto'>" + encrypted + "</div>";
+  
+      // decryption
+      document.getElementById("passphrase").innerHTML += "<div style='margin-top: 20px'>Decrypted <small>w/phrase</small>:</div>" + AES256.decrypt(encrypted, phrase);
+  
+    };
+    document.getElementById("display").style.display = "none";
+    document.getElementById("comments").style.display = "none";
+    document.getElementById("gridd").style.display = "none";
+
+    if (localStorage.getItem("hive") !== null) {
+    let loggedinas = localStorage.getItem("hive");
+    document.getElementById("loggedin").innerHTML = "Using site as <a href='../?hive=" + loggedinas + "'>" + loggedinas + "</a> <div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div>";
+    document.getElementById("loggedin").innerHTML += "<br /><button onclick='modalOnclick()'>New Post</button>";
+  }
+  };
+  
+ </script>
   <button id="blokztop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab"
   style="background-color: #ddd;">
   <i class="material-icons" onclick="javascript:location.href='#'">keyboard_arrow_up</i>
