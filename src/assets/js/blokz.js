@@ -33,8 +33,21 @@ let btn = document.getElementById("myBtn");
 let span = document.getElementsByClassName("close")[0];
 
 // When the user clicks the button, open the modal 
-function modalOnclick() {
+let parentAuthor = '';
+let parentPermlink = "personalcommunity";
+function modalOnclick(author, commentpermlink) {
   document.getElementById("myModal").style.display = "block";
+  console.log("author :" + author);
+  console.log("commentpermlink :" + commentpermlink);
+  if (author !== undefined) {
+    document.getElementById("replyingToContainer").style.display = "block";
+    document.getElementById("replyingTo").value = commentpermlink;
+    parentAuthor = author;
+    parentPermlink = commentpermlink;
+  } else {
+    document.getElementById("replyingToContainer").style.display = "none";
+    console.log("defaults");
+  }
   // console.log('button works')
 }
 
@@ -226,7 +239,9 @@ function updateProfile() {
     }
   );
 }
+
 let reply
+
 function createPost(reply) {
   let postTitle = document.getElementById('postTitle').value;
   let ran = AES256.encrypt(postTitle, postTitle);
@@ -241,10 +256,13 @@ function createPost(reply) {
   let postingAs = localStorage.getItem("hive");
   // console.log("replying to : " + reply)
   // let setTags = "['testing', 'blokz', 'test']";
+
+  // todo: reply to comments and posts
+
   hive.broadcast.comment(
     document.getElementById('postingKey').value,
-    '', //author
-    'personalcommunity', //firsttag
+    parentAuthor, //author
+    parentPermlink, //firsttag
     postingAs,
     postpermLink, //permlink
     postTitle,
@@ -308,7 +326,8 @@ function sanitize(sanitized) {
   return sanitized;
 }
 
-function fetchpost() {
+function displayPost() {
+  console.log('displaying post')
   document.getElementById("gridd").style.display = "none";
   var letting = getQueryVariable("post").split("/");
   let author = letting[0].replace("@", '');
@@ -340,7 +359,7 @@ function fetchpost() {
     let jsonTAGS = JSON.parse(result.json_metadata);
     jsonTAGS.tags.forEach(genTags);
     // todo : comments
-    document.getElementById("comments").innerHTML += "<h3>Comments</h3>";
+    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='modalOnclick("`+ author + `","` + permlink +`")'>reply</button></div>`;
     hive.api.getContentReplies(author, permlink, function (err, result) {
       // console.log(err, result);
       if (result.length > 0) {
@@ -657,7 +676,7 @@ window.onload = function loading() {
   if (tag !== "null") {
     showtag(tag);
   } else if (post === "true") {
-    fetchpost();
+    displayPost();
   } else if (userLatest !== undefined) {
     userRecent();
   } else if (hiveuser !== undefined) {
