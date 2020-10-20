@@ -26,36 +26,36 @@ md.set({
 
 
 
-  // Get the button that opens the modal
-  let btn = document.getElementById("myBtn");
+// Get the button that opens the modal
+let btn = document.getElementById("myBtn");
 
-  // Get the <span> element that closes the modal
-  let span = document.getElementsByClassName("close")[0];
+// Get the <span> element that closes the modal
+let span = document.getElementsByClassName("close")[0];
 
-  // When the user clicks the button, open the modal 
-  function modalOnclick() {
-    document.getElementById("myModal").style.display = "block";
-    // console.log('button works')
-  }
+// When the user clicks the button, open the modal 
+function modalOnclick() {
+  document.getElementById("myModal").style.display = "block";
+  // console.log('button works')
+}
 
-  // When the user clicks on <span> (x), close the modal
-  function closeMe () {
+// When the user clicks on <span> (x), close the modal
+function closeMe() {
+  document.getElementById("myModal").style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == document.getElementById("myModal")) {
     document.getElementById("myModal").style.display = "none";
   }
+}
 
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-    if (event.target == document.getElementById("myModal")) {
-      document.getElementById("myModal").style.display = "none";
-    }
-  }
-
-  function words(str) {
-    str = str.replace(/(^\s*)|(\s*$)/gi,"");
-    str = str.replace(/[ ]{2,}/gi," ");
-    str = str.replace(/\n /,"\n");
-    return str.split(' ').length;
- }
+function words(str) {
+  str = str.replace(/(^\s*)|(\s*$)/gi, "");
+  str = str.replace(/[ ]{2,}/gi, " ");
+  str = str.replace(/\n /, "\n");
+  return str.split(' ').length;
+}
 
 
 function logout() {
@@ -233,7 +233,7 @@ function createPost(reply) {
   ran = ran.substring(1, 6);
   // console.log("ran is : " + ran);
   let permbuilder = document.getElementById('postTitle').value.replace(/[^A-Za-z]+/g, '-').toLowerCase();
-  let postpermLink = permbuilder + "-" +ran.toLowerCase();
+  let postpermLink = permbuilder + "-" + ran.toLowerCase();
   // console.log("perm link " + postpermLink);
   let postData = document.getElementById('postBody').value;
   // console.log("document.getElementById('postingKey').value " + document.getElementById('postingKey').value);
@@ -255,9 +255,9 @@ function createPost(reply) {
     },
     function (err, result) {
       if (err)
-       document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
+        document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
       else
-       document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post="+postingAs+"/"+postpermLink+"'>"+postpermLink+"</a></h3> click the x or outside the box to close<br />" + result;
+        document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + result;
 
 
       /*setTimeout(() => {
@@ -322,12 +322,12 @@ function fetchpost() {
     document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3>";
     let whenagain = new Date(result.created.slice(0, 10)).toDateString();
     whenagain = whenagain.split('GMT');
-    let timeToRead = words(result.body) /3 /60;
-    if (timeToRead < 1 ) {
+    let timeToRead = words(result.body) / 3 / 60;
+    if (timeToRead < 1) {
       timeToRead = 1;
     }
-    document.getElementById("display").innerHTML += "<div style='float: right; padding-top: 2em;'> Reading time: "+ timeToRead.toFixed(0) +" min</div>";
-    
+    document.getElementById("display").innerHTML += "<div style='float: right; padding-top: 2em;'> Reading time: " + timeToRead.toFixed(0) + " min</div>";
+
 
     document.getElementById("display").innerHTML += "<br />" + whenagain + "<hr />";
     let sanipost = md.render(post1);
@@ -479,133 +479,133 @@ if (getQueryVariable("post") !== false) {
 
 function buildprofile(hiveuser) {
 
-      // console.log("fetching profile for : " + hiveuser)
+  // console.log("fetching profile for : " + hiveuser)
 
-    // gets posting_json_metadata for generic profile data for user
-    hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
-      let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
-      // TODO: -- remove testing notes ^>^
-      // console.log("posting_json: " + posting_json);
-      // display avater
-      let useravatar = "https://images.hive.blog/u/" + hiveuser + "/avatar";
-      document.getElementById("profimg").src = useravatar;
-      // display cover image
-      document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
-    });
+  // gets posting_json_metadata for generic profile data for user
+  hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
+    let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+    // TODO: -- remove testing notes ^>^
+    // console.log("posting_json: " + posting_json);
+    // display avater
+    let useravatar = "https://images.hive.blog/u/" + hiveuser + "/avatar";
+    document.getElementById("profimg").src = useravatar;
+    // display cover image
+    document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
+  });
 
-    hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 10, (err, result) => {
-      // testing for loop for posts. 
-      // data for each post in a loop
-      //document.getElementById("blog").innerHTML += "most recent posts of <h1><a href='../?hive=" + hiveuser + "'>" + hiveuser + "</a></h1>";
-      for (var i = 0; i < result.length; i++) {
-        // console.log(" for loop data : " + JSON.stringify(result[i]));
-        // console.log("who dis " + hiveuser);
-        // console.log("i is " + i);
-        // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
-        reactionCount = result[i].active_votes.length;
-        // console.log('post created on : ' + result[i].created);
-        let postedon = new Date(result[i].created.slice(0, 10)).toDateString();
-        postedon = postedon.split('GMT');
-        document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + result[i].permlink + "'>"
-          + result[i].title + "</a><br /> by " + hiveuser + " on " + postedon + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactionCount + "<hr />";
+  hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 10, (err, result) => {
+    // testing for loop for posts. 
+    // data for each post in a loop
+    //document.getElementById("blog").innerHTML += "most recent posts of <h1><a href='../?hive=" + hiveuser + "'>" + hiveuser + "</a></h1>";
+    for (var i = 0; i < result.length; i++) {
+      // console.log(" for loop data : " + JSON.stringify(result[i]));
+      // console.log("who dis " + hiveuser);
+      // console.log("i is " + i);
+      // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
+      reactionCount = result[i].active_votes.length;
+      // console.log('post created on : ' + result[i].created);
+      let postedon = new Date(result[i].created.slice(0, 10)).toDateString();
+      postedon = postedon.split('GMT');
+      document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + result[i].permlink + "'>"
+        + result[i].title + "</a><br /> by " + hiveuser + " on " + postedon + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactionCount + "<hr />";
 
-      }
-    });
-
-
-    // show link to peakd profile
-    // TODO : remove link 
-    document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_peakd'><img src='../images/peakd.png'></a> &#8226; ";
-    document.getElementById("hiveuser").innerHTML += "<a href='http://hivestats.io/@" + hiveuser + "' target='_hivestats'><img src='../images/hivestats.ico'></a> &#8226; ";
-    document.getElementById("hiveuser").innerHTML += "<a href='https://hive-engine.com/?p=balances&a=" + hiveuser + "' target='_hiveengine'><img src='../images/hive_engine.png' height='32px' width='32px'></a> &#8226; ";
-    document.getElementById("hiveuser").innerHTML += "<a href='https://dcity.io/city?c=" + hiveuser + "' target='_dcity'><img src='../images/dcity.png' height='32px' width='151px'></a>  ";
-    // https://hiveblocks.com/@
-    // fetch blokzprofile post from hive
-    hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
-      // user has a blokz/profile
-      if (result.length >= 1) {
-        // console.log("meep :" + JSON.stringify(result));
-        var blokify = JSON.parse(JSON.stringify(result[0].body));
-        var blokzmeta = JSON.parse((result[0].json_metadata));
-        // console.log("what is blokify " + blokify);
-        var bitff = JSON.parse(JSON.stringify(blokzmeta));
-        // console.log("blokzmeta: " + bitff.app);
-        // console.log(bitff.interests);
-        document.getElementById("name").innerHTML = sanitize(blokzmeta.name);
-        document.getElementById("article").innerHTML = sanitize(blokzmeta.article);
-        document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
-        var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
-        document.getElementById("age").innerHTML = profage;
-        document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
-        document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
-        document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
-        // interests
-        var skills = sanitize(bitff.interests);
-        let skillsLog = skills.split(',');
-        skillsLog.forEach(function (entry) {
-          // console.log(entry);
-          let entryy = entry.replace(/\s+/g, '');
-          entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
-          entryy = entryy.toLowerCase();
-          // creat chips for each interest
-          var vadd = document.createElement('button');
-          vadd.className = "mdl-chip";
-          vadd.id = entryy;
-          vadd.setAttribute("onclick", "window.location.href='/?tag=" + entryy + "';");
-          document.getElementById("interests").appendChild(vadd);
-          var sadd = document.createElement('span');
-          sadd.className = "mdl-chip__text";
-          sadd.id = entryy + "2";
-          document.getElementById(entryy).appendChild(sadd);
-          var t = document.createTextNode("#" + entryy);
-          document.getElementById(entryy + "2").appendChild(t);
-          // ENDNEW
-        });
-
-        // favorite steemians
-        var favs = sanitize(bitff.favorites);
-        // console.log("favs : " + favs);
-        let favsLog = favs.split(',');
-        favsLog.forEach(function (entry) {
-          // console.log("show: " + entry);
-          let entryy = entry.replace(/\s+/g, '');
-          entryy = entryy.toLowerCase();
-          // CURRENT TODO: FRIEND IMAGE
-          // console.log("CAUGHT: " + entryy);
-          var favfriend = document.createElement("div");
-          favfriend.id = entryy + "_";
-          favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
-          favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
-          document.getElementById("favorites").appendChild(favfriend);
-          var para = document.createElement("div");                 // Create a <p> element
-          para.id = favfriend.id + "sub";
-          var ffs = document.createElement("div");
-          ffs.id = favfriend.id;
-          var ffsName = document.createElement("div");
-          ffsName.id = favfriend.id + "ffsName";
-          var ff = favfriend.id + "NEW";   // placeholder
-          document.getElementById(entryy + "_").appendChild(para);
-          document.getElementById(ffs.id).appendChild(ffsName);
-          var image = document.createElement("img");
-          var imageParent = document.getElementById(para.id);
-          image.className = "avatar";
-          
-          image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
-          imageParent.appendChild(image);
-          document.getElementById(entryy + "_").appendChild(ffsName);
-          ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
-
-        }); // finished displaying blokzprofile
+    }
+  });
 
 
-      } else {
+  // show link to peakd profile
+  // TODO : remove link 
+  document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_peakd'><img src='../images/peakd.png'></a> &#8226; ";
+  document.getElementById("hiveuser").innerHTML += "<a href='http://hivestats.io/@" + hiveuser + "' target='_hivestats'><img src='../images/hivestats.ico'></a> &#8226; ";
+  document.getElementById("hiveuser").innerHTML += "<a href='https://hive-engine.com/?p=balances&a=" + hiveuser + "' target='_hiveengine'><img src='../images/hive_engine.png' height='32px' width='32px'></a> &#8226; ";
+  document.getElementById("hiveuser").innerHTML += "<a href='https://dcity.io/city?c=" + hiveuser + "' target='_dcity'><img src='../images/dcity.png' height='32px' width='151px'></a>  ";
+  // https://hiveblocks.com/@
+  // fetch blokzprofile post from hive
+  hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
+    // user has a blokz/profile
+    if (result.length >= 1) {
+      // console.log("meep :" + JSON.stringify(result));
+      var blokify = JSON.parse(JSON.stringify(result[0].body));
+      var blokzmeta = JSON.parse((result[0].json_metadata));
+      // console.log("what is blokify " + blokify);
+      var bitff = JSON.parse(JSON.stringify(blokzmeta));
+      // console.log("blokzmeta: " + bitff.app);
+      // console.log(bitff.interests);
+      document.getElementById("name").innerHTML = sanitize(blokzmeta.name);
+      document.getElementById("article").innerHTML = sanitize(blokzmeta.article);
+      document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
+      var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
+      document.getElementById("age").innerHTML = profage;
+      document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
+      document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
+      document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
+      // interests
+      var skills = sanitize(bitff.interests);
+      let skillsLog = skills.split(',');
+      skillsLog.forEach(function (entry) {
+        // console.log(entry);
+        let entryy = entry.replace(/\s+/g, '');
+        entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
+        entryy = entryy.toLowerCase();
+        // creat chips for each interest
+        var vadd = document.createElement('button');
+        vadd.className = "mdl-chip";
+        vadd.id = entryy;
+        vadd.setAttribute("onclick", "window.location.href='/?tag=" + entryy + "';");
+        document.getElementById("interests").appendChild(vadd);
+        var sadd = document.createElement('span');
+        sadd.className = "mdl-chip__text";
+        sadd.id = entryy + "2";
+        document.getElementById(entryy).appendChild(sadd);
+        var t = document.createTextNode("#" + entryy);
+        document.getElementById(entryy + "2").appendChild(t);
+        // ENDNEW
+      });
 
-        nonBlokzUser(hiveuser);
+      // favorite steemians
+      var favs = sanitize(bitff.favorites);
+      // console.log("favs : " + favs);
+      let favsLog = favs.split(',');
+      favsLog.forEach(function (entry) {
+        // console.log("show: " + entry);
+        let entryy = entry.replace(/\s+/g, '');
+        entryy = entryy.toLowerCase();
+        // CURRENT TODO: FRIEND IMAGE
+        // console.log("CAUGHT: " + entryy);
+        var favfriend = document.createElement("div");
+        favfriend.id = entryy + "_";
+        favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
+        favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
+        document.getElementById("favorites").appendChild(favfriend);
+        var para = document.createElement("div");                 // Create a <p> element
+        para.id = favfriend.id + "sub";
+        var ffs = document.createElement("div");
+        ffs.id = favfriend.id;
+        var ffsName = document.createElement("div");
+        ffsName.id = favfriend.id + "ffsName";
+        var ff = favfriend.id + "NEW";   // placeholder
+        document.getElementById(entryy + "_").appendChild(para);
+        document.getElementById(ffs.id).appendChild(ffsName);
+        var image = document.createElement("img");
+        var imageParent = document.getElementById(para.id);
+        image.className = "avatar";
 
-      }
-      hidecomm();
-    });
-    document.title = hiveuser + "'s personal.community profile";
+        image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
+        imageParent.appendChild(image);
+        document.getElementById(entryy + "_").appendChild(ffsName);
+        ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
+
+      }); // finished displaying blokzprofile
+
+
+    } else {
+
+      nonBlokzUser(hiveuser);
+
+    }
+    hidecomm();
+  });
+  document.title = hiveuser + "'s personal.community profile";
 
 
 }
@@ -664,7 +664,7 @@ window.onload = function loading() {
     buildprofile(hiveuser)
   } else if (update === true) {
     updatePage();
-  } else if (localStorage.getItem("hive") !== null ) {
+  } else if (localStorage.getItem("hive") !== null) {
     buildprofile(localStorage.getItem("hive"));
   } else {
     splash();
