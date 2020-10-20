@@ -4,6 +4,6 @@ module.exports = {
     outputPath: './docs'
   },
   site: {
-    title: '$HIVE powered personal.community '
+    title: '$HIVE powered'
   }
 };
