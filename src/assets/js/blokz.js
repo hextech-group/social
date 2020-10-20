@@ -50,6 +50,13 @@ md.set({
     }
   }
 
+  function words(str) {
+    str = str.replace(/(^\s*)|(\s*$)/gi,"");
+    str = str.replace(/[ ]{2,}/gi," ");
+    str = str.replace(/\n /,"\n");
+    return str.split(' ').length;
+ }
+
 
 function logout() {
   let url = "../#loggedout";
@@ -311,13 +318,22 @@ function fetchpost() {
     // console.log(err, result);
     let post1 = md.render(result.body).replace("\n", "");
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
-    document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 400%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
+    document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
     document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3>";
     let whenagain = new Date(result.created.slice(0, 10)).toDateString();
     whenagain = whenagain.split('GMT');
+    let timeToRead = words(result.body) /3 /60;
+    if (timeToRead < 1 ) {
+      timeToRead = 1;
+    }
+    document.getElementById("display").innerHTML += "<div style='float: right; padding-top: 2em;'> Reading time: "+ timeToRead.toFixed(0) +" min</div>";
+    
+
     document.getElementById("display").innerHTML += "<br />" + whenagain + "<hr />";
     let sanipost = md.render(post1);
     sanipost = sanitize(sanipost);
+
+
     document.getElementById("display").innerHTML += sanipost;
     // console.log("SANITATION TEST post output" + sanipost);
     document.getElementById("display").innerHTML += "<hr /> tags: <br />";
