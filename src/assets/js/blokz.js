@@ -52,14 +52,13 @@ md.set({
 
 
 function logout() {
+  let url = "../#loggedout";
   localStorage.removeItem('hive');
-  setTimeout(continueExecution, 1000);
-
+  window.location.href = url;
+  setTimeout(continueLogout, 1000);
 }
 
-function continueExecution() {
-  let url = "../#loggedout";
-  window.location.href = url;
+function continueLogout() {
   window.location.reload();
 }
 
