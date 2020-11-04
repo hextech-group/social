@@ -118,11 +118,11 @@ function updatePage() {
 function login(username) {
   username = document.getElementById('login').value;
   localStorage.setItem("hive", username);
-  
+
 
   let url = "../?hive=" + username;
   window.location.href = url;
-  
+
 
 }
 
@@ -363,7 +363,7 @@ function displayPost() {
     let jsonTAGS = JSON.parse(result.json_metadata);
     jsonTAGS.tags.forEach(genTags);
     // todo : comments
-    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='modalOnclick("`+ author + `","` + permlink +`")'>reply</button></div>`;
+    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='modalOnclick("` + author + `","` + permlink + `")'>reply</button></div>`;
     hive.api.getContentReplies(author, permlink, function (err, result) {
       // console.log(err, result);
       if (result.length > 0) {
@@ -670,23 +670,27 @@ window.onload = function loading() {
       localStorage.setItem("hive", getQueryVariable("loginas"));
     }
     hiveuser = getQueryVariable("loginas");
-  
-    function keyChainPassing (keychainpass) {
-      hive_keychain.requestHandshake(function() {
-        console.log("Handshake received!");})
+    if (window.hive_keychain) {
+      function keyChainPassing(keychainpass) {
+        hive_keychain.requestHandshake(function () {
+          console.log("Handshake received!");
+        })
         hive_keychain.requestSignBuffer(keychainpass, 'Login', 'Posting',
-        (response) => {
-        console.log(response)
-        if (response.success) {
-        // all is well!
-        console.log("success;");
-        localStorage.setItem("KeychainVerified", hiveuser);
-        };
-      });
+          (response) => {
+            console.log(response)
+            if (response.success) {
+              // all is well!
+              console.log("success;");
+              localStorage.setItem("hiveKeychainVerified", hiveuser);
+            };
+          });
+      };
+
+      keyChainPassing(hiveuser);
+      // console.log(hiveuser + " connected");
+    } else {
+      console.log('keychain not installed')
     };
-  
-    keyChainPassing(hiveuser);
-    // console.log(hiveuser + " connected");
   }
 
   if (localStorage.getItem("hive") !== null) {
