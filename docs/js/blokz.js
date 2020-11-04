@@ -496,6 +496,8 @@ if (getQueryVariable("post") !== false) {
   hiveuser = undefined;
 }
 
+hive.api.setOptions({ url: 'https://anyx.io' });
+
 function buildprofile(hiveuser) {
 
   // console.log("fetching profile for : " + hiveuser)
