@@ -118,8 +118,12 @@ function updatePage() {
 function login(username) {
   username = document.getElementById('login').value;
   localStorage.setItem("hive", username);
+  
+
   let url = "../?hive=" + username;
   window.location.href = url;
+  
+
 }
 
 
@@ -478,13 +482,10 @@ if (getQueryVariable("hive") !== false) {
   // console.log(hiveuser + " connected");
 }
 
-if (getQueryVariable("loginas") !== false) {
-  if (localStorage.getItem("hive") === null) {
-    localStorage.setItem("hive", getQueryVariable("loginas"));
-  }
-  hiveuser = getQueryVariable("loginas");
-  // console.log(hiveuser + " connected");
-}
+
+
+
+
 
 if (getQueryVariable("tag") !== false) {
   tag = getQueryVariable("tag");
@@ -664,6 +665,29 @@ function showtag(tag) {
 
 // MAIN BODY OF DISPLAYING A PROFILE
 window.onload = function loading() {
+  if (getQueryVariable("loginas") !== false) {
+    if (localStorage.getItem("hive") === null) {
+      localStorage.setItem("hive", getQueryVariable("loginas"));
+    }
+    hiveuser = getQueryVariable("loginas");
+  
+    function keyChainPassing (keychainpass) {
+      hive_keychain.requestHandshake(function() {
+        console.log("Handshake received!");})
+        hive_keychain.requestSignBuffer(keychainpass, 'Login', 'Posting',
+        (response) => {
+        console.log(response)
+        if (response.success) {
+        // all is well!
+        console.log("success;");
+        localStorage.setItem("KeychainVerified", hiveuser);
+        };
+      });
+    };
+  
+    keyChainPassing(hiveuser);
+    // console.log(hiveuser + " connected");
+  }
 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
@@ -692,6 +716,8 @@ window.onload = function loading() {
     hidecomm();
   };
 
-};
+
+
+}
 
 
