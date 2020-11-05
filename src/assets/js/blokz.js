@@ -75,6 +75,7 @@ function words(str) {
 function logout() {
   let url = "../#loggedout";
   localStorage.removeItem('hive');
+  localStorage.removeItem('hiveKeychainVerified');
   window.location.href = url;
   setTimeout(continueLogout, 1000);
 }
