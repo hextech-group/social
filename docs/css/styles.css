@@ -35,6 +35,10 @@
   width: 64px;
 }
 
+.mdl-textfield {
+  width: 80%;
+}
+
 
 .name {
   font-weight: bold;

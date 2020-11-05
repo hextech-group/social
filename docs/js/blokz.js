@@ -1,5 +1,4 @@
 "use strict";
-let version = "1";
 
 let titleset = "";
 let year = new Date();
@@ -207,43 +206,92 @@ function updateProfile() {
 
   let upwho = document.getElementById('hiveuser').value;
 
-  hive.broadcast.comment(
-    document.getElementById('postingKey').value,
-    '', //author
-    'blokzprofile', //firsttag
-    document.getElementById('hiveuser').value,
-    'blokzprofile', //permlink
-    'My Personal.Community Profile',
-    data,
-    // json meta
-    {
-      tags: ['blokz'],
-      app: 'blokz',
-      article: article,
-      name: name,
-      favsite: favsite,
-      usertitle: usertitle,
-      birthyear: birthyear,
-      gender: gender,
-      location: location,
-      interests: interests,
-      favorites: favorites
-    },
-    function (err, result) {
-      if (err)
-        document.getElementById('upprofile').innerHTML = "<h3>something went wrong...</h3>" + err;
-      else
-        document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
 
-      setTimeout(() => {
-        let url = "../?hive=" + upwho;
-        window.location.href = url;
-      }, 8000);
+  if (window.hive_keychain) {
+    if (localStorage.getItem("hiveKeychainVerified") !== null) {
+      console.log('keychain update profile code here');
 
-      // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-      // window.location.href = '../';
-    }
-  );
+      hiveuser = localStorage.getItem("hiveKeychainVerified");
+
+      let weight = 500;
+      hive_keychain.requestPost(
+        document.getElementById('hiveuser').value,
+        'My Personal.Community Profile',
+        data,
+        'blokzprofile',
+        '',
+        {
+          tags: ['blokz'],
+          app: 'blokz',
+          article: article,
+          name: name,
+          favsite: favsite,
+          usertitle: usertitle,
+          birthyear: birthyear,
+          gender: gender,
+          location: location,
+          interests: interests,
+          favorites: favorites
+        },
+        'blokzprofile',
+        '',
+        function (response) {
+            document.getElementById('upprofile').innerHTML = response;
+
+            document.getElementById('upprofile').innerHTML += "<h3> Please wait while updating profile...</h3>";
+
+          setTimeout(() => {
+            let url = "../?hive=" + upwho;
+            window.location.href = url;
+          }, 8000);
+
+          // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+          // window.location.href = '../';
+        }
+      );
+      // console.log(hiveuser + " connected");
+    } else {
+      console.log('keychain not installed')
+    };
+  } else {
+    hive.broadcast.comment(
+      document.getElementById('postingKey').value,
+      '', //author
+      'blokzprofile', //firsttag
+      document.getElementById('hiveuser').value,
+      'blokzprofile', //permlink
+      'My Personal.Community Profile',
+      data,
+      // json meta
+      {
+        tags: ['blokz'],
+        app: 'blokz',
+        article: article,
+        name: name,
+        favsite: favsite,
+        usertitle: usertitle,
+        birthyear: birthyear,
+        gender: gender,
+        location: location,
+        interests: interests,
+        favorites: favorites
+      },
+      function (err, result) {
+        if (err)
+          document.getElementById('upprofile').innerHTML = "<h3>something went wrong...</h3>" + err;
+        else
+          document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
+
+        setTimeout(() => {
+          let url = "../?hive=" + upwho;
+          window.location.href = url;
+        }, 8000);
+
+        // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+        // window.location.href = '../';
+      }
+    );
+  };
 }
 
 let reply
@@ -336,7 +384,7 @@ function userRecent() {
 let sanizited;
 function sanitize(sanitized) {
   sanitized = sanitizeHtml(sanitized, {
-    allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'pre', 'code'],
+    allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'pre', 'code', 'hr', 'br'],
     allowedAttributes: {
       'img': ['src'],
       'a': ['href']
@@ -379,7 +427,7 @@ function displayPost() {
     document.getElementById("display").innerHTML += "<hr /> tags: <br />";
     let jsonTAGS = JSON.parse(result.json_metadata);
     jsonTAGS.tags.forEach(genTags);
-    
+
     document.getElementById("display").innerHTML += "<hr /><span style='font-size:2em'>Reaction: </span> <span class='material-icons' style='font-size:2em' onClick='upvote(`" + permlink + "`,`" + author + "`)'>thumb_up</span> ";
     // todo : comments
     document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='modalOnclick("` + author + `","` + permlink + `")'>reply</button></div>`;
