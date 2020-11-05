@@ -1,4 +1,5 @@
 "use strict";
+let version = "1";
 
 let titleset = "";
 let year = new Date();
