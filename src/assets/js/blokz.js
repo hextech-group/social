@@ -295,6 +295,21 @@ function createPost(reply) {
 
 }
 
+function upvote(permlink, author) {
+  if (window.hive_keychain) {
+    if (localStorage.getItem("hiveKeychainVerified") !== null) {
+
+      hiveuser = localStorage.getItem("hiveKeychainVerified");
+
+      let weight = 500;
+      hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) { console.log(response); })
+
+      // console.log(hiveuser + " connected");
+    } else {
+      console.log('keychain not installed')
+    };
+  }
+};
 
 function userRecent() {
   document.getElementById("gridd").style.display = "none";
@@ -319,7 +334,7 @@ function userRecent() {
 let sanizited;
 function sanitize(sanitized) {
   sanitized = sanitizeHtml(sanitized, {
-    allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub'],
+    allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'pre', 'code'],
     allowedAttributes: {
       'img': ['src'],
       'a': ['href']
@@ -362,6 +377,8 @@ function displayPost() {
     document.getElementById("display").innerHTML += "<hr /> tags: <br />";
     let jsonTAGS = JSON.parse(result.json_metadata);
     jsonTAGS.tags.forEach(genTags);
+    
+    document.getElementById("display").innerHTML += "<hr /><span style='font-size:2em'>Reaction: </span> <span class='material-icons' style='font-size:2em' onClick='upvote(`" + permlink + "`,`" + author + "`)'>thumb_up</span> ";
     // todo : comments
     document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='modalOnclick("` + author + `","` + permlink + `")'>reply</button></div>`;
     hive.api.getContentReplies(author, permlink, function (err, result) {
@@ -663,8 +680,9 @@ function showtag(tag) {
   });
 }
 
-// MAIN BODY OF DISPLAYING A PROFILE
+// MAIN()
 window.onload = function loading() {
+
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
       localStorage.setItem("hive", getQueryVariable("loginas"));
@@ -691,7 +709,7 @@ window.onload = function loading() {
     } else {
       console.log('keychain not installed')
     };
-  }
+  };
 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");

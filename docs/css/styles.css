@@ -124,7 +124,10 @@ body {
 
 code, pre {
   overflow: auto;
-}
+  background-color: lightgray;
+  padding: 1px;
+};
+
 
 acronym, .titleTip {
   border-bottom: 1px dotted rgb(153,153,153);
