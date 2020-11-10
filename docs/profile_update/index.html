@@ -20,6 +20,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@hiveio/hive-js/dist/hive.min.js"></script>
 
 
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
 <script type="text/javascript" src="../js/sanitize-html.js?ver=5.2"></script>
 
@@ -39,6 +42,8 @@
   <script>
   update = true;
 </script>
+
+
 
 <!-- playground -->
 <link rel="stylesheet" href="../css/mdl-chips-input.css">
@@ -61,17 +66,16 @@
 <div
   style="padding: 3em; margin: 2em auto; justify-content: center; max-width: 800px; text-align: left; border: 1px solid black; background-color: whitesmoke;"
   id="upprofile">
+  <h3>personal.community profile builder</h3>
   <div class="mdl-textfield mdl-js-textfield">
-    <small>Hive Username</small><input class="mdl-textfield__input" type="text" id="hiveuser" onchange="hiveuserUp()">
+    <input class="mdl-textfield__input" id="hiveuser" type="hidden" onchange="hiveuserUp()">
     <label class="mdl-textfield__label" for="username"></label>
+    <strong>read me:</strong>
+  If this is your first time here, please know that creating a profile will create a top level post on your hive account, 
+  this will be visible on hive frontends, similar to:  
+  <a href="https://personal.community/?post=@eddiespino/blokzprofile" target="_blank">https://personal.community/?post=@eddiespino/blokzprofile</a>.<br />
+
   </div>
-
-  <hr />
-
-
-
-
-
 
 
   <div class="mdl-textfield mdl-js-textfield">
@@ -203,7 +207,10 @@
   </div><br />
 
   <div class="mdl-textfield mdl-js-textfield">
-    <small>Bio/About</small><textarea class="mdl-textfield__input" type="text" style="height: 200px;" id="article"></textarea>
+    <small>Bio/About</small><textarea id="article"></textarea>
+    <script>
+      var easyMDE = new EasyMDE({element: document.getElementById('article')});
+      </script>
     <label class="mdl-textfield__label" for="article" id="articleLabel"></label>
   </div>
 

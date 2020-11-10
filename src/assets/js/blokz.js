@@ -172,7 +172,7 @@ function hiveuserUp() {
       let bitff = JSON.parse(JSON.stringify(blokzmeta));
       // console.log(bitff);
       document.getElementById("name").value = bitff.name;
-      document.getElementById("article").value = bitff.article;
+      easyMDE.value(bitff.article);
       document.getElementById("usertitle").value = bitff.usertitle;
       document.getElementById("birthyear").value = bitff.birthyear;
       document.getElementById("location").value = bitff.location;
@@ -190,7 +190,7 @@ function hiveuserUp() {
 // uses private posting key to update profile
 function updateProfile() {
   let data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here:<br /> <a href='https://personal.community/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a>";
-  let article = document.getElementById('article').value;
+  let article = easyMDE.value();
   let name = document.getElementById('name').value;
   let favsite = document.getElementById('favsite').value;
   let usertitle = document.getElementById('usertitle').value;
@@ -236,9 +236,9 @@ function updateProfile() {
         'blokzprofile',
         '',
         function (response) {
-            document.getElementById('upprofile').innerHTML = response;
+          document.getElementById('upprofile').innerHTML = response;
 
-            document.getElementById('upprofile').innerHTML += "<h3> Please wait while updating profile...</h3>";
+          document.getElementById('upprofile').innerHTML += "<h3> Please wait while updating profile...</h3>";
 
           setTimeout(() => {
             let url = "../?hive=" + upwho;
@@ -296,7 +296,7 @@ function updateProfile() {
 
 let reply
 
-function createPost(reply) {
+function createPost() {
   let postTitle = document.getElementById('postTitle').value;
   let ran = AES256.encrypt(postTitle, postTitle);
   ran = ran.substring(1, 6);
@@ -304,44 +304,77 @@ function createPost(reply) {
   let permbuilder = document.getElementById('postTitle').value.replace(/[^A-Za-z]+/g, '-').toLowerCase();
   let postpermLink = permbuilder + "-" + ran.toLowerCase();
   // console.log("perm link " + postpermLink);
-  let postData = document.getElementById('postBody').value;
+  let postData = easyMDE.value();
   // console.log("document.getElementById('postingKey').value " + document.getElementById('postingKey').value);
   // console.log(hiveuser);
   let postingAs = localStorage.getItem("hive");
   // console.log("replying to : " + reply)
   // let setTags = "['testing', 'blokz', 'test']";
-
+  console.log('a');
   // todo: reply to comments and posts
+    if (window.hive_keychain) {
+      console.log('b');
+      console.log('keychain post or comment');
+      console.log("commenting to :" + parentPermlink);
+      // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
 
-  hive.broadcast.comment(
-    document.getElementById('postingKey').value,
-    parentAuthor, //author
-    parentPermlink, //firsttag
-    postingAs,
-    postpermLink, //permlink
-    postTitle,
-    postData,
-    {
-      tags: ['blog'],
-      app: 'blokz'
-    },
-    function (err, result) {
-      if (err)
-        document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
-      else
-        document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + result;
+      hive_keychain.requestPost(
+        localStorage.getItem("hiveKeychainVerified"),
+        postTitle,
+        postData,
+        parentPermlink,
+        parentAuthor,
+        {
+          tags: ['blokz'],
+          app: 'blokz',
+        },
+        postpermLink,
+        '',
+        function (response) {
+          document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
+
+          document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + hiveuser + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
 
 
-      /*setTimeout(() => {
-        let url = "../?hive=" + hiveuser;
-        window.location.href = url;
-      }, 8000); */
 
-      // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-      // window.location.href = '../';
-    }
-  ); // broadcast.comment
+          // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+          // window.location.href = '../';
+        }
+      );
+      // console.log(hiveuser + " connected");
+    
+  
+ } else {
+    console.log('c');
+    hive.broadcast.comment(
+      document.getElementById('postingKey').value,
+      parentAuthor, //author
+      parentPermlink, //firsttag
+      postingAs,
+      postpermLink, //permlink
+      postTitle,
+      postData,
+      {
+        tags: ['blog'],
+        app: 'blokz'
+      },
+      function (err, result) {
+        if (err)
+          document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
+        else
+          document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + result;
 
+
+        /*setTimeout(() => {
+          let url = "../?hive=" + hiveuser;
+          window.location.href = url;
+        }, 8000); */
+
+        // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+        // window.location.href = '../';
+      }
+    ); // broadcast.comment
+  };
 
 }
 
@@ -356,7 +389,7 @@ function upvote(permlink, author) {
 
       // console.log(hiveuser + " connected");
     } else {
-      console.log('keychain not installed')
+      console.log('keychain not installed');
     };
   }
 };
@@ -621,7 +654,8 @@ function buildprofile(hiveuser) {
       // console.log("blokzmeta: " + bitff.app);
       // console.log(bitff.interests);
       document.getElementById("name").innerHTML = sanitize(blokzmeta.name);
-      document.getElementById("article").innerHTML = sanitize(blokzmeta.article);
+      document.getElementById("article").innerHTML = sanitize(md.render(blokzmeta.article));
+      // ~~~ md.render(blokzmeta.article).replace("\n", "");
       document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
       var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
       document.getElementById("age").innerHTML = profage;
