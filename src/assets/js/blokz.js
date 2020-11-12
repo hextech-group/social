@@ -236,7 +236,7 @@ function updateProfile() {
         'blokzprofile',
         '',
         function (response) {
-          document.getElementById('upprofile').innerHTML = response;
+          document.getElementById('upprofile').innerHTML = JSON.stringify(response);
 
           document.getElementById('upprofile').innerHTML += "<h3> Please wait while updating profile...</h3>";
 
