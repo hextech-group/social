@@ -1,5 +1,6 @@
 "use strict";
 
+let blokz = 'test';
 let titleset = "";
 let year = new Date();
 let now = new Date().toISOString().split('.')[0];
