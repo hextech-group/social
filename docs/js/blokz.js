@@ -43,12 +43,14 @@ function modalOnclick(author, commentpermlink) {
   if (author !== undefined) {
     document.getElementById("replyingToContainer").style.display = "block";
     document.getElementById("replyingTo").value = commentpermlink;
+    document.getElementById("replyingToWho").value = author;
     parentAuthor = author;
     parentPermlink = commentpermlink;
   } else {
     document.getElementById("replyingToContainer").style.display = "none";
     console.log("defaults");
   }
+
   // console.log('button works')
 }
 
@@ -188,6 +190,10 @@ function hiveuserUp() {
   });
 }
 
+
+
+
+
 // uses private posting key to update profile
 function updateProfile() {
   let data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here:<br /> <a href='https://personal.community/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a>";
@@ -207,6 +213,28 @@ function updateProfile() {
 
   let upwho = document.getElementById('hiveuser').value;
 
+  const beneProfile = [
+    "comment_options",
+    {
+      "author": "sn0n",
+      "permlink": "blokzprofile",
+      "max_accepted_payout": {
+        "amount": "1000000",
+        "precision": 3,
+        "nai": "@@000000013"
+      },
+      "percent_hbd": 63,
+      "allow_votes": true,
+      "allow_curation_rewards": true,
+      "extensions": [
+        {
+          "beneficiaries": [{ "account": "blokz", "weight": 4200 }]
+        }
+      ]
+    }
+  ];
+
+  const bene = Object.create(beneProfile);
 
   if (window.hive_keychain) {
     if (localStorage.getItem("hiveKeychainVerified") !== null) {
@@ -235,7 +263,7 @@ function updateProfile() {
           favorites: favorites
         },
         'blokzprofile',
-        '',
+        bene,
         function (response) {
           document.getElementById('upprofile').innerHTML = JSON.stringify(response);
 
@@ -313,39 +341,45 @@ function createPost() {
   // let setTags = "['testing', 'blokz', 'test']";
   console.log('a');
   // todo: reply to comments and posts
-    if (window.hive_keychain) {
-      console.log('b');
-      console.log('keychain post or comment');
-      console.log("commenting to :" + parentPermlink);
-      // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
-
-      hive_keychain.requestPost(
-        localStorage.getItem("hiveKeychainVerified"),
-        postTitle,
-        postData,
-        parentPermlink,
-        parentAuthor,
-        {
-          tags: ['blokz'],
-          app: 'blokz',
-        },
-        postpermLink,
-        '',
-        function (response) {
-          document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
-
-          document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + hiveuser + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
 
 
 
-          // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-          // window.location.href = '../';
-        }
-      );
-      // console.log(hiveuser + " connected");
-    
-  
- } else {
+
+
+
+  if (window.hive_keychain) {
+    console.log('b');
+    console.log('keychain post or comment');
+    console.log("commenting to :" + parentPermlink);
+    // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
+    let postAs = localStorage.getItem("hiveKeychainVerified");
+    hive_keychain.requestPost(
+      postAs,
+      postTitle,
+      postData,
+      parentPermlink,
+      parentAuthor,
+      {
+        tags: ['blokz'],
+        app: 'blokz',
+      },
+      postpermLink,
+      '',
+      function (response) {
+        document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
+
+        document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
+
+
+
+        // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+        // window.location.href = '../';
+      }
+    );
+    // console.log(hiveuser + " connected");
+
+
+  } else {
     console.log('c');
     hive.broadcast.comment(
       document.getElementById('postingKey').value,
@@ -477,7 +511,7 @@ function displayPost() {
           // console.log("i is " + i);
           let sanicomm = md.render(md.render(result[i].body));
           sanicomm = sanitize(sanicomm);
-          document.getElementById("comments").innerHTML += "<div id='comm'>  <button id='whodonit' onclick='blokzmenu()' class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + thisPost.author + "/avatar'></button> <strong>" + thisPost.author + "</strong> <a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>says</a>: <div style='padding:2em'>" + sanicomm + "</div></div>";
+          document.getElementById("comments").innerHTML += "<div id='comm'>  <a id='whodonit' class='mdl-button mdl-js-button mdl-button--fab' href='../?hive=" + thisPost.author + "'><img src='https://images.hive.blog/u/" + thisPost.author + "/avatar'></a> <a href='../?hive=" + thisPost.author + "'><span style='text-decoration: none;'>" + thisPost.author + "</span></a>:  <div style='padding:2em'>" + sanicomm + "</div> <div style='text-align: right'><a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>permlink & replies</a></div></div>";
           // if parent_author is listed, put on top of post
         }
         // console.log("comment from: " + comments);
