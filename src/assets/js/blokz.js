@@ -24,8 +24,15 @@ md.set({
   linkify: true
 });
 
+window.onscroll = function() {scrollFunction()};
 
-
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("blokztop").style.display = "block";
+  } else {
+    document.getElementById("blokztop").style.display = "none";
+  }
+}
 
 // Get the button that opens the modal
 let btn = document.getElementById("myBtn");
