@@ -24,7 +24,7 @@ md.set({
   linkify: true
 });
 
-window.onscroll = function() {scrollFunction()};
+window.onscroll = function () { scrollFunction() };
 
 function scrollFunction() {
   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -459,7 +459,7 @@ function userRecent() {
 let sanizited;
 function sanitize(sanitized) {
   sanitized = sanitizeHtml(sanitized, {
-    allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'pre', 'code', 'hr', 'br'],
+    allowedTags: ['b', 'i', 'em', 'strong', 'a', 'img', 'center', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'pre', 'code', 'hr', 'br', 'blockquote', 'table', 'thead', 'th', 'tbody', 'tr', 'td', 'sup', 'sub'],
     allowedAttributes: {
       'img': ['src'],
       'a': ['href']
@@ -495,6 +495,8 @@ function displayPost() {
     document.getElementById("display").innerHTML += "<br />" + whenagain + "<hr />";
     let sanipost = md.render(post1);
     sanipost = sanitize(sanipost);
+    sanipost = sanipost.replace(/@[A-Za-z0-9_.]\w+[A-Za-z0-9_.]\b/gi, "<a href='../?hive=$&'>$&</a>");
+
 
 
     document.getElementById("display").innerHTML += sanipost;
@@ -517,6 +519,9 @@ function displayPost() {
           // console.log("who dis " + thisPost.author);
           // console.log("i is " + i);
           let sanicomm = md.render(md.render(result[i].body));
+          sanicomm = sanicomm.replace(/@[A-Za-z0-9_.]\w+[A-Za-z0-9_.]\b/gi, "<a href='../?hive=$&'>$&</a>");
+
+          console.log(sanicomm);
           sanicomm = sanitize(sanicomm);
           document.getElementById("comments").innerHTML += "<div id='comm'>  <a class='mdl-chip mdl-color--blue-grey mdl-chip--contact mdl-chip--deletable' href='../?hive=" + thisPost.author + "'><img class='mdl-chip__contact mdl-color--light-blue' src='https://images.hive.blog/u/" + thisPost.author + "/avatar' alt='avatar'></img><span class='mdl-chip__text' style='font-weight: bold; color: white'>" + thisPost.author + " &nbsp;</span></a>  <div style='padding:2em'>" + sanicomm + "</div> <div style='text-align: right'><a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>permlink & replies</a></div></div>";
           // if parent_author is listed, put on top of post
@@ -546,8 +551,9 @@ function nonBlokzUser(hiveuser) {
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     // console.log("posting_json: " + posting_json);
-    document.getElementById("profimg").src = JSON.parse(posting_json).profile.profile_image;
-    document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
+
+    document.getElementById("profimg").src = "https://images.hive.blog/u/" + hiveuser + "/avatar";
+    document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
     if (JSON.parse(posting_json).profile.website !== undefined) {
       let saniweb = JSON.parse(posting_json).profile.website;
       let saniwebsite = sanitize(saniweb);
@@ -620,7 +626,7 @@ if (getQueryVariable("hive") !== false) {
   if (localStorage.getItem("hive") === null) {
     // localStorage.setItem("hive", getQueryVariable("hive"));
   }
-  hiveuser = getQueryVariable("hive");
+  hiveuser = getQueryVariable("hive").replace('@', '');
   // console.log(hiveuser + " connected");
 }
 
@@ -651,10 +657,13 @@ function buildprofile(hiveuser) {
     // TODO: -- remove testing notes ^>^
     // console.log("posting_json: " + posting_json);
     // display avater
+
+
+    // https://images.hive.blog/u/" + result.author + "/avatar
     let useravatar = "https://images.hive.blog/u/" + hiveuser + "/avatar";
     document.getElementById("profimg").src = useravatar;
     // display cover image
-    document.getElementById("coverimage").style.backgroundImage = "url('" + JSON.parse(posting_json).profile.cover_image + "')";
+    document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
   });
 
   hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 10, (err, result) => {
@@ -726,7 +735,6 @@ function buildprofile(hiveuser) {
         document.getElementById(entryy + "2").appendChild(t);
         // ENDNEW
       });
-
       // favorite steemians
       var favs = sanitize(bitff.favorites);
       // console.log("favs : " + favs);
@@ -754,38 +762,26 @@ function buildprofile(hiveuser) {
         var image = document.createElement("img");
         var imageParent = document.getElementById(para.id);
         image.className = "avatar";
-
         image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
         imageParent.appendChild(image);
         document.getElementById(entryy + "_").appendChild(ffsName);
         ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
-
       }); // finished displaying blokzprofile
-
-
     } else {
-
       nonBlokzUser(hiveuser);
-
     }
     hidecomm();
   });
   document.title = hiveuser + "'s personal.community profile";
-
-
 }
 
 function showtag(tag) {
   document.getElementById("gridd").style.display = "none";
   hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
-
     if (err === null) {
-
       var i, len = result.length;
       document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
-
       for (i = 0; i < len; i++) {
-
         var discussion = result[i];
         // console.log(i, discussion);
         // console.log("who dun it " + discussion.author);
@@ -794,15 +790,10 @@ function showtag(tag) {
         whenbytag = whenbytag.split('GMT');
         document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + "<br /><br />";
         document.getElementById("comments").style.display = "none";
-
       }
-
     } else {
-
       console.log(err);
-
     }
-
   });
 }
 
