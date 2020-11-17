@@ -430,6 +430,8 @@ function upvote(permlink, author) {
       hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) { 
         console.log(response); 
         // todo:  change reaction color
+
+      document.getElementById("thumbs").style.color = "red"; 
       })
 
       // console.log(hiveuser + " connected");
@@ -689,12 +691,12 @@ function buildprofile(hiveuser) {
     // data for each post in a loop
     //document.getElementById("blog").innerHTML += "most recent posts of <h1><a href='../?hive=" + hiveuser + "'>" + hiveuser + "</a></h1>";
     for (var i = 0; i < result.length; i++) {
-      // console.log(" for loop data : " + JSON.stringify(result[i]));
-      // console.log("who dis " + hiveuser);
-      // console.log("i is " + i);
+       console.log(" for loop data : " + JSON.stringify(result[i]));
+       console.log("who dis " + hiveuser);
+       console.log("i is " + i);
       // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
       reactionCount = result[i].active_votes.length;
-      // console.log('post created on : ' + result[i].created);
+      console.log('post created on : ' + result[i].created);
       let postedon = new Date(result[i].created.slice(0, 10)).toDateString();
       postedon = postedon.split('GMT');
       document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + result[i].permlink + "'>"
@@ -735,11 +737,12 @@ function buildprofile(hiveuser) {
       var skills = sanitize(bitff.interests);
       let skillsLog = skills.split(',');
       skillsLog.forEach(function (entry) {
-        // console.log(entry);
-        let entryy = entry.replace(/\s+/g, '');
-        entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
+        console.log(entry);
+        let entryy = entry; //.replace(/\s+/g, '');
+        // entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
         entryy = entryy.toLowerCase();
         // creat chips for each interest
+        // todo: parse for communities and update those 'hive-'
         var vadd = document.createElement('button');
         vadd.className = "mdl-chip";
         vadd.id = entryy;
@@ -806,7 +809,8 @@ function showtag(tag) {
         // console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
         let whenbytag = new Date(discussion.created.slice(0, 10)).toDateString();
         whenbytag = whenbytag.split('GMT');
-        document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + "<br /><br />";
+        let reactioncount = result[i].active_votes.length;
+        document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactioncount + "<hr />";
         document.getElementById("comments").style.display = "none";
       }
     } else {
