@@ -427,7 +427,10 @@ function upvote(permlink, author) {
       hiveuser = localStorage.getItem("hiveKeychainVerified");
 
       let weight = 500;
-      hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) { console.log(response); })
+      hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) { 
+        console.log(response); 
+        // todo:  change reaction color
+      })
 
       // console.log(hiveuser + " connected");
     } else {
@@ -478,7 +481,11 @@ function displayPost() {
   let permlink = letting[1];
   // console.log("letting : " + author + permlink);
   hive.api.getContent(author, permlink, function (err, result) {
-    // console.log(err, result);
+ 
+    let findVoter = JSON.stringify(result.active_votes);
+    console.log(findVoter);
+    
+
     let post1 = md.render(result.body).replace("\n", "");
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
     document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
@@ -505,7 +512,16 @@ function displayPost() {
     let jsonTAGS = JSON.parse(result.json_metadata);
     jsonTAGS.tags.forEach(genTags);
 
-    document.getElementById("display").innerHTML += "<hr /><span style='font-size:2em'>Reaction: </span> <span class='material-icons' style='font-size:2em' onClick='upvote(`" + permlink + "`,`" + author + "`)'>thumb_up</span> ";
+    document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
+
+    // TODO : color reaction 
+    if (findVoter.search(localStorage.getItem("hive")) > 0) {
+      console.log("user found, you have upvoted this");
+      document.getElementById("thumbs").style.color = "red";
+    } else {
+      console.log('you have yet to upvote this post')
+    }
+
     // todo : comments
     document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='modalOnclick("` + author + `","` + permlink + `")'>reply</button></div>`;
     hive.api.getContentReplies(author, permlink, function (err, result) {

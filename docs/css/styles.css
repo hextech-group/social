@@ -330,6 +330,9 @@ dd {
 	margin-left: 3px;
 }
 
+#thumbs {
+  cursor: pointer;
+}
 
 .icons {
     font-size: 20px;
