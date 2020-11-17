@@ -518,7 +518,7 @@ function displayPost() {
           // console.log("i is " + i);
           let sanicomm = md.render(md.render(result[i].body));
           sanicomm = sanitize(sanicomm);
-          document.getElementById("comments").innerHTML += "<div id='comm'>  <a id='whodonit' class='mdl-button mdl-js-button mdl-button--fab' href='../?hive=" + thisPost.author + "'><img src='https://images.hive.blog/u/" + thisPost.author + "/avatar'></a> <a href='../?hive=" + thisPost.author + "'><span style='text-decoration: none;'>" + thisPost.author + "</span></a>:  <div style='padding:2em'>" + sanicomm + "</div> <div style='text-align: right'><a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>permlink & replies</a></div></div>";
+          document.getElementById("comments").innerHTML += "<div id='comm'>  <a class='mdl-chip mdl-color--blue-grey mdl-chip--contact mdl-chip--deletable' href='../?hive=" + thisPost.author + "'><img class='mdl-chip__contact mdl-color--light-blue' src='https://images.hive.blog/u/" + thisPost.author + "/avatar'></img><span class='mdl-chip__text' style='font-weight: bold; color: white'>" + thisPost.author + " &nbsp;</span></a>  <div style='padding:2em'>" + sanicomm + "</div> <div style='text-align: right'><a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>permlink & replies</a></div></div>";
           // if parent_author is listed, put on top of post
         }
         // console.log("comment from: " + comments);
