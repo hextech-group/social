@@ -620,6 +620,8 @@ function splash() {
   tempElement.innerHTML = html;
   document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
 
+
+  
 }
 
 if (getQueryVariable("hive") !== false) {
@@ -841,6 +843,8 @@ window.onload = function loading() {
   if (tag !== "null") {
     showtag(tag);
   } else if (post === "true") {
+    document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
+  
     displayPost();
   } else if (userLatest !== undefined) {
     userRecent();

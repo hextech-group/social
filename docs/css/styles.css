@@ -1,4 +1,5 @@
 
+
   .demo-card-wide.mdl-card {
     width: 100%;
     margin: 10px auto;  
@@ -24,6 +25,7 @@
   .bio {
     text-align: center;
     margin: auto;
+    
   }
   .biofull {
     text-align: left;
