@@ -595,7 +595,7 @@ function nonBlokzUser(hiveuser) {
     }
 
 
-    document.getElementById("toptab").style.display = "none";
+    // document.getElementById("toptab").style.display = "none";
     document.getElementById("strongLocation").style.display = "none";
     document.getElementById("strongAbout").style.display = "none";
     document.getElementById("location").style.display = "none";
@@ -604,7 +604,7 @@ function nonBlokzUser(hiveuser) {
     document.getElementById("nonuser").style.textAlign = "center"
     document.getElementById("usertitle").innerHTML = titleset;
     document.getElementById("name").innerHTML = hiveuser;
-    document.getElementById("strongInterests").style.display = "none";
+    // document.getElementById("strongInterests").style.display = "none";
     document.getElementById("strongAge").style.display = "none";
     document.getElementById("strongGender").style.display = "none";
     document.getElementById("strongAbout").style.display = "none";

@@ -73,12 +73,31 @@
 
         </div>
         <div class="mdl-tabs__panel" id="top8" style="min-height: 100vh; padding: 1em; text-align: center;margin: auto">
-          <div id="favorites"></div>
+          
+          <!-- sn0n is tom -->
+          
+          <div id="tom" onclick="window.location.href='../?hive=sn0n';" style="display: inline-block; padding: 5px; margin: 15px auto; width: 100px; text-align: center;"><div id="sn0n_tom"><img class="avatar" src="https://images.hive.blog/u/sn0n/avatar"></div><div id="sn0n_tom_ffsName"><small id="sn0n_NEW_tom">sn0n</small></div></div>
+          
+          <span id="favorites"></span>
           
         </div>
         <div class="mdl-tabs__panel is-active" id="basic-info" style="min-height: 100vh; padding: 1em;">
-          <div style='float: right;   width:50%; '><strong id="strongInterests">Skills and Interests</strong><br />
-            <div id="interests" class="interests" style="padding-left: 1em;"></div></div>
+          <div style='float: right;   width:50%; '><strong id="strongInterests">Topics of Interest</strong><br />
+
+            <!-- integrate into actual profiles -->
+            <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=hive-167922'>
+              <img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/hive-167922/avatar'></img>
+              <span class='mdl-chip__text'>leofinance &nbsp;</span>
+            </a>
+            <!-- 
+              <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=hive-195370'>
+              <img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/hive-195370/avatar'></img>
+              <span class='mdl-chip__text'>rising star &nbsp;</span>
+            </a><br />
+          -->
+            <span id="interests" class="interests" style="padding-left: 1em;"></span>
+          </div>
+
           <strong id="strongAge">Age</strong>
           <div style="padding-left: 1em;" id="age"></div>
           <strong id="strongGender">Gender</strong>
