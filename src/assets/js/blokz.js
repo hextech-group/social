@@ -879,8 +879,15 @@ window.onload = function loading() {
     hidecomm();
   };
 
-
-
+  /*
+  genCommunityChip()
+  function genCommunityChip() {
+    var temp = document.getElementsByTagName("template")[0];
+    var clon = temp.content.cloneNode(true);
+    document.body.appendChild(clon);
+  }
+  */
+ 
 }
 
 
