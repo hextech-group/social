@@ -853,7 +853,7 @@ window.onload = function loading() {
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
     document.getElementById("loggedin").innerHTML = "<div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a></div> ";
-    document.getElementById("loggedin").innerHTML += "<br /><button onclick='modalOnclick()'>New Post</button>";
+    document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>New Post</a>";
   }
 
   if (update !== true && localStorage.getItem("hive") !== null) {
@@ -862,6 +862,12 @@ window.onload = function loading() {
 
   if (tag !== "null") {
     showtag(tag);
+  } else if (getQueryVariable("newpost") !== false) { 
+    console.log("NEW POST");
+    document.getElementById("gridd").style.display = "none";
+
+    document.getElementById("comments").style.display = "none";
+
   } else if (post === "true") {
     document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
   
@@ -878,6 +884,8 @@ window.onload = function loading() {
     splash();
     hidecomm();
   };
+
+ 
 
   /*
   genCommunityChip()
