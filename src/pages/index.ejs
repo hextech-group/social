@@ -16,47 +16,7 @@
             -->
 
 
-<div id="myModal" class="modal">
 
-  <div class="modal-content" id="createpostbox">
-    <div style='text-align: right; color: red; font-size: 2em;' onclick="closeMe()">&times;</div>
-    <div>
-      <div class="mdl-textfield mdl-js-textfield" id="replyingToContainer">
-        <small>replying to: </small>
-        <input type="text" id="replyingTo" name="lname" disabled> by <br />
-        <input type="text" id="replyingToWho" name="lname" disabled>
-      </div>
-
-
-      <div class="mdl-textfield mdl-js-textfield">
-        <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
-        <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
-      </div>
-
-      <div class="mdl-textfield mdl-js-textfield">
-        <small>Post Body</small>
-        <textarea id="postBody"></textarea>
-    <script>
-      var easyMDE = new EasyMDE({element: document.getElementById('postBody')});
-      </script>
-        <label class="mdl-textfield__label" for="postBody" id="postBodyLabel"></label>
-      </div>
-
-
-      <div class="mdl-textfield mdl-js-textfield">
-        <small>Private Posting Key:</small><input class="mdl-textfield__input" type="password" id="postingKey">
-        <label class="mdl-textfield__label" for="postingKey"></label>
-  
-      </div>
-      <div>
-        <button type="button" id="nextBtn" onclick="createPost()"
-          class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-          data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
-      </div>
-    </div>
-  </div>
-
-</div>
 
 
 <div style="background-color:white; padding-bottom: 100px; min-height: 100vh;" id="gridd">

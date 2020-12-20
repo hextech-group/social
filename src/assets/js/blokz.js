@@ -333,6 +333,7 @@ function updateProfile() {
 let reply
 
 function createPost() {
+  console.log("begin creating post process")
   let postTitle = document.getElementById('postTitle').value;
   let ran = AES256.encrypt(postTitle, postTitle);
   ran = ran.substring(1, 6);
@@ -348,11 +349,6 @@ function createPost() {
   // let setTags = "['testing', 'blokz', 'test']";
   console.log('a');
   // todo: reply to comments and posts
-
-
-
-
-
 
   if (window.hive_keychain) {
     console.log('b');
@@ -374,18 +370,12 @@ function createPost() {
       '',
       function (response) {
         document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
-
         document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
-
-
-
         // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
         // window.location.href = '../';
       }
     );
     // console.log(hiveuser + " connected");
-
-
   } else {
     console.log('c');
     hive.broadcast.comment(
@@ -402,9 +392,9 @@ function createPost() {
       },
       function (err, result) {
         if (err)
-          document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
+          document.getElementById("display").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
         else
-          document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + result;
+          document.getElementById("display").innerHTML = "<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + result;
 
 
         /*setTimeout(() => {
@@ -864,6 +854,33 @@ window.onload = function loading() {
     showtag(tag);
   } else if (getQueryVariable("newpost") !== false) { 
     console.log("NEW POST");
+    document.getElementById("display").innerHTML = `
+    <div class="mdl-textfield mdl-js-textfield">
+      <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
+      <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield">
+      <small>Post Body</small>
+      <textarea id="postBody"></textarea>
+
+
+      <label class="mdl-textfield__label" for="postBody" id="postBodyLabel"></label>
+    </div>
+
+
+    <div class="mdl-textfield mdl-js-textfield">
+      <small>Private Posting Key:</small><input class="mdl-textfield__input" type="password" id="postingKey">
+      <label class="mdl-textfield__label" for="postingKey"></label>
+
+    </div>
+    <div>
+      <button type="button" id="nextBtn" onclick="createPost()"
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+        data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
+    </div>`;
+    let easyMDEComment = new EasyMDE({element: document.getElementById('postBody')});
+    console.log(easyMDEComment);
     document.getElementById("gridd").style.display = "none";
 
     document.getElementById("comments").style.display = "none";
