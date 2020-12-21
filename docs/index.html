@@ -13,21 +13,21 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-light_blue.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 <!-- end todo -->
 
-<script defer src="https://cdn.jsdelivr.net/npm/@hiveio/hive-js/dist/hive.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@hiveio/hive-js/dist/hive.min.js"></script>
 
 
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
-<script defer src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
 
-<script defer src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
-<script defer src="../js/sanitize-html.js?ver=5.2"></script>
+<script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="../js/sanitize-html.js?ver=5.2"></script>
 
 <link rel="stylesheet" href="../css/styles.css?ver=7.42b">
 
-<script async src="../js/blokz.js?ver=7.42b"></script>
+<script src="../js/blokz.js?ver=7.42b"></script>
 
 
 
@@ -197,7 +197,18 @@
 
 
 
-
+<script>
+  if('serviceWorker' in navigator) {
+    navigator.serviceWorker
+         .register('sw.js')
+         .then(function() { console.log("Service Worker Registered"); });
+  }
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+  </script>
 
 </body>
 
