@@ -654,8 +654,8 @@ if (getQueryVariable("post") !== false) {
   post = "true";
   hiveuser = undefined;
 }
-
-hive.api.setOptions({ url: 'https://anyx.io' });
+ 
+hive.api.setOptions({ url: 'https://api.hive.blog' });
 
 function buildprofile(hiveuser) {
 
@@ -663,6 +663,7 @@ function buildprofile(hiveuser) {
 
   // gets posting_json_metadata for generic profile data for user
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
+    console.log(res, err);
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     // TODO: -- remove testing notes ^>^
     // console.log("posting_json: " + posting_json);
@@ -681,12 +682,14 @@ function buildprofile(hiveuser) {
     // data for each post in a loop
     //document.getElementById("blog").innerHTML += "most recent posts of <h1><a href='../?hive=" + hiveuser + "'>" + hiveuser + "</a></h1>";
     for (var i = 0; i < result.length; i++) {
-       console.log(" for loop data : " + JSON.stringify(result[i]));
-       console.log("who dis " + hiveuser);
-       console.log("i is " + i);
+
+      // testing for replies 
+       // console.log(" for loop data : " + JSON.stringify(result[i]));
+       // console.log("who dis " + hiveuser);
+       // console.log("i is " + i);
       // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
       reactionCount = result[i].active_votes.length;
-      console.log('post created on : ' + result[i].created);
+      // console.log('post created on : ' + result[i].created);
       let postedon = new Date(result[i].created.slice(0, 10)).toDateString();
       postedon = postedon.split('GMT');
       document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + result[i].permlink + "'>"
@@ -704,18 +707,22 @@ function buildprofile(hiveuser) {
   document.getElementById("hiveuser").innerHTML += "<a href='https://dcity.io/city?c=" + hiveuser + "' target='_dcity'><img src='../images/dcity.png' height='32px' width='151px'></a>  ";
   // https://hiveblocks.com/@
   // fetch blokzprofile post from hive
-  hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
+  hive.api.getContent(hiveuser, 'blokzprofile', function (err, result) {
+  // hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
     // user has a blokz/profile
-    if (result.length >= 1) {
+    console.log("whats goin on here?")
+    console.log(err, result)
+    if (result) {
       // console.log("meep :" + JSON.stringify(result));
-      var blokify = JSON.parse(JSON.stringify(result[0].body));
-      var blokzmeta = JSON.parse((result[0].json_metadata));
+      var blokify = JSON.stringify(result.json_metadata);
+      var blokzmeta = JSON.parse(result.json_metadata);
+      console.log("test " + blokzmeta.article);
       // console.log("what is blokify " + blokify);
       var bitff = JSON.parse(JSON.stringify(blokzmeta));
       // console.log("blokzmeta: " + bitff.app);
       // console.log(bitff.interests);
-      document.getElementById("name").innerHTML = sanitize(blokzmeta.name);
-      document.getElementById("article").innerHTML = sanitize(md.render(blokzmeta.article));
+      document.getElementById("name").innerHTML = sanitize(blokify.name);
+      document.getElementById("article").innerHTML = sanitize(md.render(blokify.article));
       // ~~~ md.render(blokzmeta.article).replace("\n", "");
       document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
       var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
