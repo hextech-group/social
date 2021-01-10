@@ -714,15 +714,14 @@ function buildprofile(hiveuser) {
     console.log(err, result)
     if (result) {
       // console.log("meep :" + JSON.stringify(result));
-      var blokify = JSON.stringify(result.json_metadata);
       var blokzmeta = JSON.parse(result.json_metadata);
       console.log("test " + blokzmeta.article);
       // console.log("what is blokify " + blokify);
       var bitff = JSON.parse(JSON.stringify(blokzmeta));
       // console.log("blokzmeta: " + bitff.app);
       // console.log(bitff.interests);
-      document.getElementById("name").innerHTML = sanitize(blokify.name);
-      document.getElementById("article").innerHTML = sanitize(md.render(blokify.article));
+      document.getElementById("name").innerHTML = sanitize(blokzmeta.name);
+      document.getElementById("article").innerHTML = sanitize(md.render(blokzmeta.article));
       // ~~~ md.render(blokzmeta.article).replace("\n", "");
       document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
       var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
