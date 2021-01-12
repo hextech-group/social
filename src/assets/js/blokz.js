@@ -15,6 +15,7 @@ let hiveuser = undefined;
 let reactionCount;
 let postedon;
 let thisPost;
+let easyMDE;
 let oldestPermLink = "";
 let md = new Remarkable();
 md.set({
@@ -169,18 +170,19 @@ function hiveuserUp() {
   // console.log("TRIGGERED!!!");
   let hiveuserUP = document.getElementById("hiveuser").value;
   // console.log(hiveuserUP);
-  hive.api.getDiscussionsByAuthorBeforeDate(hiveuserUP, 'blokzprofile', now, 1, (err, result) => {
+  hive.api.getContent(hiveuser, 'blokzprofile', function (err, result) {
     // populate data
     if (result) {
-      // console.log("results are in:");
-      // console.log(result);
-      let blokify = JSON.parse(JSON.stringify(result[0].body));
-      let blokzmeta = JSON.parse((result[0].json_metadata));
+      console.log("results are in:");
+      console.log(result);
+      //       var blokzmeta = JSON.parse(result.json_metadata);
+     // OLD let blokify = JSON.parse(JSON.stringify(result[0].body));
+     // OLD let blokzmeta = JSON.parse((result[0].json_metadata));
       // console.log(blokify);
       // console.log("blokzmeta: " + blokzmeta);
       // console.log(blokzmeta.blokz);
-      let bitff = JSON.parse(JSON.stringify(blokzmeta));
-      // console.log(bitff);
+      let bitff = JSON.parse(result.json_metadata);
+      console.log(bitff);
       document.getElementById("name").value = bitff.name;
       easyMDE.value(bitff.article);
       document.getElementById("usertitle").value = bitff.usertitle;
@@ -610,19 +612,20 @@ function nonBlokzUser(hiveuser) {
 }
 
 
+
+
 function splash() {
 
   document.getElementById("gridd").style.display = "none";
   // console.log("splash engaged");
-  var html = `<div id='splash'><img src="../images/logo192.png"><br /><h6 style="margin-bottom: 2px; padding: 2px;">Welcome to </h6>	<h3>personal.community</h3>To get started, input a $HIVE username and submit to goto profile</strong>` +
-    `<form id="frm1" action="/"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">` +
-    `  <label class="mdl-textfield__label" for="sample4" style="font-size: 1.25em;">HIVE username</label>` +
-    `  <input type="text" name="hive" class="mdl-textfield__input">` +
-    `</div></form>` +
+  var html = `<div id='splash'><img src="../images/logo192.png"><br />` +
+  `<h6 style="margin-bottom: 2px; padding: 2px;">Welcome to </h6>`+ 
+  `<h3>personal.community</h3>` +
 
 
     //`    </div>` +
-    `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu.<br /> This is used to navigate site past this page<br /> ` +
+    `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu.` + 
+    `<br /> This is used to navigate site past this page<br /> ` +
     `<hr />Made with &#10084; by <br /><a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?hive=sn0n'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/sn0n/avatar'></img><span class='mdl-chip__text'>sn0n &nbsp;</span></a></div>`;
   var tempElement = document.createElement('splash');
   tempElement.innerHTML = html;
@@ -885,8 +888,8 @@ window.onload = function loading() {
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
         data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
     </div>`;
-    let easyMDEComment = new EasyMDE({element: document.getElementById('postBody')});
-    console.log(easyMDEComment);
+    easyMDE = new EasyMDE({element: document.getElementById('postBody')});
+    console.log("this is " + easyMDE);
     document.getElementById("gridd").style.display = "none";
 
     document.getElementById("comments").style.display = "none";
