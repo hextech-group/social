@@ -496,7 +496,11 @@ function displayPost() {
     document.getElementById("display").innerHTML += "<br />" + whenagain + "<hr />";
     let sanipost = md.render(post1);
     sanipost = sanitize(sanipost);
-    sanipost = sanipost.replace(/@[A-Za-z0-9_.]\w+[A-Za-z0-9_.]\b/gi, "<a href='../?hive=$&'>$&</a>");
+    sanipost = sanipost.replace(/@[A-Za-z0-9_.-]+[A-Za-z0-9_.]\s/gi, `<a href="../?hive=$&">$&</a>`);
+    // sanipost = sanipost.replace('<a href="../?hive= ', `<a href="../?hive=`);
+
+
+
 
 
 
