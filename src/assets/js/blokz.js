@@ -825,9 +825,11 @@ function showtag(tag) {
 // MAIN()
 window.onload = function loading() {
 
+
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
       localStorage.setItem("hive", getQueryVariable("loginas"));
+      
     }
     hiveuser = getQueryVariable("loginas");
     if (window.hive_keychain) {
@@ -916,6 +918,10 @@ window.onload = function loading() {
   };
 
  
+  if (getQueryVariable("hive") === localStorage.getItem("hive")) {
+    console.log("this is my page");
+    document.getElementById("toptab").click()
+  }
 
   /*
   genCommunityChip()
