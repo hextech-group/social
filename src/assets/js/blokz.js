@@ -245,53 +245,6 @@ function updateProfile() {
 
   const bene = Object.create(beneProfile);
 
-  if (window.hive_keychain) {
-    if (localStorage.getItem("hiveKeychainVerified") !== null) {
-      console.log('keychain update profile code here');
-
-      hiveuser = localStorage.getItem("hiveKeychainVerified");
-
-      let weight = 500;
-      hive_keychain.requestPost(
-        document.getElementById('hiveuser').value,
-        'My Personal.Community Profile',
-        data,
-        'blokzprofile',
-        '',
-        {
-          tags: ['blokz'],
-          app: 'blokz',
-          article: article,
-          name: name,
-          favsite: favsite,
-          usertitle: usertitle,
-          birthyear: birthyear,
-          gender: gender,
-          location: location,
-          interests: interests,
-          favorites: favorites
-        },
-        'blokzprofile',
-        bene,
-        function (response) {
-          document.getElementById('upprofile').innerHTML = JSON.stringify(response);
-
-          document.getElementById('upprofile').innerHTML += "<h3> Please wait while updating profile...</h3>";
-
-          setTimeout(() => {
-            let url = "../?hive=" + upwho;
-            window.location.href = url;
-          }, 8000);
-
-          // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-          // window.location.href = '../';
-        }
-      );
-      // console.log(hiveuser + " connected");
-    } else {
-      console.log('keychain not installed')
-    };
-  } else {
     hive.broadcast.comment(
       document.getElementById('postingKey').value,
       '', //author
@@ -329,7 +282,7 @@ function updateProfile() {
         // window.location.href = '../';
       }
     );
-  };
+  
 }
 
 let reply
