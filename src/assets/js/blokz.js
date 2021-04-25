@@ -743,7 +743,6 @@ function buildprofile(hiveuser) {
           
           xhr.onreadystatechange = function () {
              if (xhr.readyState === 4) {
-                console.log(xhr.status);
                 let communityinfo = JSON.parse(xhr.responseText)
                 console.log("at bat " + communityinfo.result.title);   //
              }};
