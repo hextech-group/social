@@ -41,14 +41,15 @@ let btn = document.getElementById("myBtn");
 // Get the <span> element that closes the modal
 let span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
+
 let parentAuthor = '';
 let parentPermlink = "personalcommunity";
-function modalOnclick(author, commentpermlink) {
-  document.getElementById("myModal").style.display = "block";
+function replyClick(author, commentpermlink) {
+
+
   console.log("author :" + author);
   console.log("commentpermlink :" + commentpermlink);
-  if (author !== undefined) {
+/*  if (author !== undefined) {
     document.getElementById("replyingToContainer").style.display = "block";
     document.getElementById("replyingTo").value = commentpermlink;
     document.getElementById("replyingToWho").value = author;
@@ -57,22 +58,17 @@ function modalOnclick(author, commentpermlink) {
   } else {
     document.getElementById("replyingToContainer").style.display = "none";
     console.log("defaults");
-  }
+  } 
+  */
 
-  // console.log('button works')
+  window.location.href = "../?newpost=true&author=" + author + "&permlink=" + commentpermlink;
+
 }
 
-// When the user clicks on <span> (x), close the modal
-function closeMe() {
-  document.getElementById("myModal").style.display = "none";
-}
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  if (event.target == document.getElementById("myModal")) {
-    document.getElementById("myModal").style.display = "none";
-  }
-}
+
+
+
 
 function words(str) {
   str = str.replace(/(^\s*)|(\s*$)/gi, "");
@@ -287,8 +283,13 @@ function updateProfile() {
 
 let reply
 
+
+
+
 function createPost() {
-  console.log("begin creating post process")
+  console.log("begin creating post process");
+
+  
   let postTitle = document.getElementById('postTitle').value;
   let ran = AES256.encrypt(postTitle, postTitle);
   ran = ran.substring(1, 6);
@@ -304,6 +305,8 @@ function createPost() {
   // let setTags = "['testing', 'blokz', 'test']";
   console.log('a');
   // todo: reply to comments and posts
+
+
 
   if (window.hive_keychain) {
     console.log('b');
@@ -332,6 +335,8 @@ function createPost() {
     );
     // console.log(hiveuser + " connected");
   } else {
+
+    // broadcast a new post
     console.log('c');
     hive.broadcast.comment(
       document.getElementById('postingKey').value,
@@ -346,17 +351,18 @@ function createPost() {
         app: 'blokz'
       },
       function (err, result) {
+        document.getElementById("displayUpdate").style.display = "block";
         if (err)
-          document.getElementById("display").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + err;
-        else
-          document.getElementById("display").innerHTML = "<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + result;
+          document.getElementById("displayUpdate").innerHTML = "<h3>something went wrong...  try again</h3>" + err;
+        else {
+          document.getElementById("displayUpdate").innerHTML = "<h3>Redirecting page in 8 seconds<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a><br />" + result;
 
 
-        /*setTimeout(() => {
-          let url = "../?hive=" + hiveuser;
+        setTimeout(() => {
+          let url = "../?post=" + postingAs + "/" + postpermLink;
           window.location.href = url;
-        }, 8000); */
-
+        }, 8000); 
+      }
         // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
         // window.location.href = '../';
       }
@@ -474,7 +480,7 @@ function displayPost() {
     }
 
     // todo : comments
-    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='modalOnclick("` + author + `","` + permlink + `")'>reply</button></div>`;
+    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='replyClick("` + author + `","` + permlink + `")'>reply</button></div>`;
     hive.api.getContentReplies(author, permlink, function (err, result) {
       // console.log(err, result);
       if (result.length > 0) {
@@ -554,10 +560,9 @@ function nonBlokzUser(hiveuser) {
     document.getElementById("usertitle").innerHTML = titleset;
     document.getElementById("name").innerHTML = hiveuser;
     // document.getElementById("strongInterests").style.display = "none";
-    document.getElementById("strongAge").style.display = "none";
+    // document.getElementById("strongAge").style.display = "none";
     document.getElementById("strongGender").style.display = "none";
     document.getElementById("strongAbout").style.display = "none";
-    document.getElementById("age").style.display = "none";
     document.getElementById("gender").style.display = "none";
 
 
@@ -625,6 +630,10 @@ function buildprofile(hiveuser) {
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
     console.log(res, err);
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+    
+    let createdAge = Date(res.accounts[0].created).slice(4, 15);
+    console.log(Date(res.accounts[0].created).slice(0, 15));
+    document.getElementById("age").innerHTML = createdAge;
     // TODO: -- remove testing notes ^>^
     // console.log("posting_json: " + posting_json);
     // display avater
@@ -673,6 +682,7 @@ function buildprofile(hiveuser) {
     console.log("whats goin on here?")
     console.log(err, result)
     if (result) {
+
       // console.log("meep :" + JSON.stringify(result));
       var blokzmeta = JSON.parse(result.json_metadata);
       console.log("test " + blokzmeta.article);
@@ -685,7 +695,7 @@ function buildprofile(hiveuser) {
       // ~~~ md.render(blokzmeta.article).replace("\n", "");
       document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
       var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
-      document.getElementById("age").innerHTML = profage;
+
       document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
       document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
       document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
@@ -822,14 +832,17 @@ window.onload = function loading() {
     showtag(tag);
   } else if (getQueryVariable("newpost") !== false) { 
     console.log("NEW POST");
+    // testing commenting
+
+
     document.getElementById("display").innerHTML = `
-    <div class="mdl-textfield mdl-js-textfield">
+    <div class="mdl-textfield mdl-js-textfield" id="posttitleid">
       <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
       <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
     </div>
 
     <div class="mdl-textfield mdl-js-textfield">
-      <small>Post Body</small>
+      <small id="postorcomment">Post Body</small>
       <textarea id="postBody"></textarea>
 
 
@@ -848,11 +861,18 @@ window.onload = function loading() {
         data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
     </div>`;
     easyMDE = new EasyMDE({element: document.getElementById('postBody')});
-    console.log("this is " + easyMDE);
+
     document.getElementById("gridd").style.display = "none";
 
     document.getElementById("comments").style.display = "none";
-
+    if (getQueryVariable("author") !== false) {
+      parentAuthor = getQueryVariable("author");
+      parentPermlink = getQueryVariable("permlink");
+      console.log(parentAuthor + "/" + parentPermlink);
+      document.getElementById("posttitleid").style.display = "none";
+      document.getElementById('postTitle').value = "replying to " + parentAuthor + "/" + parentPermlink;
+      document.getElementById("postorcomment").innerHTML = "commenting on " + parentAuthor + "/" + parentPermlink ;
+     }
   } else if (post === "true") {
     document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
   
