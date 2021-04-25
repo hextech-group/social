@@ -1,5 +1,8 @@
 "use strict";
 
+hive.api.setOptions({ url: 'https://api.hive.blog' });
+let url = "https://api.hive.blog";
+
 let blokz = 'test';
 let titleset = "";
 let year = new Date();
@@ -620,7 +623,7 @@ if (getQueryVariable("post") !== false) {
   hiveuser = undefined;
 }
  
-hive.api.setOptions({ url: 'https://api.hive.blog' });
+
 
 function buildprofile(hiveuser) {
 
@@ -700,9 +703,16 @@ function buildprofile(hiveuser) {
       document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
       document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
       // interests
-      var skills = sanitize(bitff.interests);
-      let skillsLog = skills.split(',');
-      skillsLog.forEach(function (entry) {
+
+      /* <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=hive-167922'>
+      <img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/hive-167922/avatar'></img>
+      <span class='mdl-chip__text'>leofinance &nbsp;</span>
+      </a>  */
+
+      var interests = sanitize(bitff.interests);
+      let interestsLog = interests.split(',');
+
+      interestsLog.forEach(function (entry) {
         console.log(entry);
         let entryy = entry; //.replace(/\s+/g, '');
         // entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
@@ -720,8 +730,36 @@ function buildprofile(hiveuser) {
         document.getElementById(entryy).appendChild(sadd);
         var t = document.createTextNode("#" + entryy);
         document.getElementById(entryy + "2").appendChild(t);
+
+
+        // todo: community chips
+        if (entryy.substring(0, 5) == "hive-") {
+          console.log("community found in interests at " + entryy);
+
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
+          
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          
+          xhr.onreadystatechange = function () {
+             if (xhr.readyState === 4) {
+                console.log(xhr.status);
+                let communityinfo = JSON.parse(xhr.responseText)
+                console.log("at bat " + communityinfo.result.title);   //
+             }};
+          
+          var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"'+ entryy +'","observer":"blokz"}, "id":1}';
+          
+          xhr.send(data);
+
+          
+        };
+        // end of fix community named chips
+
+
         // ENDNEW
       });
+
       // favorite steemians
       var favs = sanitize(bitff.favorites);
       // console.log("favs : " + favs);
