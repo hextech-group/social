@@ -185,9 +185,9 @@ function hiveuserUp() {
       document.getElementById("name").value = bitff.name;
       easyMDE.value(bitff.article);
       document.getElementById("usertitle").value = bitff.usertitle;
-      document.getElementById("birthyear").value = bitff.birthyear;
+      //document.getElementById("birthyear").value = bitff.birthyear;
       document.getElementById("location").value = bitff.location;
-      document.getElementById("gender").value = bitff.gender;
+      //document.getElementById("gender").value = bitff.gender;
       document.getElementById("interest").value = bitff.interests;
       document.getElementById("favorite").value = bitff.favorites;
       document.getElementById("favsite").value = bitff.favsite;
@@ -209,15 +209,15 @@ function updateProfile() {
   let name = document.getElementById('name').value;
   let favsite = document.getElementById('favsite').value;
   let usertitle = document.getElementById('usertitle').value;
-  let birthyear = document.getElementById('birthyear').value;
+  //let birthyear = document.getElementById('birthyear').value;
   //var sign = document.getElementById('sign').value;
-  let gender = document.getElementById('gender').value;
+  // let gender = document.getElementById('gender').value;
   let location = document.getElementById('location').value;
   let interests = document.getElementById('interest').value;
   let favorites = document.getElementById('favorite').value;
 
 
-  // console.log("proof: " + favsite + article + name + usertitle + birthyear + gender + location + interests + favorites);
+  console.log("proof: " + favsite + article + name + usertitle + location + interests + favorites);
 
   let upwho = document.getElementById('hiveuser').value;
 
@@ -260,8 +260,6 @@ function updateProfile() {
         name: name,
         favsite: favsite,
         usertitle: usertitle,
-        birthyear: birthyear,
-        gender: gender,
         location: location,
         interests: interests,
         favorites: favorites
@@ -272,10 +270,11 @@ function updateProfile() {
         else
           document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
 
-        setTimeout(() => {
+        /* setTimeout(() => {
           let url = "../?hive=" + upwho;
           window.location.href = url;
         }, 8000);
+        */ 
 
         // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
         // window.location.href = '../';
@@ -721,6 +720,20 @@ function buildprofile(hiveuser) {
 
       interestsLog.forEach(function (entry) {
         console.log(entry);
+        if (entry.substring(0, 5) == "hive-") {
+          console.log("community found in interests at " + entry);
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.onreadystatechange = function () {
+             if (xhr.readyState === 4) {
+                let communityinfo = JSON.parse(xhr.responseText)
+                console.log("at bat " + communityinfo.result.title);   //
+                document.getElementById("interests").innerHTML += "<a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=" + entry + "'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/" + entry + "/avatar'></img><span class='mdl-chip__text'>" + communityinfo.result.title + "&nbsp;</span></a>";
+             }};
+          var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"'+ entry +'","observer":"blokz"}, "id":1}';
+          xhr.send(data);
+        } else {
         let entryy = entry; //.replace(/\s+/g, '');
         // entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
         entryy = entryy.toLowerCase();
@@ -737,29 +750,10 @@ function buildprofile(hiveuser) {
         document.getElementById(entryy).appendChild(sadd);
         var t = document.createTextNode("#" + entryy);
         document.getElementById(entryy + "2").appendChild(t);
-
+        };
 
         // todo: community chips
-        if (entryy.substring(0, 5) == "hive-") {
-          console.log("community found in interests at " + entryy);
-
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", url);
-          
-          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          
-          xhr.onreadystatechange = function () {
-             if (xhr.readyState === 4) {
-                let communityinfo = JSON.parse(xhr.responseText)
-                console.log("at bat " + communityinfo.result.title);   //
-             }};
-          
-          var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"'+ entryy +'","observer":"blokz"}, "id":1}';
-          
-          xhr.send(data);
-
-          
-        };
+        
         // end of fix community named chips
 
 
@@ -811,8 +805,28 @@ function showtag(tag) {
   hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
     if (err === null) {
       var i, len = result.length;
-      document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
-      for (i = 0; i < len; i++) {
+      console.log("what is a " + tag);
+ 
+      if (tag.substring(0, 5) == "hive-") {
+        console.log("community found in interests at " + tag);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+           if (xhr.readyState === 4) {
+              let communityinfo = JSON.parse(xhr.responseText)
+              console.log("at bat " + communityinfo.result.title);  
+              let contentofTag = document.getElementById("display").innerHTML;
+              document.getElementById("display").innerHTML = "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + communityinfo.result.title + " posts</div><br />" + contentofTag;
+           }};
+        var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"'+ tag +'","observer":"blokz"}, "id":1}';
+        xhr.send(data);
+      } else {
+        document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
+
+      }
+
+     for (i = 0; i < len; i++) {
         var discussion = result[i];
         // console.log(i, discussion);
         // console.log("who dun it " + discussion.author);
