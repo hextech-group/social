@@ -634,9 +634,16 @@ function buildprofile(hiveuser) {
     console.log(res, err);
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     
-    let createdAge = Date(res.accounts[0].created).slice(4, 15);
-    console.log(Date(res.accounts[0].created).slice(0, 15));
-    document.getElementById("age").innerHTML = createdAge;
+    let createdAge = res.accounts[0].created.slice(0, 10);
+    let datedd = createdAge.split("-");
+    console.log("Member since: " + datedd[0]);
+
+    function monthName(mon) {
+      return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][mon - 1];
+   }
+  
+    
+    document.getElementById("age").innerHTML = monthName(datedd[1]) + " " + datedd[2] + ", " + datedd[0]; 
     // TODO: -- remove testing notes ^>^
     // console.log("posting_json: " + posting_json);
     // display avater
@@ -683,7 +690,7 @@ function buildprofile(hiveuser) {
   // hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
     // user has a blokz/profile
     console.log("whats goin on here?")
-    console.log(err, result)
+    // console.log(err, result)
     if (result) {
 
       // console.log("meep :" + JSON.stringify(result));
