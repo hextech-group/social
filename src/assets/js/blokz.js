@@ -182,15 +182,15 @@ function hiveuserUp() {
       // console.log(blokzmeta.blokz);
       let bitff = JSON.parse(result.json_metadata);
       console.log(bitff);
-      document.getElementById("name").value = bitff.name;
+      //document.getElementById("name").value = bitff.name;
       easyMDE.value(bitff.article);
-      document.getElementById("usertitle").value = bitff.usertitle;
+      //document.getElementById("usertitle").value = bitff.usertitle;
       //document.getElementById("birthyear").value = bitff.birthyear;
-      document.getElementById("location").value = bitff.location;
+      //document.getElementById("location").value = bitff.location;
       //document.getElementById("gender").value = bitff.gender;
       document.getElementById("interest").value = bitff.interests;
       document.getElementById("favorite").value = bitff.favorites;
-      document.getElementById("favsite").value = bitff.favsite;
+      //document.getElementById("favsite").value = bitff.favsite;
       loadChips();
     } else {
       reject(err);
@@ -206,18 +206,18 @@ function hiveuserUp() {
 function updateProfile() {
   let data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here:<br /> <a href='https://personal.community/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a>";
   let article = easyMDE.value();
-  let name = document.getElementById('name').value;
-  let favsite = document.getElementById('favsite').value;
-  let usertitle = document.getElementById('usertitle').value;
+  //let name = document.getElementById('name').value;
+  //let favsite = document.getElementById('favsite').value;
+  //let usertitle = document.getElementById('usertitle').value;
   //let birthyear = document.getElementById('birthyear').value;
   //var sign = document.getElementById('sign').value;
   // let gender = document.getElementById('gender').value;
-  let location = document.getElementById('location').value;
+  // let location = document.getElementById('location').value;
   let interests = document.getElementById('interest').value;
   let favorites = document.getElementById('favorite').value;
 
 
-  console.log("proof: " + favsite + article + name + usertitle + location + interests + favorites);
+  console.log("proof: " + article + interests + favorites);
 
   let upwho = document.getElementById('hiveuser').value;
 
@@ -257,10 +257,6 @@ function updateProfile() {
         tags: ['blokz'],
         app: 'blokz',
         article: article,
-        name: name,
-        favsite: favsite,
-        usertitle: usertitle,
-        location: location,
         interests: interests,
         favorites: favorites
       },
@@ -270,11 +266,11 @@ function updateProfile() {
         else
           document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
 
-        /* setTimeout(() => {
+         setTimeout(() => {
           let url = "../?hive=" + upwho;
           window.location.href = url;
         }, 8000);
-        */ 
+         
 
         // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
         // window.location.href = '../';
@@ -525,7 +521,7 @@ function nonBlokzUser(hiveuser) {
   // console.log("user does not exist! or something went wrong")
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
-    // console.log("posting_json: " + posting_json);
+    console.log("posting_json: " + posting_json);
 
     document.getElementById("profimg").src = "https://images.hive.blog/u/" + hiveuser + "/avatar";
     document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
@@ -553,14 +549,14 @@ function nonBlokzUser(hiveuser) {
 
 
     // document.getElementById("toptab").style.display = "none";
-    document.getElementById("strongLocation").style.display = "none";
+    //document.getElementById("strongLocation").style.display = "none";
     document.getElementById("strongAbout").style.display = "none";
-    document.getElementById("location").style.display = "none";
+    //document.getElementById("location").style.display = "none";
     document.getElementById("comments").style.display = "none";
     document.getElementById("nonuser").innerHTML = "<h3> no personal.community page setup</h3>";
     document.getElementById("nonuser").style.textAlign = "center"
     document.getElementById("usertitle").innerHTML = titleset;
-    document.getElementById("name").innerHTML = hiveuser;
+    // document.getElementById("name").innerHTML = hiveuser;
     // document.getElementById("strongInterests").style.display = "none";
     // document.getElementById("strongAge").style.display = "none";
     document.getElementById("strongGender").style.display = "none";
@@ -626,13 +622,50 @@ if (getQueryVariable("post") !== false) {
 
 function buildprofile(hiveuser) {
 
-  // console.log("fetching profile for : " + hiveuser)
+  console.log("fetching profile for : " + hiveuser)
 
   // gets posting_json_metadata for generic profile data for user
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
-    console.log(res, err);
-    let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+
+
+
     
+    let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+    console.log("posting_json: " + posting_json);
+
+    if (JSON.parse(posting_json).profile.about !== undefined) {
+      let saniabo = JSON.parse(posting_json).profile.about;
+      let saniabout = sanitize(saniabo);
+      document.getElementById("usertitle").innerHTML = saniabout;
+    } else {
+      titleset = "";
+    }
+
+    if (JSON.parse(posting_json).profile.name !== undefined) {
+      let saniname = JSON.parse(posting_json).profile.name;
+      let saniName1 = sanitize(saniname);
+      document.getElementById("name").innerHTML = saniName1;
+    } else {
+      document.getElementById("name").innerHTML = hiveuser;
+    }
+
+    if (JSON.parse(posting_json).profile.website !== undefined) {
+      let saniweb = JSON.parse(posting_json).profile.website;
+      let saniwebsite = sanitize(saniweb);
+      document.getElementById("favsite").innerHTML = "<a href='" + saniwebsite + "' target='_blank'>" + saniwebsite + "</a>";
+    } else {
+      document.getElementById("strongWebsite").style.display = "none";
+    }
+
+    if (JSON.parse(posting_json).profile.location !== undefined) {
+      let saniloc = JSON.parse(posting_json).profile.location;
+      let sanilocation = sanitize(saniloc);
+      console.log("loc " + sanilocation)
+      document.getElementById("location").innerHTML = sanilocation;
+    } else {
+      document.getElementById("strongLocation").style.display = "none";
+    }
+
     let createdAge = res.accounts[0].created.slice(0, 10);
     let datedd = createdAge.split("-");
     console.log("Member since: " + datedd[0]);
@@ -699,15 +732,13 @@ function buildprofile(hiveuser) {
       var bitff = JSON.parse(JSON.stringify(blokzmeta));
       // console.log("blokzmeta: " + bitff.app);
       // console.log(bitff.interests);
-      document.getElementById("name").innerHTML = sanitize(blokzmeta.name);
       document.getElementById("article").innerHTML = sanitize(md.render(blokzmeta.article));
       // ~~~ md.render(blokzmeta.article).replace("\n", "");
-      document.getElementById("usertitle").innerHTML = sanitize(blokzmeta.usertitle);
-      var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
+      //var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
 
-      document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
-      document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
-      document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
+     // document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
+     // document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
+     // document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
       // interests
 
       /* <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=hive-167922'>
