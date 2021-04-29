@@ -52,17 +52,17 @@ function replyClick(author, commentpermlink) {
 
   console.log("author :" + author);
   console.log("commentpermlink :" + commentpermlink);
-/*  if (author !== undefined) {
-    document.getElementById("replyingToContainer").style.display = "block";
-    document.getElementById("replyingTo").value = commentpermlink;
-    document.getElementById("replyingToWho").value = author;
-    parentAuthor = author;
-    parentPermlink = commentpermlink;
-  } else {
-    document.getElementById("replyingToContainer").style.display = "none";
-    console.log("defaults");
-  } 
-  */
+  /*  if (author !== undefined) {
+      document.getElementById("replyingToContainer").style.display = "block";
+      document.getElementById("replyingTo").value = commentpermlink;
+      document.getElementById("replyingToWho").value = author;
+      parentAuthor = author;
+      parentPermlink = commentpermlink;
+    } else {
+      document.getElementById("replyingToContainer").style.display = "none";
+      console.log("defaults");
+    } 
+    */
 
   window.location.href = "../?newpost=true&author=" + author + "&permlink=" + commentpermlink;
 
@@ -121,7 +121,7 @@ function updatePage() {
   } else {
     // console.log("user does not exist! or something went wrong");
 
-    document.getElementById('upprofile').innerHTML = "<strong>Please inpute a username on the <a href='../'>homepage</a></strong>";
+    document.getElementById('upprofile').innerHTML = "<strong>Please browse as user on the <a onclick='blokzmenu()'>menu</a> below before accessing this page.</strong>";
   }
   hidecomm();
 }
@@ -137,6 +137,9 @@ function login(username) {
 
 }
 
+function replaceAll(string, search, replace) {
+  return string.split(search).join(replace);
+}
 
 function blokzmenu() {
   let x = document.getElementById("blokzmenuPOP");
@@ -161,6 +164,19 @@ function loadChips() {
   });
 }
 
+function loadTags() {
+  function ready(fn) {
+    if (document.readyState != 'loading') {
+      fn();
+    } else {
+      document.addEventListener('DOMContentLoaded', fn);
+    }
+  }
+  ready(function () {
+    new window['MaterialChipInput'](document.getElementById('tags'));
+  });
+}
+
 function genTags(item, index) {
   document.getElementById("display").innerHTML += "<a href='?tag=" + item + "'>" + item + "</a> &nbsp;";
 }
@@ -175,8 +191,8 @@ function hiveuserUp() {
       console.log("results are in:");
       console.log(result);
       //       var blokzmeta = JSON.parse(result.json_metadata);
-     // OLD let blokify = JSON.parse(JSON.stringify(result[0].body));
-     // OLD let blokzmeta = JSON.parse((result[0].json_metadata));
+      // OLD let blokify = JSON.parse(JSON.stringify(result[0].body));
+      // OLD let blokzmeta = JSON.parse((result[0].json_metadata));
       // console.log(blokify);
       // console.log("blokzmeta: " + blokzmeta);
       // console.log(blokzmeta.blokz);
@@ -244,39 +260,39 @@ function updateProfile() {
 
   const bene = Object.create(beneProfile);
 
-    hive.broadcast.comment(
-      document.getElementById('postingKey').value,
-      '', //author
-      'blokzprofile', //firsttag
-      document.getElementById('hiveuser').value,
-      'blokzprofile', //permlink
-      'My Personal.Community Profile',
-      data,
-      // json meta
-      {
-        tags: ['blokz'],
-        app: 'blokz',
-        article: article,
-        interests: interests,
-        favorites: favorites
-      },
-      function (err, result) {
-        if (err)
-          document.getElementById('upprofile').innerHTML = "<h3>something went wrong...</h3>" + err;
-        else
-          document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
+  hive.broadcast.comment(
+    document.getElementById('postingKey').value,
+    '', //author
+    'blokzprofile', //firsttag
+    document.getElementById('hiveuser').value,
+    'blokzprofile', //permlink
+    'My Personal.Community Profile',
+    data,
+    // json meta
+    {
+      tags: ['blokz'],
+      app: 'blokz',
+      article: article,
+      interests: interests,
+      favorites: favorites
+    },
+    function (err, result) {
+      if (err)
+        document.getElementById('upprofile').innerHTML = "<h3>something went wrong...</h3>" + err;
+      else
+        document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
 
-         setTimeout(() => {
-          let url = "../?hive=" + upwho;
-          window.location.href = url;
-        }, 8000);
-         
+      setTimeout(() => {
+        let url = "../?hive=" + upwho;
+        window.location.href = url;
+      }, 8000);
 
-        // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-        // window.location.href = '../';
-      }
-    );
-  
+
+      // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
+      // window.location.href = '../';
+    }
+  );
+
 }
 
 let reply
@@ -287,7 +303,8 @@ let reply
 function createPost() {
   console.log("begin creating post process");
 
-  
+  let tag = document.getElementById('tag').value;
+  console.log("tags test: " + tag)
   let postTitle = document.getElementById('postTitle').value;
   let ran = AES256.encrypt(postTitle, postTitle);
   ran = ran.substring(1, 6);
@@ -303,9 +320,16 @@ function createPost() {
   // let setTags = "['testing', 'blokz', 'test']";
   console.log('a');
   // todo: reply to comments and posts
+  tag = replaceAll(tag, " ", "")
+  tag = tag.split(",")
 
-
-
+  let jsonmeta = {
+    tags: tag,
+    app: 'blokz'
+  }
+  
+  jsonmeta = JSON.stringify(jsonmeta)
+  console.log(jsonmeta)
   if (window.hive_keychain) {
     console.log('b');
     console.log('keychain post or comment');
@@ -318,10 +342,7 @@ function createPost() {
       postData,
       parentPermlink,
       parentAuthor,
-      {
-        tags: ['blokz'],
-        app: 'blokz',
-      },
+      jsonmeta,
       postpermLink,
       '',
       function (response) {
@@ -344,10 +365,7 @@ function createPost() {
       postpermLink, //permlink
       postTitle,
       postData,
-      {
-        tags: ['blog'],
-        app: 'blokz'
-      },
+      jsonmeta,
       function (err, result) {
         document.getElementById("displayUpdate").style.display = "block";
         if (err)
@@ -356,11 +374,11 @@ function createPost() {
           document.getElementById("displayUpdate").innerHTML = "<h3>Redirecting page in 8 seconds<h3>view post: <a href='../?post=" + postingAs + "/" + postpermLink + "'>" + postpermLink + "</a><br />" + result;
 
 
-        setTimeout(() => {
-          let url = "../?post=" + postingAs + "/" + postpermLink;
-          window.location.href = url;
-        }, 8000); 
-      }
+          setTimeout(() => {
+            let url = "../?post=" + postingAs + "/" + postpermLink;
+            window.location.href = url;
+          }, 8000);
+        }
         // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
         // window.location.href = '../';
       }
@@ -376,11 +394,11 @@ function upvote(permlink, author) {
       hiveuser = localStorage.getItem("hiveKeychainVerified");
 
       let weight = 500;
-      hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) { 
-        console.log(response); 
+      hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) {
+        console.log(response);
         // todo:  change reaction color
 
-      document.getElementById("thumbs").style.color = "red"; 
+        document.getElementById("thumbs").style.color = "red";
       })
 
       // console.log(hiveuser + " connected");
@@ -432,10 +450,10 @@ function displayPost() {
   let permlink = letting[1];
   // console.log("letting : " + author + permlink);
   hive.api.getContent(author, permlink, function (err, result) {
- 
+
     let findVoter = JSON.stringify(result.active_votes);
     console.log(findVoter);
-    
+
 
     let post1 = md.render(result.body).replace("\n", "");
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
@@ -519,6 +537,7 @@ function nonBlokzUser(hiveuser) {
 
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
+  document.title = hiveuser + "'s personal.community profile";
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     console.log("posting_json: " + posting_json);
@@ -579,12 +598,12 @@ function splash() {
   document.getElementById("gridd").style.display = "none";
   // console.log("splash engaged");
   var html = `<div id='splash'><img src="../images/logo192.png"><br />` +
-  `<h6 style="margin-bottom: 2px; padding: 2px;">Welcome to </h6>`+ 
-  `<h3>personal.community</h3>` +
+    `<h6 style="margin-bottom: 2px; padding: 2px;">Welcome to </h6>` +
+    `<h3>personal.community</h3>` +
 
 
     //`    </div>` +
-    `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu.` + 
+    `<hr />The <a href='https://blokz.io/'><img src="../images/favicon.png" style="height:16px" /></a> icon down below is the app menu.` +
     `<br /> This is used to navigate site past this page<br /> ` +
     `<hr />Made with &#10084; by <br /><a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?hive=sn0n'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/sn0n/avatar'></img><span class='mdl-chip__text'>sn0n &nbsp;</span></a></div>`;
   var tempElement = document.createElement('splash');
@@ -592,7 +611,7 @@ function splash() {
   document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
 
 
-  
+
 }
 
 if (getQueryVariable("hive") !== false) {
@@ -617,22 +636,16 @@ if (getQueryVariable("post") !== false) {
   post = "true";
   hiveuser = undefined;
 }
- 
+
 
 
 function buildprofile(hiveuser) {
 
   console.log("fetching profile for : " + hiveuser)
-
   // gets posting_json_metadata for generic profile data for user
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
-
-
-
-    
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     console.log("posting_json: " + posting_json);
-
     if (JSON.parse(posting_json).profile.about !== undefined) {
       let saniabo = JSON.parse(posting_json).profile.about;
       let saniabout = sanitize(saniabo);
@@ -640,7 +653,6 @@ function buildprofile(hiveuser) {
     } else {
       titleset = "";
     }
-
     if (JSON.parse(posting_json).profile.name !== undefined) {
       let saniname = JSON.parse(posting_json).profile.name;
       let saniName1 = sanitize(saniname);
@@ -648,7 +660,6 @@ function buildprofile(hiveuser) {
     } else {
       document.getElementById("name").innerHTML = hiveuser;
     }
-
     if (JSON.parse(posting_json).profile.website !== undefined) {
       let saniweb = JSON.parse(posting_json).profile.website;
       let saniwebsite = sanitize(saniweb);
@@ -656,7 +667,6 @@ function buildprofile(hiveuser) {
     } else {
       document.getElementById("strongWebsite").style.display = "none";
     }
-
     if (JSON.parse(posting_json).profile.location !== undefined) {
       let saniloc = JSON.parse(posting_json).profile.location;
       let sanilocation = sanitize(saniloc);
@@ -665,22 +675,16 @@ function buildprofile(hiveuser) {
     } else {
       document.getElementById("strongLocation").style.display = "none";
     }
-
     let createdAge = res.accounts[0].created.slice(0, 10);
     let datedd = createdAge.split("-");
     console.log("Member since: " + datedd[0]);
-
     function monthName(mon) {
       return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][mon - 1];
-   }
-  
-    
-    document.getElementById("age").innerHTML = monthName(datedd[1]) + " " + datedd[2] + ", " + datedd[0]; 
+    }
+    document.getElementById("age").innerHTML = monthName(datedd[1]) + " " + datedd[2] + ", " + datedd[0];
     // TODO: -- remove testing notes ^>^
     // console.log("posting_json: " + posting_json);
     // display avater
-
-
     // https://images.hive.blog/u/" + result.author + "/avatar
     let useravatar = "https://images.hive.blog/u/" + hiveuser + "/avatar";
     document.getElementById("profimg").src = useravatar;
@@ -695,9 +699,9 @@ function buildprofile(hiveuser) {
     for (var i = 0; i < result.length; i++) {
 
       // testing for replies 
-       // console.log(" for loop data : " + JSON.stringify(result[i]));
-       // console.log("who dis " + hiveuser);
-       // console.log("i is " + i);
+      // console.log(" for loop data : " + JSON.stringify(result[i]));
+      // console.log("who dis " + hiveuser);
+      // console.log("i is " + i);
       // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
       reactionCount = result[i].active_votes.length;
       // console.log('post created on : ' + result[i].created);
@@ -719,7 +723,7 @@ function buildprofile(hiveuser) {
   // https://hiveblocks.com/@
   // fetch blokzprofile post from hive
   hive.api.getContent(hiveuser, 'blokzprofile', function (err, result) {
-  // hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
+    // hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
     // user has a blokz/profile
     console.log("whats goin on here?")
     // console.log(err, result)
@@ -736,9 +740,9 @@ function buildprofile(hiveuser) {
       // ~~~ md.render(blokzmeta.article).replace("\n", "");
       //var profage = year.getFullYear() - sanitize(blokzmeta.birthyear);
 
-     // document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
-     // document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
-     // document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
+      // document.getElementById("location").innerHTML = sanitize(blokzmeta.location);
+      // document.getElementById("gender").innerHTML = sanitize(blokzmeta.gender);
+      // document.getElementById("favsite").innerHTML = "<a href='" + sanitize(blokzmeta.favsite) + "' target='_blank'>" + sanitize(blokzmeta.favsite) + "</a>";
       // interests
 
       /* <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=hive-167922'>
@@ -757,34 +761,35 @@ function buildprofile(hiveuser) {
           xhr.open("POST", url);
           xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
           xhr.onreadystatechange = function () {
-             if (xhr.readyState === 4) {
-                let communityinfo = JSON.parse(xhr.responseText)
-                console.log("at bat " + communityinfo.result.title);   //
-                document.getElementById("interests").innerHTML += "<a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=" + entry + "'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/" + entry + "/avatar'></img><span class='mdl-chip__text'>" + communityinfo.result.title + "&nbsp;</span></a>";
-             }};
-          var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"'+ entry +'","observer":"blokz"}, "id":1}';
+            if (xhr.readyState === 4) {
+              let communityinfo = JSON.parse(xhr.responseText)
+              console.log("at bat " + communityinfo.result.title);   //
+              document.getElementById("interests").innerHTML += "<a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=" + entry + "'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/" + entry + "/avatar'></img><span class='mdl-chip__text'>" + communityinfo.result.title + "&nbsp;</span></a>";
+            }
+          };
+          var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"' + entry + '","observer":"blokz"}, "id":1}';
           xhr.send(data);
         } else {
-        let entryy = entry; //.replace(/\s+/g, '');
-        // entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
-        entryy = entryy.toLowerCase();
-        // creat chips for each interest
-        // todo: parse for communities and update those 'hive-'
-        var vadd = document.createElement('button');
-        vadd.className = "mdl-chip";
-        vadd.id = entryy;
-        vadd.setAttribute("onclick", "window.location.href='/?tag=" + entryy + "';");
-        document.getElementById("interests").appendChild(vadd);
-        var sadd = document.createElement('span');
-        sadd.className = "mdl-chip__text";
-        sadd.id = entryy + "2";
-        document.getElementById(entryy).appendChild(sadd);
-        var t = document.createTextNode("#" + entryy);
-        document.getElementById(entryy + "2").appendChild(t);
+          let entryy = entry; //.replace(/\s+/g, '');
+          // entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
+          entryy = entryy.toLowerCase();
+          // creat chips for each interest
+          // todo: parse for communities and update those 'hive-'
+          var vadd = document.createElement('button');
+          vadd.className = "mdl-chip";
+          vadd.id = entryy;
+          vadd.setAttribute("onclick", "window.location.href='/?tag=" + entryy + "';");
+          document.getElementById("interests").appendChild(vadd);
+          var sadd = document.createElement('span');
+          sadd.className = "mdl-chip__text";
+          sadd.id = entryy + "2";
+          document.getElementById(entryy).appendChild(sadd);
+          var t = document.createTextNode("#" + entryy);
+          document.getElementById(entryy + "2").appendChild(t);
         };
 
         // todo: community chips
-        
+
         // end of fix community named chips
 
 
@@ -837,27 +842,28 @@ function showtag(tag) {
     if (err === null) {
       var i, len = result.length;
       console.log("what is a " + tag);
- 
+
       if (tag.substring(0, 5) == "hive-") {
         console.log("community found in interests at " + tag);
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
-           if (xhr.readyState === 4) {
-              let communityinfo = JSON.parse(xhr.responseText)
-              console.log("at bat " + communityinfo.result.title);  
-              let contentofTag = document.getElementById("display").innerHTML;
-              document.getElementById("display").innerHTML = "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + communityinfo.result.title + " posts</div><br />" + contentofTag;
-           }};
-        var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"'+ tag +'","observer":"blokz"}, "id":1}';
+          if (xhr.readyState === 4) {
+            let communityinfo = JSON.parse(xhr.responseText)
+            console.log("at bat " + communityinfo.result.title);
+            let contentofTag = document.getElementById("display").innerHTML;
+            document.getElementById("display").innerHTML = "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + communityinfo.result.title + " posts</div><br />" + contentofTag;
+          }
+        };
+        var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"' + tag + '","observer":"blokz"}, "id":1}';
         xhr.send(data);
       } else {
         document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
 
       }
 
-     for (i = 0; i < len; i++) {
+      for (i = 0; i < len; i++) {
         var discussion = result[i];
         // console.log(i, discussion);
         // console.log("who dun it " + discussion.author);
@@ -881,7 +887,7 @@ window.onload = function loading() {
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
       localStorage.setItem("hive", getQueryVariable("loginas"));
-      
+
     }
     hiveuser = getQueryVariable("loginas");
     if (window.hive_keychain) {
@@ -919,37 +925,15 @@ window.onload = function loading() {
 
   if (tag !== "null") {
     showtag(tag);
-  } else if (getQueryVariable("newpost") !== false) { 
+  } else if (getQueryVariable("newpost") !== false) {
     console.log("NEW POST");
     // testing commenting
 
 
-    document.getElementById("display").innerHTML = `
-    <div class="mdl-textfield mdl-js-textfield" id="posttitleid">
-      <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
-      <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
-    </div>
+    document.getElementById("newPostDiv").style.display = "block";
+    document.getElementById("display").style.display = "none";
 
-    <div class="mdl-textfield mdl-js-textfield">
-      <small id="postorcomment">Post Body</small>
-      <textarea id="postBody"></textarea>
-
-
-      <label class="mdl-textfield__label" for="postBody" id="postBodyLabel"></label>
-    </div>
-
-
-    <div class="mdl-textfield mdl-js-textfield">
-      <small>Private Posting Key:</small><input class="mdl-textfield__input" type="password" id="postingKey">
-      <label class="mdl-textfield__label" for="postingKey"></label>
-
-    </div>
-    <div>
-      <button type="button" id="nextBtn" onclick="createPost()"
-        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-        data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
-    </div>`;
-    easyMDE = new EasyMDE({element: document.getElementById('postBody')});
+    easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
 
     document.getElementById("gridd").style.display = "none";
 
@@ -960,11 +944,12 @@ window.onload = function loading() {
       console.log(parentAuthor + "/" + parentPermlink);
       document.getElementById("posttitleid").style.display = "none";
       document.getElementById('postTitle').value = "replying to " + parentAuthor + "/" + parentPermlink;
-      document.getElementById("postorcomment").innerHTML = "commenting on " + parentAuthor + "/" + parentPermlink ;
-     }
+      document.getElementById("postorcomment").innerHTML = "commenting on " + parentAuthor + "/" + parentPermlink;
+    }
+    loadTags();
   } else if (post === "true") {
     document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
-  
+
     displayPost();
   } else if (userLatest !== undefined) {
     userRecent();
@@ -979,7 +964,7 @@ window.onload = function loading() {
     hidecomm();
   };
 
- 
+
   if (getQueryVariable("hive") === localStorage.getItem("hive")) {
     console.log("this is my page");
     document.getElementById("toptab").click()
@@ -993,7 +978,7 @@ window.onload = function loading() {
     document.body.appendChild(clon);
   }
   */
- 
+
 }
 
 

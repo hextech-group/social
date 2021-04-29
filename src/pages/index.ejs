@@ -16,6 +16,11 @@
             -->
 
 
+            <link rel="stylesheet" href="../css/mdl-chips-input.css">
+            <script src="../js/mdl-chips-input.js" type="application/javascript"></script>
+            
+            
+
 
 
 
@@ -102,5 +107,39 @@
 <div id="comments"
   style="padding: 1em; margin: auto; margin-top: 2em; margin-bottom: 100px; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
 </div>
+
+<div id="newPostDiv" style="padding: 2em; background-color: white; display:none ">
+  <div class="mdl-textfield mdl-js-textfield" id="posttitleid">
+    <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
+    <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
+  </div>
+
+  <div class="mdl-textfield mdl-js-textfield">
+    <small id="postorcomment">Post Body</small>
+    <textarea id="postBody"></textarea>
+
+
+    <label class="mdl-textfield__label" for="postBody" id="postBodyLabel"></label>
+  </div>
+  <br />
+  <small>tags:</small><br />
+  <div class="mdl-textfield mdl-js-textfield mdl-chipfield" id="tags">
+    <input type="hidden" class="mdl-chipfield__input" name="tags" id="tag" value="">
+    <input class="mdl-textfield__input" type="text" id="my-input-0">
+    <label class="mdl-textfield__label" for="my-input-0"></label>
+  </div><br />
+
+  <div class="mdl-textfield mdl-js-textfield">
+    <small>Private Posting Key:</small><input class="mdl-textfield__input" type="password" id="postingKey">
+    <label class="mdl-textfield__label" for="postingKey"></label>
+
+  </div>
+  <div>
+    <button type="button" id="nextBtn" onclick="createPost()"
+      class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+      data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
+  </div>
+</div>
+
 
 
