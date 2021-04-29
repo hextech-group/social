@@ -320,14 +320,14 @@ function createPost() {
   // let setTags = "['testing', 'blokz', 'test']";
   console.log('a');
   // todo: reply to comments and posts
-  tag = replaceAll(tag, " ", "")
+  tag = replaceAll(tag, " ", "");
+  tag += "blog";
   tag = tag.split(",")
-
   let jsonmeta = {
     tags: tag,
     app: 'blokz'
   }
-  
+
   jsonmeta = JSON.stringify(jsonmeta)
   console.log(jsonmeta)
   if (window.hive_keychain) {
@@ -403,9 +403,11 @@ function upvote(permlink, author) {
 
       // console.log(hiveuser + " connected");
     } else {
-      console.log('keychain not installed');
+      console.log('keychain not setup, or something');
     };
-  }
+  } else {
+    console.log('keychain not installed');
+  };
 };
 
 function userRecent() {
@@ -450,11 +452,17 @@ function displayPost() {
   let permlink = letting[1];
   // console.log("letting : " + author + permlink);
   hive.api.getContent(author, permlink, function (err, result) {
-
+    console.log(result)
     let findVoter = JSON.stringify(result.active_votes);
     console.log(findVoter);
 
+    if (result.parent_author.length > 1) {
+      console.log("this is a reply to " + result.parent_author)
 
+      document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>replying to : <a href='../?post=" + result.parent_author + "/" + result.parent_permlink + "'>" + result.parent_author + "/" + result.parent_permlink + "</a></div>";
+    } else {
+      console.log("this is a top level comment")
+    }
     let post1 = md.render(result.body).replace("\n", "");
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
     document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
@@ -481,10 +489,14 @@ function displayPost() {
 
     document.getElementById("display").innerHTML += sanipost;
     // console.log("SANITATION TEST post output" + sanipost);
-    document.getElementById("display").innerHTML += "<hr /> tags: <br />";
+    document.getElementById("display").innerHTML += "<div id='commentTags' style='border-top: 1px solid'>tags: </div>";
     let jsonTAGS = JSON.parse(result.json_metadata);
-    jsonTAGS.tags.forEach(genTags);
-
+    console.log("jsonTAGS" + JSON.stringify(jsonTAGS));
+    if (jsonTAGS.tags === undefined) {
+      document.getElementById("commentTags").style.display = "none";
+    } else {
+      jsonTAGS.tags.forEach(genTags);
+    }
     document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
 
     // TODO : color reaction 
@@ -496,31 +508,27 @@ function displayPost() {
     }
 
     // todo : comments
-    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px'><button onclick='replyClick("` + author + `","` + permlink + `")'>reply</button></div>`;
+    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px;'><button onclick='replyClick("` + author + `","` + permlink + `")'>reply</button></div>`;
     hive.api.getContentReplies(author, permlink, function (err, result) {
-      // console.log(err, result);
+
       if (result.length > 0) {
-        // console.log("testing number " + result.length)
-        let comments = JSON.stringify(result[0].author);
+
         for (var i = 0; i < result.length; i++) {
-          // console.log(" for loop data : " + JSON.stringify(result[i]));
           let thisPost = JSON.parse(JSON.stringify(result[i]));
-          // console.log("who dis " + thisPost.author);
-          // console.log("i is " + i);
+
           let sanicomm = md.render(md.render(result[i].body));
           sanicomm = sanicomm.replace(/@[A-Za-z0-9_.]\w+[A-Za-z0-9_.]\b/gi, "<a href='../?hive=$&'>$&</a>");
 
           console.log(sanicomm);
           sanicomm = sanitize(sanicomm);
           document.getElementById("comments").innerHTML += "<div id='comm'>  <a class='mdl-chip mdl-color--blue-grey mdl-chip--contact mdl-chip--deletable' href='../?hive=" + thisPost.author + "'><img class='mdl-chip__contact mdl-color--light-blue' src='https://images.hive.blog/u/" + thisPost.author + "/avatar' alt='avatar'></img><span class='mdl-chip__text' style='font-weight: bold; color: white'>" + thisPost.author + " &nbsp;</span></a>  <div style='padding:2em'>" + sanicomm + "</div> <div style='text-align: right'><a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>permlink & replies</a></div></div>";
-          // if parent_author is listed, put on top of post
+
         }
-        // console.log("comment from: " + comments);
+
 
       } else {
 
-        // console.log("no comments");
-        document.getElementById("comments").innerHTML += "no comments to show";
+        document.getElementById("comments").innerHTML += "no comments to show<div style='padding: 5px; margin-bottom: 75px;'>&nbsp;</div>";
 
       }
 
@@ -763,8 +771,9 @@ function buildprofile(hiveuser) {
           xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
               let communityinfo = JSON.parse(xhr.responseText)
-              console.log("at bat " + communityinfo.result.title);   //
-              document.getElementById("interests").innerHTML += "<a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=" + entry + "'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/" + entry + "/avatar'></img><span class='mdl-chip__text'>" + communityinfo.result.title + "&nbsp;</span></a>";
+              console.log("at bat " + communityinfo.result.title);
+              let originalchips = document.getElementById("interests").innerHTML;
+              document.getElementById("interests").innerHTML = "<a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=" + entry + "'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/" + entry + "/avatar'></img><span class='mdl-chip__text'>" + communityinfo.result.title + "&nbsp;</span></a>" + originalchips;
             }
           };
           var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"' + entry + '","observer":"blokz"}, "id":1}';
