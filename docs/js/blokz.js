@@ -743,7 +743,7 @@ function buildprofile(hiveuser) {
 
 
       document.getElementById("blog").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
-      "<div>" + postdesc +"</div>" +
+      "<div style='overflow: hidden'>" + postdesc +"</div>" +
       "<div style='margin-top: 1em; min-width: 50%; text-align: right'> " + postedon + "</div></div>";
       /* <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> //  + reactionCount + */
 
