@@ -506,7 +506,7 @@ function displayPost() {
     } else {
       jsonTAGS.tags.forEach(genTags);
     }
-    document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
+    // document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
 
     // TODO : color reaction 
     if (findVoter.search(localStorage.getItem("hive")) > 0) {
@@ -925,7 +925,7 @@ function showtag(tag) {
           postdesc = md.render(result[i].body);
           postdesc = strip(postdesc);
           postdesc = sanitize(postdesc);
-          postdesc = truncate(postdesc, 20);
+          postdesc = truncate(postdesc, 40);
           console.log("What post desc we working with here: " + postdesc);
           postdesc = postdesc + "...";
         }
