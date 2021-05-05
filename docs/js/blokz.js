@@ -2,7 +2,7 @@
 
 hive.api.setOptions({ url: 'https://api.hive.blog' });
 let url = "https://api.hive.blog";
-
+let postdesc;
 let blokz = 'test';
 let titleset = "";
 let year = new Date();
@@ -726,7 +726,6 @@ function buildprofile(hiveuser) {
       let descjson = JSON.parse(result[i].json_metadata);
       console.log("working with json_metadata: " + descjson.description);
 
-      let postdesc;
       if (descjson.description !== undefined) {
         console.log("success on description : " + descjson.description);
         postdesc = descjson.description;
@@ -912,9 +911,30 @@ function showtag(tag) {
         // console.log("who dun it " + discussion.author);
         // console.log("where do i find it? @" + discussion.author + "/" + discussion.permlink);
         let whenbytag = new Date(discussion.created.slice(0, 10)).toDateString();
-        whenbytag = whenbytag.split('GMT');
-        let reactioncount = result[i].active_votes.length;
-        document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactioncount + "<hr />";
+        //whenbytag = whenbytag.split('GMT');
+        //let reactioncount = result[i].active_votes.length;
+
+        let descjson = JSON.parse(result[i].json_metadata);
+        console.log("working with json_metadata: " + descjson.description);
+        
+        if (descjson.description !== undefined) {
+          console.log("success on description : " + descjson.description);
+          postdesc = descjson.description;
+        } else {
+          console.log("no desc");
+          postdesc = md.render(result[i].body);
+          postdesc = strip(postdesc);
+          postdesc = sanitize(postdesc);
+          postdesc = truncate(postdesc, 20);
+          console.log("What post desc we working with here: " + postdesc);
+          postdesc = postdesc + "...";
+        }
+        document.getElementById("display").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + discussion.author + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
+        "<div style='overflow: hidden; padding-bottom: .5em;'>" + postdesc +"</div>" +
+        "<div style='display: flex;margin-top: .5em; '><div style='min-width:70%'>Author <a href='..?hive=" + discussion.author + "'>" + discussion.author + "</a></div>" +
+        "<div style='justify-content: right; min-width: 30%; text-align: right'> " + whenbytag + "</div></div></div>";
+
+       // document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactioncount + "<hr />";
         document.getElementById("comments").style.display = "none";
       }
     } else {
