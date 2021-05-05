@@ -30,6 +30,15 @@ md.set({
 
 window.onscroll = function () { scrollFunction() };
 
+function strip(html){
+  let doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || "";
+}
+
+function truncate(str, no_words) {
+  return str.split(" ").splice(0,no_words).join(" ");
+}
+
 function scrollFunction() {
   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
     document.getElementById("blokztop").style.display = "block";
@@ -714,9 +723,29 @@ function buildprofile(hiveuser) {
       reactionCount = result[i].active_votes.length;
       // console.log('post created on : ' + result[i].created);
       let postedon = new Date(result[i].created.slice(0, 10)).toDateString();
+      let descjson = JSON.parse(result[i].json_metadata);
+      console.log("working with json_metadata: " + descjson.description);
+
+      let postdesc;
+      if (descjson.description !== undefined) {
+        console.log("success on description : " + descjson.description);
+        postdesc = descjson.description;
+      } else {
+        console.log("no desc");
+        postdesc = md.render(result[i].body);
+        postdesc = strip(postdesc);
+        postdesc = sanitize(postdesc);
+        postdesc = truncate(postdesc, 20);
+        console.log("What post desc we working with here: " + postdesc);
+        postdesc = postdesc + "...";
+      }
       postedon = postedon.split('GMT');
-      document.getElementById("blog").innerHTML += "<a href='?post=" + hiveuser + "/" + result[i].permlink + "'>"
-        + result[i].title + "</a><br /> by " + hiveuser + " on " + postedon + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactionCount + "<hr />";
+
+
+      document.getElementById("blog").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
+      "<div>" + postdesc +"</div>" +
+      "<div style='margin-top: 1em; min-width: 50%; text-align: right'> " + postedon + "</div></div>";
+      /* <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> //  + reactionCount + */
 
     }
   });
@@ -779,6 +808,7 @@ function buildprofile(hiveuser) {
           var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"' + entry + '","observer":"blokz"}, "id":1}';
           xhr.send(data);
         } else {
+          if (entry.length > 2) {
           let entryy = entry; //.replace(/\s+/g, '');
           // entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
           entryy = entryy.toLowerCase();
@@ -795,6 +825,7 @@ function buildprofile(hiveuser) {
           document.getElementById(entryy).appendChild(sadd);
           var t = document.createTextNode("#" + entryy);
           document.getElementById(entryy + "2").appendChild(t);
+        }
         };
 
         // todo: community chips
@@ -810,6 +841,7 @@ function buildprofile(hiveuser) {
       // console.log("favs : " + favs);
       let favsLog = favs.split(',');
       favsLog.forEach(function (entry) {
+        if (entry.length > 2) {
         // console.log("show: " + entry);
         let entryy = entry.replace(/\s+/g, '');
         entryy = entryy.toLowerCase();
@@ -836,7 +868,9 @@ function buildprofile(hiveuser) {
         imageParent.appendChild(image);
         document.getElementById(entryy + "_").appendChild(ffsName);
         ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
+      }
       }); // finished displaying blokzprofile
+      
     } else {
       nonBlokzUser(hiveuser);
     }
