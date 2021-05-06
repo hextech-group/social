@@ -453,6 +453,20 @@ function sanitize(sanitized) {
   return sanitized;
 }
 
+function share() {
+  if (navigator.share) { 
+   navigator.share({
+      title: document.title,
+      url: window.location
+    }).then(() => {
+      console.log('Thanks for sharing!');
+    })
+    .catch(console.error);
+    } else {
+        shareDialog.classList.add('is-open');
+    }
+};
+
 function displayPost() {
   console.log('displaying post')
   document.getElementById("gridd").style.display = "none";
@@ -474,18 +488,20 @@ function displayPost() {
     }
     let post1 = md.render(result.body).replace("\n", "");
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
-    document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
-    document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3>";
     let whenagain = new Date(result.created.slice(0, 10)).toDateString();
     whenagain = whenagain.split('GMT');
     let timeToRead = words(result.body) / 3 / 60;
     if (timeToRead < 1) {
       timeToRead = 1;
     }
-    document.getElementById("display").innerHTML += "<div style='float: right; padding-top: 2em;'> Reading time: " + timeToRead.toFixed(0) + " min</div>";
+    document.title = result.title + " by " + result.author;
+    document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
+    document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3><br />" + whenagain ;
+
+    document.getElementById("display").innerHTML += "<div style='float: right; text-align: right; justify-content: right; padding-top: 2em;'> Reading time: " + timeToRead.toFixed(0) + " min <br /><i class='material-icons' onclick='share()' style='cursor: pointer;'>share</i></div></div>";
 
 
-    document.getElementById("display").innerHTML += "<br />" + whenagain + "<hr />";
+    document.getElementById("display").innerHTML += "<hr style='clear:both' />";
     let sanipost = md.render(post1);
     sanipost = sanitize(sanipost);
     sanipost = sanipost.replace(/@[A-Za-z0-9_.-]+[A-Za-z0-9_.]\s/gi, `<a href="../?hive=$&">$&</a>`);
