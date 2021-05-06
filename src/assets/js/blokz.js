@@ -462,8 +462,8 @@ function displayPost() {
   // console.log("letting : " + author + permlink);
   hive.api.getContent(author, permlink, function (err, result) {
     console.log(result)
-    let findVoter = JSON.stringify(result.active_votes);
-    console.log(findVoter);
+  //  let findVoter = JSON.stringify(result.active_votes);
+   // console.log(findVoter);
 
     if (result.parent_author.length > 1) {
       console.log("this is a reply to " + result.parent_author)
@@ -509,13 +509,13 @@ function displayPost() {
     // document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
 
     // TODO : color reaction 
-    if (findVoter.search(localStorage.getItem("hive")) > 0) {
+    /* if (findVoter.search(localStorage.getItem("hive")) > 0) {
       console.log("user found, you have upvoted this");
       document.getElementById("thumbs").style.color = "red";
     } else {
       console.log('you have yet to upvote this post')
     }
-
+    */
     // todo : comments
     document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px;'><button onclick='replyClick("` + author + `","` + permlink + `")'>reply</button></div>`;
     hive.api.getContentReplies(author, permlink, function (err, result) {
