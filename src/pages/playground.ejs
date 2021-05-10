@@ -100,4 +100,84 @@ https://github.com/mervick/aes-everywhere/tree/master/javascript
   }
   };
   
+
+
+
+
+
+/*
+var newurl = "https://api.deathwing.me";
+let hiveaccount = "sn0n"
+let startpermlink = ""
+let beforedate = ""
+var xhr = new XMLHttpRequest();
+let response = ""
+xhr.open("POST", newurl);
+
+xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+xhr.onreadystatechange = function () {
+   if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      // console.log(xhr.responseText);
+      response = JSON.parse(xhr.responseText);
+      for (i = 0; i < 10; i++) {
+      console.log('lets try this post:' + JSON.stringify(response.result[i]));
+      localStorage.setItem("index", JSON.stringify(response.result[i].author)+"."+JSON.stringify(response.result[i].permlink));
+      localStorage.setItem(JSON.stringify(response.result[i].author)+"."+JSON.stringify(response.result[i].permlink), JSON.stringify(response.result[i]));
+}
+   }};
+
+var data = '{"jsonrpc":"2.0", "method":"tags_api.get_discussions_by_author_before_date", "params":{"author": "'+hiveaccount+'","start_permlink":"'+startpermlink+'","before_date":"'+beforedate+'","limit":10}, "id":1}';
+
+xhr.send(data);
+*/
+
+
+
+/*
+ * base58.js
+ *  - encodes integers to and decodes from a base58 (or your own) base58 alphabet
+ *  - based on Flickr's url shortening
+ * 
+ * usage:
+ *   base58.encode(integer);
+ *   base58.decode(string);
+ * 
+ * (c) 2012 inflammable/raromachine
+ * Licensed under the MIT License.
+ * 
+ */
+
+ var base58 = (function(alpha) {
+    var alphabet = alpha || '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ',
+        base = alphabet.length;
+    return {
+        encode: function(enc) {
+            if(typeof enc!=='number' || enc !== parseInt(enc))
+                throw '"encode" only accepts integers.';
+            var encoded = '';
+            while(enc) {
+                var remainder = enc % base;
+                enc = Math.floor(enc / base);
+                encoded = alphabet[remainder].toString() + encoded;        
+            }
+            return encoded;
+        },
+        decode: function(dec) {
+            if(typeof dec!=='string')
+                throw '"decode" only accepts strings.';            
+            var decoded = 0;
+            while(dec) {
+                var alphabetPosition = alphabet.indexOf(dec[0]);
+                if (alphabetPosition < 0)
+                    throw '"decode" can\'t find "' + dec[0] + '" in the alphabet: "' + alphabet + '"';
+                var powerOf = dec.length - 1;
+                decoded += alphabetPosition * (Math.pow(base, powerOf));
+                dec = dec.substring(1);
+            }
+            return decoded;
+        }
+    };
+})();
  </script>
