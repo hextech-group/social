@@ -37,3 +37,5 @@ and you are ready to go.
 
 # TODO 
 lots... please open tickets and report bugs
+
+testing deployments to netlify,cloudflare and others
