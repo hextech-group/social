@@ -420,7 +420,6 @@ function upvote(permlink, author) {
 };
 
 function userRecent() {
-  document.getElementById("gridd").style.display = "none";
   // console.log("user connected for showing their latest posts : " + userLatest);
   // get recent posts
   hive.api.getDiscussionsByAuthorBeforeDate(userLatest, null, now, 20, (err, result) => {
@@ -469,7 +468,6 @@ function share() {
 
 function displayPost() {
   console.log('displaying post')
-  document.getElementById("gridd").style.display = "none";
   var letting = getQueryVariable("post").split("/");
   let author = letting[0].replace("@", '');
   let permlink = letting[1];
@@ -575,8 +573,15 @@ function nonBlokzUser(hiveuser) {
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     console.log("posting_json: " + posting_json);
 
+
+
     document.getElementById("profimg").src = "https://images.hive.blog/u/" + hiveuser + "/avatar";
+    
     document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
+
+
+
+    
     if (JSON.parse(posting_json).profile.website !== undefined) {
       let saniweb = JSON.parse(posting_json).profile.website;
       let saniwebsite = sanitize(saniweb);
@@ -609,11 +614,9 @@ function nonBlokzUser(hiveuser) {
     document.getElementById("nonuser").style.textAlign = "center"
     document.getElementById("usertitle").innerHTML = titleset;
     // document.getElementById("name").innerHTML = hiveuser;
-    // document.getElementById("strongInterests").style.display = "none";
+    document.getElementById("strongInterests").style.display = "none";
     // document.getElementById("strongAge").style.display = "none";
-    document.getElementById("strongGender").style.display = "none";
-    document.getElementById("strongAbout").style.display = "none";
-    document.getElementById("gender").style.display = "none";
+    document.getElementById("fltrt").style.display = "none";
 
 
     //// console.log("Location: " +JSON.parse(posting_json).profile.location);
@@ -628,7 +631,6 @@ function nonBlokzUser(hiveuser) {
 
 function splash() {
 
-  document.getElementById("gridd").style.display = "none";
   // console.log("splash engaged");
   var html = `<div id='splash'><img src="../images/logo192.png"><br />` +
     `<h6 style="margin-bottom: 2px; padding: 2px;">Welcome to </h6>` +
@@ -674,6 +676,10 @@ if (getQueryVariable("post") !== false) {
 
 function buildprofile(hiveuser) {
 
+
+  let profile = document.getElementById('TempProfile');
+  let display = document.getElementById('profile');
+  display.appendChild(profile.content.cloneNode(true));
   console.log("fetching profile for : " + hiveuser)
   // gets posting_json_metadata for generic profile data for user
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
@@ -895,7 +901,6 @@ function buildprofile(hiveuser) {
 }
 
 function showtag(tag) {
-  document.getElementById("gridd").style.display = "none";
   hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
     if (err === null) {
       var i, len = result.length;
@@ -1014,7 +1019,6 @@ window.onload = function loading() {
 
     easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
 
-    document.getElementById("gridd").style.display = "none";
 
     document.getElementById("comments").style.display = "none";
     if (getQueryVariable("author") !== false) {
