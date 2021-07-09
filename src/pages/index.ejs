@@ -1,14 +1,14 @@
 <!-- TODO : fix layout to dynamic builds -->
 
-            <!-- TODO: integrate into actual profiles -->
-            <template>
-              <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' id="communityURL">
-                <img class='mdl-chip__contact mdl-color--pink' id="communityIMG"></img>
-                <span class='mdl-chip__text'>leofinance &nbsp;</span>
-              </a>
-            </template>
-  
-              <!-- 
+<!-- TODO: integrate into actual profiles -->
+<template>
+  <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' id="communityURL">
+    <img class='mdl-chip__contact mdl-color--pink' id="communityIMG"></img>
+    <span class='mdl-chip__text'>leofinance &nbsp;</span>
+  </a>
+</template>
+
+<!-- 
                 <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?tag=hive-195370'>
                 <img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/hive-195370/avatar'></img>
                 <span class='mdl-chip__text'>rising star &nbsp;</span>
@@ -16,77 +16,82 @@
             -->
 
 
-            <link rel="stylesheet" href="../css/mdl-chips-input.css">
-            <script src="../js/mdl-chips-input.js" type="application/javascript"></script>
-            
-            
+<link rel="stylesheet" href="../css/mdl-chips-input.css">
+<script src="../js/mdl-chips-input.js" type="application/javascript"></script>
+
+
 
 
 <div id="profile"></div>
 <template id="TempProfile">
-<div style="background-color:white; padding-bottom: 100px; min-height: 100vh;" id="gridd">
+  <div style="background-color:white; padding-bottom: 100px; min-height: 100vh;" id="gridd">
 
 
 
-  <!-- profileCover -->
-  <div class="preopreo" id="coverimage" style="background-color: darkslategray;"></div>
-  <div style="text-align: center; margin: -64px auto;">
-    <img src="../images/avatar.png" height="128" width="128" class="profimg" id="profimg" alt="blank avatar">
-  </div>
-  <div style="margin-top: 72px;">
-    <div class="bio" id="bio">
-      <div id="cms">
-        <div id="name" class="name"></div>
-        <div id="usertitle"></div>
-      </div>
-      <!--<div id="userpic"><img id="default_pic" class="profile_pic"></div>-->
-
-      <div id="nonuser">
-      </div>
-
-     
-
-       
-
-
-          <div style='float: right;   width:50%; ' id="fltrt"><strong id="strongInterests">Topics of Interest</strong><br />
-
-
-            <span id="interests" class="interests" style="padding-left: 1em;"></span>
-          </div>
-
-          <div style='float: right; clear: both;  width:50%; ' >
-            <strong>Friends</strong><br />
-            <div class="mdl-tabs__panel" id="top8" style="padding: 1em; text-align: center;margin: auto">
-              <!-- sn0n is tom -->
-              <div id="tom" onclick="window.location.href='../?hive=sn0n';" style="display: inline-block; padding: 5px; margin: 15px auto; width: 100px; text-align: center;"><div id="sn0n_tom"><img class="avatar" src="https://images.hive.blog/u/sn0n/avatar"></div><div id="sn0n_tom_ffsName"><small id="sn0n_NEW_tom">sn0n</small></div></div> 
-              <span id="favorites"></span>
-            </div>
+    <!-- profileCover -->
+    <div class="preopreo" id="coverimage" style="background-color: darkslategray;"></div>
+    <div style="text-align: center; margin: -64px auto;">
+      <img src="../images/avatar.png" height="128" width="128" class="profimg" id="profimg" alt="blank avatar">
     </div>
-
-
-          <strong id="strongAge">Member Since</strong>
-          <div style="padding-left: 1em;" id="age"></div>
-
-          <strong id="strongLocation">Location</strong>
-          <div style="padding-left: 1em;" id="location"></div>
-          
-          <strong id="strongWebsite">Website:</strong><br />
-          <div id="favsite" class="favsite" style="padding-left: 1em;"></div><br />
-          <div style=''><strong id="strongAbout">About Me</strong></div>
-          <div id="article" class="biofull"></div><br />
-
-
-
-
-
-
-
-<div style="clear: both;">
-        <strong>Feed</strong><br />
-        <div id="blog" style="padding: 1em; clear: both;">
+    <div style="margin-top: 72px;">
+      <div class="bio" id="bio">
+        <div id="cms">
+          <div id="name" class="name"></div>
+          <div id="usertitle"></div>
         </div>
-</div>
+        <!--<div id="userpic"><img id="default_pic" class="profile_pic"></div>-->
+
+        <div id="nonuser">
+        </div>
+
+
+
+
+
+
+        <div style='float: right;   width:50%; ' id="fltrt"><strong id="strongInterests">Topics of
+            Interest</strong><br />
+
+
+          <span id="interests" class="interests" style="padding-left: 1em;"></span>
+        </div>
+
+        <div style='float: right; clear: both;  width:50%; '>
+          <strong>Friends</strong><br />
+          <div class="mdl-tabs__panel" id="top8" style="padding: 1em; text-align: center;margin: auto">
+            <!-- sn0n is tom -->
+            <div id="tom" onclick="window.location.href='../?hive=sn0n';"
+              style="display: inline-block; padding: 5px; margin: 15px auto; width: 100px; text-align: center;">
+              <div id="sn0n_tom"><img class="avatar" src="https://images.hive.blog/u/sn0n/avatar"></div>
+              <div id="sn0n_tom_ffsName"><small id="sn0n_NEW_tom">sn0n</small></div>
+            </div>
+            <span id="favorites"></span>
+          </div>
+        </div>
+
+
+        <strong id="strongAge">Member Since</strong>
+        <div style="padding-left: 1em;" id="age"></div>
+
+        <strong id="strongLocation">Location</strong>
+        <div style="padding-left: 1em;" id="location"></div>
+
+        <strong id="strongWebsite">Website:</strong><br />
+        <div id="favsite" class="favsite" style="padding-left: 1em;"></div><br />
+        <div style=''><strong id="strongAbout">About Me</strong></div>
+        <div id="article" class="biofull"></div><br />
+
+
+
+
+
+
+
+        <div style="clear: both;">
+          <strong>Feed</strong><br />
+          <div id="blog" style="padding: 1em; clear: both;">
+          </div>
+        </div>
 
 
 
@@ -94,9 +99,9 @@
         <span id="hiveuser">&nbsp;</span><br />
 
 
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <div id="displayUpdate"
@@ -142,4 +147,3 @@
       data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
   </div>
 </div>
-
