@@ -9,7 +9,6 @@ let year = new Date();
 let now = new Date().toISOString().split('.')[0];
 let tag = "null";
 let post = false;
-let userLatest = undefined;
 let pageURL = window.location.origin;
 let state = "/";
 let params = (new URL(location)).searchParams;
@@ -419,25 +418,7 @@ function upvote(permlink, author) {
   };
 };
 
-function userRecent() {
-  // console.log("user connected for showing their latest posts : " + userLatest);
-  // get recent posts
-  hive.api.getDiscussionsByAuthorBeforeDate(userLatest, null, now, 20, (err, result) => {
-    // testing for loop for posts. 
-    // data for each post in a loop
-    document.getElementById("display").innerHTML += "most recent posts of <h1><a href='../?hive=" + userLatest + "'>" + userLatest + "</a></h1>";
-    for (let i = 0; i < result.length; i++) {
-      // console.log(" for loop data : " + JSON.stringify(result[i]));
-      let thisPost = JSON.parse(JSON.stringify(result[i]));
-      // console.log("who dis " + userLatest);
-      // console.log("i is " + i);
-      // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
-      let whenlatest = Date(thisPost.created.slice(0, 10));
-      document.getElementById("display").innerHTML += "<a href='?post=" + userLatest + "/" + thisPost.permlink + "'>" + thisPost.title + "</a><br /> by " + userLatest + " on " + whenlatest + "<br />";
-      document.getElementById("comments").style.display = "none";
-    }
-  });
-}
+
 let sanizited;
 function sanitize(sanitized) {
   sanitized = sanitizeHtml(sanitized, {
@@ -1034,8 +1015,6 @@ window.onload = function loading() {
     document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
 
     displayPost();
-  } else if (userLatest !== undefined) {
-    userRecent();
   } else if (hiveuser !== undefined) {
     buildprofile(hiveuser)
   } else if (update === true) {
@@ -1048,10 +1027,7 @@ window.onload = function loading() {
   };
 
 
-  if (getQueryVariable("hive") === localStorage.getItem("hive")) {
-    console.log("this is my page");
-    document.getElementById("toptab").click()
-  }
+
 
   /*
   genCommunityChip()

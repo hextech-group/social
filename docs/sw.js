@@ -4,7 +4,6 @@ self.addEventListener('install', function(e) {
 			return cache.addAll([
 				'index.html',
 				'profile_update/index.html',
-				'playground/index.html',
 				'manifest.json',
 				'sw.js',
 				'images/favicon.png',
