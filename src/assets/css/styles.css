@@ -478,3 +478,7 @@ th {
   background-color: #ddd;
   color: #555;
 }
+
+#newPostDiv {
+ margin-bottom: 100px;
+}

@@ -29,13 +29,13 @@ md.set({
 
 window.onscroll = function () { scrollFunction() };
 
-function strip(html){
+function strip(html) {
   let doc = new DOMParser().parseFromString(html, 'text/html');
   return doc.body.textContent || "";
 }
 
 function truncate(str, no_words) {
-  return str.split(" ").splice(0,no_words).join(" ");
+  return str.split(" ").splice(0, no_words).join(" ");
 }
 
 function scrollFunction() {
@@ -344,21 +344,22 @@ function createPost() {
     console.log("commenting to :" + parentPermlink);
     // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
     let postAs = localStorage.getItem("hiveKeychainVerified");
-    hive_keychain.requestPost(
-      postAs,
-      postTitle,
-      postData,
-      parentPermlink,
-      parentAuthor,
-      jsonmeta,
-      postpermLink,
-      '',
-      function (response) {
+    hive_keychain.requestPost({
+      "username": postAs,
+      "title": postTitle,
+      "body": postData,
+      "parent_permlink": parentPermlink,
+      "parent_author": '',
+      "json_metadata": jsonmeta,
+      "permlink": postpermLink,
+      "comment_options": "",
+      function(response) {
         document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
         document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
         // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
         // window.location.href = '../';
       }
+    }
     );
     // console.log(hiveuser + " connected");
   } else {
@@ -434,20 +435,21 @@ function sanitize(sanitized) {
 }
 
 function share() {
-  if (navigator.share) { 
-   navigator.share({
+  if (navigator.share) {
+    navigator.share({
       title: document.title,
       url: window.location
     }).then(() => {
       console.log('Thanks for sharing!');
     })
-    .catch(console.error);
-    } else {
-        shareDialog.classList.add('is-open');
-    }
+      .catch(console.error);
+  } else {
+    shareDialog.classList.add('is-open');
+  }
 };
 
 function displayPost() {
+  document.getElementById("display").style = "padding:2em; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;"
   console.log('displaying post')
   var letting = getQueryVariable("post").split("/");
   let author = letting[0].replace("@", '');
@@ -455,8 +457,8 @@ function displayPost() {
   // console.log("letting : " + author + permlink);
   hive.api.getContent(author, permlink, function (err, result) {
     console.log(result)
-  //  let findVoter = JSON.stringify(result.active_votes);
-   // console.log(findVoter);
+    //  let findVoter = JSON.stringify(result.active_votes);
+    // console.log(findVoter);
 
     if (result.parent_author.length > 1) {
       console.log("this is a reply to " + result.parent_author)
@@ -475,7 +477,7 @@ function displayPost() {
     }
     document.title = result.title + " by " + result.author;
     document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
-    document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3><br />" + whenagain ;
+    document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3><br />" + whenagain;
 
     document.getElementById("display").innerHTML += "<div style='float: right; text-align: right; justify-content: right; padding-top: 2em;'> Reading time: " + timeToRead.toFixed(0) + " min <br /><i class='material-icons' onclick='share()' style='cursor: pointer;'>share</i></div></div>";
 
@@ -557,12 +559,12 @@ function nonBlokzUser(hiveuser) {
 
 
     document.getElementById("profimg").src = "https://images.hive.blog/u/" + hiveuser + "/avatar";
-    
+
     document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
 
 
 
-    
+
     if (JSON.parse(posting_json).profile.website !== undefined) {
       let saniweb = JSON.parse(posting_json).profile.website;
       let saniwebsite = sanitize(saniweb);
@@ -745,9 +747,8 @@ function buildprofile(hiveuser) {
 
 
       document.getElementById("blog").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
-      "<div style='overflow: hidden'>" + postdesc +"</div>" +
-      "<div style='margin-top: 1em; min-width: 50%; text-align: right'> " + postedon + "</div></div>";
-      /* <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> //  + reactionCount + */
+        "<div style='overflow: hidden'>" + postdesc + "</div>" +
+        "<div style='margin-top: 1em; min-width: 50%; text-align: right'> " + postedon + "</div></div>";
 
     }
   });
@@ -758,17 +759,18 @@ function buildprofile(hiveuser) {
   document.getElementById("hiveuser").innerHTML = "<br /><a href='http://peakd.com/@" + hiveuser + "' target='_peakd'><img src='../images/peakd.png'></a> &#8226; ";
   document.getElementById("hiveuser").innerHTML += "<a href='http://hivestats.io/@" + hiveuser + "' target='_hivestats'><img src='../images/hivestats.ico'></a> &#8226; ";
   document.getElementById("hiveuser").innerHTML += "<a href='https://hive-engine.com/?p=balances&a=" + hiveuser + "' target='_hiveengine'><img src='../images/hive_engine.png' height='32px' width='32px'></a> &#8226; ";
-  document.getElementById("hiveuser").innerHTML += "<a href='https://dcity.io/city?c=" + hiveuser + "' target='_dcity'><img src='../images/dcity.png' height='32px' width='151px'></a>  ";
-  // https://hiveblocks.com/@
+  document.getElementById("hiveuser").innerHTML += "<a href='https://hiveblocks.com/@" + hiveuser + "' target='_hiveblocks'>hiveblocks</a>  &#8226;  ";
+  document.getElementById("hiveuser").innerHTML += "<a href='https://hivel.ink/@" + hiveuser + "' target='_hivelink'>hivel.ink</a>";
+  // https://hivel.ink/@sn0n
   // fetch blokzprofile post from hive
   hive.api.getContent(hiveuser, 'blokzprofile', function (err, result) {
     // hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, 'blokzprofile', now, 1, (err, result) => {
     // user has a blokz/profile
     console.log("whats goin on here?")
     // console.log(err, result)
-    if (result) {
+    if (result.json_metadata !== undefined) {
 
-      // console.log("meep :" + JSON.stringify(result));
+      console.log("meep :" + JSON.stringify(result));
       var blokzmeta = JSON.parse(result.json_metadata);
       console.log("test " + blokzmeta.article);
       // console.log("what is blokify " + blokify);
@@ -811,23 +813,21 @@ function buildprofile(hiveuser) {
           xhr.send(data);
         } else {
           if (entry.length > 2) {
-          let entryy = entry; //.replace(/\s+/g, '');
-          // entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
-          entryy = entryy.toLowerCase();
-          // creat chips for each interest
-          // todo: parse for communities and update those 'hive-'
-          var vadd = document.createElement('button');
-          vadd.className = "mdl-chip";
-          vadd.id = entryy;
-          vadd.setAttribute("onclick", "window.location.href='/?tag=" + entryy + "';");
-          document.getElementById("interests").appendChild(vadd);
-          var sadd = document.createElement('span');
-          sadd.className = "mdl-chip__text";
-          sadd.id = entryy + "2";
-          document.getElementById(entryy).appendChild(sadd);
-          var t = document.createTextNode("#" + entryy);
-          document.getElementById(entryy + "2").appendChild(t);
-        }
+            let entryy = entry.replace(/\s+/g, '');
+            entryy = entryy.replace(/[^a-zA-Z0-9]/g, '');
+            entryy = entryy.toLowerCase();
+            var vadd = document.createElement('button');
+            vadd.className = "mdl-chip";
+            vadd.id = entryy;
+            vadd.setAttribute("onclick", "window.location.href='/?tag=" + entryy + "';");
+            document.getElementById("interests").appendChild(vadd);
+            var sadd = document.createElement('span');
+            sadd.className = "mdl-chip__text";
+            sadd.id = entryy + "2";
+            document.getElementById(entryy).appendChild(sadd);
+            var t = document.createTextNode("#" + entryy);
+            document.getElementById(entryy + "2").appendChild(t);
+          }
         };
 
         // todo: community chips
@@ -843,36 +843,38 @@ function buildprofile(hiveuser) {
       // console.log("favs : " + favs);
       let favsLog = favs.split(',');
       favsLog.forEach(function (entry) {
-        if (entry.length > 2) {
-        // console.log("show: " + entry);
-        let entryy = entry.replace(/\s+/g, '');
-        entryy = entryy.toLowerCase();
-        // CURRENT TODO: FRIEND IMAGE
-        // console.log("CAUGHT: " + entryy);
-        var favfriend = document.createElement("div");
-        favfriend.id = entryy + "_";
-        favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
-        favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
-        document.getElementById("favorites").appendChild(favfriend);
-        var para = document.createElement("div");                 // Create a <p> element
-        para.id = favfriend.id + "sub";
-        var ffs = document.createElement("div");
-        ffs.id = favfriend.id;
-        var ffsName = document.createElement("div");
-        ffsName.id = favfriend.id + "ffsName";
-        var ff = favfriend.id + "NEW";   // placeholder
-        document.getElementById(entryy + "_").appendChild(para);
-        document.getElementById(ffs.id).appendChild(ffsName);
-        var image = document.createElement("img");
-        var imageParent = document.getElementById(para.id);
-        image.className = "avatar";
-        image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
-        imageParent.appendChild(image);
-        document.getElementById(entryy + "_").appendChild(ffsName);
-        ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
-      }
+        if (entry !== "sn0n") {
+          if (entry.length > 2) {
+            // console.log("show: " + entry);
+            let entryy = entry.replace(/\s+/g, '');
+            entryy = entryy.toLowerCase();
+            // CURRENT TODO: FRIEND IMAGE
+            // console.log("CAUGHT: " + entryy);
+            var favfriend = document.createElement("div");
+            favfriend.id = entryy + "_";
+            favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
+            favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
+            document.getElementById("favorites").appendChild(favfriend);
+            var para = document.createElement("div");                 // Create a <p> element
+            para.id = favfriend.id + "sub";
+            var ffs = document.createElement("div");
+            ffs.id = favfriend.id;
+            var ffsName = document.createElement("div");
+            ffsName.id = favfriend.id + "ffsName";
+            var ff = favfriend.id + "NEW";   // placeholder
+            document.getElementById(entryy + "_").appendChild(para);
+            document.getElementById(ffs.id).appendChild(ffsName);
+            var image = document.createElement("img");
+            var imageParent = document.getElementById(para.id);
+            image.className = "avatar";
+            image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
+            imageParent.appendChild(image);
+            document.getElementById(entryy + "_").appendChild(ffsName);
+            ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
+          }
+        }
       }); // finished displaying blokzprofile
-      
+
     } else {
       nonBlokzUser(hiveuser);
     }
@@ -897,7 +899,7 @@ function showtag(tag) {
             let communityinfo = JSON.parse(xhr.responseText)
             console.log("at bat " + communityinfo.result.title);
             let contentofTag = document.getElementById("display").innerHTML;
-            document.getElementById("display").innerHTML = "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + communityinfo.result.title + " posts</div><br />" + contentofTag;
+            document.getElementById("display").innerHTML = "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>" + communityinfo.result.title + " community posts</div><br />" + contentofTag;
           }
         };
         var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"' + tag + '","observer":"blokz"}, "id":1}';
@@ -918,7 +920,7 @@ function showtag(tag) {
 
         let descjson = JSON.parse(result[i].json_metadata);
         console.log("working with json_metadata: " + descjson.description);
-        
+
         if (descjson.description !== undefined) {
           console.log("success on description : " + descjson.description);
           postdesc = descjson.description;
@@ -931,12 +933,20 @@ function showtag(tag) {
           console.log("What post desc we working with here: " + postdesc);
           postdesc = postdesc + "...";
         }
-        document.getElementById("display").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + discussion.author + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
-        "<div style='overflow: hidden; padding-bottom: .5em;'>" + postdesc +"</div>" +
-        "<div style='display: flex;margin-top: .5em; '><div style='min-width:70%'>Author <a href='..?hive=" + discussion.author + "'>" + discussion.author + "</a></div>" +
-        "<div style='justify-content: right; min-width: 30%; text-align: right'> " + whenbytag + "</div></div></div>";
+        document.getElementById("display").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'>" +
+          "<div><div style='min-width:70%'>" +
+          "<h5><a href='?post=" + discussion.author + "/" + result[i].permlink + "'>" + result[i].title + "</a></h5>" +
+ 
+          "<a href='..?hive=" + discussion.author + "'><span class='mdl-chip mdl-chip--contact'>" +
+          "<span class='mdl-chip__contact mdl-color--teal mdl-color-text--white'><img src='https://images.hive.blog/u/" + discussion.author + "/avatar'></span>" +
+          "<span class='mdl-chip__text'>" + discussion.author + "</span>" +
+          "</span></a></div>" +
+          "<div style='justify-content: right; min-width: 30%;'> " + whenbytag + "</div>" +
+          "<div style='overflow: hidden; padding-bottom: .5em;'>" + postdesc + "</div>" +
 
-       // document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactioncount + "<hr />";
+          "</div></div>";
+
+        // document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactioncount + "<hr />";
         document.getElementById("comments").style.display = "none";
       }
     } else {
@@ -967,6 +977,10 @@ window.onload = function loading() {
               // all is well!
               console.log("success;");
               localStorage.setItem("hiveKeychainVerified", hiveuser);
+            } else {
+              console.log('that username didnt work bruh');
+              localStorage.removeItem("hive");
+              window.location.href = "../?failedlogin"
             };
           });
       };
@@ -980,8 +994,8 @@ window.onload = function loading() {
 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
-    document.getElementById("loggedin").innerHTML = "<div style='float: right'><button onclick='logout()'><i class='material-icons'>exit_to_app</i></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a></div> ";
-    document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>New Post</a>";
+    document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i> Logout</button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a></div> ";
+    document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
   }
 
   if (update !== true && localStorage.getItem("hive") !== null) {

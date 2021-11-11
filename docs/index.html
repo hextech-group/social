@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="../css/styles.css?ver=7.42b">
 
 <script src="../js/blokz.js?ver=7.42b"></script>
+<script src="../js/aes256.min.js?ver=7.42b"></script>
 
 </head>
 
@@ -39,7 +40,7 @@
 <template>
   <a class='mdl-chip mdl-chip--contact mdl-chip--deletable' id="communityURL">
     <img class='mdl-chip__contact mdl-color--pink' id="communityIMG"></img>
-    <span class='mdl-chip__text'>leofinance &nbsp;</span>
+    <span class='mdl-chip__text mdl-badge' data-badge="4">leofinance &nbsp;</span>
   </a>
 </template>
 
@@ -140,13 +141,13 @@
 </div>
 
 <div id="display"
-  style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center;  background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
+  style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; ">
 </div>
 <div id="comments"
   style="padding: 1em; margin: auto; margin-top: 2em; margin-bottom: 100px; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
 </div>
 
-<div id="newPostDiv" style="padding: 2em; background-color: white; display:none ">
+<div id="newPostDiv" style="padding: 2em; background-color: white; display:none;">
   <div class="mdl-textfield mdl-js-textfield" id="posttitleid">
     <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
     <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
@@ -198,12 +199,12 @@
 <div id="blokzmenuPOP" class="external" style="display: none;">
 
   <div style="background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px; padding: 5px;">
-    <a href="../" class="material-icons" style="text-decoration: none;">home</a>
     
+
     <div id="loggedin">
       <form id="frm2" action="/">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
-          <label class="mdl-textfield__label" style="font-size: 1.25em;">Browse as</label>
+          <label class="mdl-textfield__label" style="font-size: 1.25em;">your username</label>
           <input type="text" name="loginas" class="mdl-textfield__input">
         </div> <br />
         --or--<br /><br /> <a href="https://hiveonboard.com?ref=blokz" target="hiveonboard">Create $HIVE Account</a>
@@ -220,14 +221,14 @@
 
 
     <form id="frm1" action="/">
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1.25em;">
-        <label class="mdl-textfield__label" style="font-size: 1.25em;">Goto Profile</label>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="font-size: 1em;">
+        <label class="mdl-textfield__label" style="font-size: 1em;">Goto Profile</label>
         <input type="text" name="hive" class="mdl-textfield__input">
       </div>
     </form>
 
     <a href="https://personal.community">personal.community</a> is a <a href="../?hive=blokz"><img src="../images/favicon.png" alt="blokz logo" style="height:16px" />blokz</a>
-    project. be well.
+    project. <br /> be well.
 
   </div>
 
