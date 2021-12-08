@@ -223,8 +223,29 @@ function hiveuserUp() {
 }
 
 
+// posting_json_metadata beginnings
+/*
+
+{
+  "roles": ["posting", "active", "owner"],
+  "operation": "account_update2",
+  "params": [
+    "account": "hiveio",
+    "posting_json_metadata": ""
+  ]
+},
+
+  hive.broadcast.account_update2(
+        "account": "hiveio",
+    "posting_json_metadata": ""
+  );
+
+  hive.broadcast.accountUpdate2(wif, account, owner, active, posting, memoKey, jsonMetadata, function(err, result) {
+  console.log(err, result);
+});
 
 
+*/
 
 // uses private posting key to update profile
 function updateProfile() {
@@ -248,7 +269,7 @@ function updateProfile() {
   const beneProfile = [
     "comment_options",
     {
-      "author": "sn0n",
+      "author": upwho,
       "permlink": "blokzprofile",
       "max_accepted_payout": {
         "amount": "1000000",
