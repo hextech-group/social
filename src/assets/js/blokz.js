@@ -642,7 +642,7 @@ function splash() {
 
 
 
-    //`    </div>` +
+    //`    </div>` + test
     `<hr />To get started, hit the <img src="../images/favicon.png" style="height:16px" /> icon down below.` +
     `<br /> This is used to navigate personal.community past this page<br /> ` +
     `<hr />Made with &#10084; by <br /><a class='mdl-chip mdl-chip--contact mdl-chip--deletable' href='../?hive=sn0n'><img class='mdl-chip__contact mdl-color--pink' src='https://images.hive.blog/u/sn0n/avatar'></img><span class='mdl-chip__text'>sn0n &nbsp;</span></a></div>`;
