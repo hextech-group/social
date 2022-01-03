@@ -54,7 +54,7 @@ let span = document.getElementsByClassName("close")[0];
 
 
 let parentAuthor = '';
-let parentPermlink = "personalcommunity";
+let parentPermlink = '';
 function replyClick(author, commentpermlink) {
 
 
@@ -336,7 +336,7 @@ function createPost() {
   console.log("tags test: " + tag)
   let postTitle = document.getElementById('postTitle').value;
   let ran = AES256.encrypt(postTitle, postTitle);
-  ran = ran.substring(1, 6);
+  ran = ran.substring(12, 18);
   // console.log("ran is : " + ran);
   let permbuilder = document.getElementById('postTitle').value.replace(/[^A-Za-z]+/g, '-').toLowerCase();
   let postpermLink = permbuilder + "-" + ran.toLowerCase();
@@ -362,28 +362,66 @@ function createPost() {
   if (window.hive_keychain) {
     console.log('b');
     console.log('keychain post or comment');
-    console.log("commenting to :" + parentPermlink);
+    console.log("commenting to :" + parentPermlink);  
+    let parentPermBC = '';
+    if (parentPermlink.length > 1) {
+      parentPermBC = parentPermlink
+    } else {
+      parentPermBC = postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc"
+    }
     // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
     let postAs = localStorage.getItem("hiveKeychainVerified");
-    hive_keychain.requestPost({
-      "username": postAs,
-      "title": postTitle,
-      "body": postData,
-      "parent_permlink": parentPermlink,
-      "parent_author": '',
-      "json_metadata": jsonmeta,
-      "permlink": postpermLink,
-      "comment_options": "",
-      function(response) {
-        document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
-        document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
+    let opsBroad = [
+      [
+        "comment",
+        {
+          "parent_author": parentAuthor,
+          "parent_permlink": parentPermBC,
+          "author": postAs,
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "title": postTitle,
+          "body": postData,
+          "json_metadata": jsonmeta
+        } 
+      ],
+      [
+        "comment_options",
+        {
+          "author": postAs,
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "allow_votes": true,
+          "allow_curation_rewards": true,
+          "max_accepted_payout": "1000000.000 HBD",
+          "percent_hbd": 10000,
+          "extensions": [
+            [
+              0,
+              {
+                "beneficiaries": [
+                  {
+                    "account": "blokz",
+                    "weight": 500
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    ];
+
+        hive_keychain.requestBroadcast(postAs,opsBroad,"Posting",function(response) {
+        console.log("main js response - post");
+        console.log(response);
+        // document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
+        // document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
         // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
         // window.location.href = '../';
       }
-    }
+ 
     );
     // console.log(hiveuser + " connected");
-  } else {
+  }  else {
 
     // broadcast a new post
     console.log('c');
@@ -423,7 +461,7 @@ function upvote(permlink, author) {
 
       hiveuser = localStorage.getItem("hiveKeychainVerified");
 
-      let weight = 500;
+      let weight = 10000;
       hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) {
         console.log(response);
         // todo:  change reaction color
@@ -524,7 +562,7 @@ function displayPost() {
     } else {
       jsonTAGS.tags.forEach(genTags);
     }
-    // document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
+    document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
 
     // TODO : color reaction 
     /* if (findVoter.search(localStorage.getItem("hive")) > 0) {
@@ -636,8 +674,8 @@ function nonBlokzUser(hiveuser) {
 function splash() {
 
   // console.log("splash engaged");
-  var html = `<div id='splash'><img src="../images/logo192.png"><br />` +
-    `<h3 style="margin: 2px; padding: 2px;">personal.community</h3>` +
+  var html = `<div id='splash'><h3 style="margin: 2px; padding: 2px;">personal.community</h3><img src="../images/logo192.png"><br />` +
+    
     `<h6 style="margin: 2px; padding: 2px;"><a class='mdl-button mdl-chip--contact mdl-chip--deletable' href='https://hive.io'><img class='mdl-chip__contact mdl-color--black' src='../images/hive.png' alt='hive.io'></img><span class='mdl-chip__text' style='font-weight: bold; color: #212529; font-family: 'Work Sans', sans-serif;'>hive powered &nbsp;</span></a> </h6>`+
 
 
