@@ -350,7 +350,13 @@ function createPost() {
   console.log('a');
   // todo: reply to comments and posts
   tag = replaceAll(tag, " ", "");
-  tag += "blog";
+  
+  if(tag.length <= 0) {
+    tag += "blog";
+  } else {
+    tag += ",blog";
+  }
+  
   tag = tag.split(",")
   let jsonmeta = {
     tags: tag,
