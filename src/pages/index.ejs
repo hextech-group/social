@@ -105,36 +105,36 @@
 </div>
 
 <div id="display"
-  style="padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; ">
+  style="overflow-wrap: break-word; padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; ">
 </div>
 <div id="comments"
   style="padding: 1em; margin: auto; margin-top: 2em; margin-bottom: 100px; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
 </div>
 
-<div id="newPostDiv" style="padding: 2em; background-color: white; display:none;">
-  <div class="mdl-textfield mdl-js-textfield" id="posttitleid">
-    <small>Post Title</small><input class="mdl-textfield__input" type="text" id="postTitle">
-    <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel"></label>
+<div id="newPostDiv" style="background-color: white; display:none; padding: 1em;  margin: 0px ">
+  <small id="postorcomment"></small>
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="posttitleid" style='width: 100%'>
+    <label class="mdl-textfield__label" for="postTitle" id="postTitleLabel">Post Title</label>
+     <input class="mdl-textfield__input" type="text" id="postTitle">
   </div>
 
-  <div class="mdl-textfield mdl-js-textfield">
-    <small id="postorcomment">Post Body</small>
-    <textarea id="postBody"></textarea>
-
-
+  <div class="mdl-textfield mdl-js-textfield" style='width: 100%; margin-top: 0px; padding: 5px'>
+    <textarea id="postBody" style="box-sizing: border-box; height: 100%;"></textarea>
     <label class="mdl-textfield__label" for="postBody" id="postBodyLabel"></label>
   </div>
-  <br />
-  <small>tags:</small><br />
-  <div class="mdl-textfield mdl-js-textfield mdl-chipfield" id="tags">
+  
+  
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-chipfield" id="tags" style='width: 100%'>
     <input type="hidden" class="mdl-chipfield__input" name="tags" id="tag" value="">
     <input class="mdl-textfield__input" type="text" id="my-input-0">
-    <label class="mdl-textfield__label" for="my-input-0"></label>
+    <label class="mdl-textfield__label" type="text" for="tagsLabel" id="tags"> tags</label>
   </div><br />
 
-  <div>
+  <div style="margin-bottom: 200px;">
     <button type="button" id="nextBtn" onclick="createPost()"
       class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
       data-upgraded=",MaterialButton,MaterialRipple">Create Post</button>
   </div>
+
+
 </div>

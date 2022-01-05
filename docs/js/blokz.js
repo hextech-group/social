@@ -419,10 +419,14 @@ function createPost() {
         hive_keychain.requestBroadcast(postAs,opsBroad,"Posting",function(response) {
         console.log("main js response - post");
         console.log(response);
-        // document.getElementById("createpostbox").innerHTML = "<h3>something went wrong... click the x or outside the box to close</h3>" + response;
-        // document.getElementById("createpostbox").innerHTML = "<h3>view post: <a href='../?post=" + postAs + "/" + postpermLink + "'>" + postpermLink + "</a></h3> click the x or outside the box to close<br />" + response;
-        // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-        // window.location.href = '../';
+
+    console.log('hold tight')
+    setTimeout(() => {
+      let url = "../?post=" + postAs + "/" + postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc";
+      window.location.href = url;
+    }, 8000);
+
+
       }
  
     );
@@ -592,7 +596,7 @@ function displayPost() {
 
           console.log(sanicomm);
           sanicomm = sanitize(sanicomm);
-          document.getElementById("comments").innerHTML += "<div id='comm'>  <a class='mdl-chip mdl-color--blue-grey mdl-chip--contact mdl-chip--deletable' href='../?hive=" + thisPost.author + "'><img class='mdl-chip__contact mdl-color--light-blue' src='https://images.hive.blog/u/" + thisPost.author + "/avatar' alt='avatar'></img><span class='mdl-chip__text' style='font-weight: bold; color: white'>" + thisPost.author + " &nbsp;</span></a>  <div style='padding:2em'>" + sanicomm + "</div> <div style='text-align: right'><a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>permlink & replies</a></div></div>";
+          document.getElementById("comments").innerHTML += "<div id='comm' style='overflow-wrap: break-word;'>  <a class='mdl-chip mdl-color--blue-grey mdl-chip--contact mdl-chip--deletable' href='../?hive=" + thisPost.author + "'><img class='mdl-chip__contact mdl-color--light-blue' src='https://images.hive.blog/u/" + thisPost.author + "/avatar' alt='avatar'></img><span class='mdl-chip__text' style='font-weight: bold; color: white'>" + thisPost.author + " &nbsp;</span></a>  <div style='padding:2em'>" + sanicomm + "</div> <div style='text-align: right'><a href='?post=@" + thisPost.author + "/" + thisPost.permlink + "'>permlink & replies</a></div></div>";
 
         }
 
@@ -1025,6 +1029,15 @@ function showtag(tag) {
 window.onload = function loading() {
 
 
+  if (getQueryVariable("newpost") !== false) {
+   
+    easyMDE = new EasyMDE({ element: document.getElementById('postBody'), minHeight: "55vh",maxHeight: "55vh"  });
+  } else if(window.location.pathname == "/profile_update/") {
+  } else {
+    easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
+
+  }
+
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
       localStorage.setItem("hive", getQueryVariable("loginas"));
@@ -1065,7 +1078,7 @@ window.onload = function loading() {
   }
 
   if (update !== true && localStorage.getItem("hive") !== null) {
-    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
+   // document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
   }
 
   if (tag !== "null") {
@@ -1077,8 +1090,6 @@ window.onload = function loading() {
 
     document.getElementById("newPostDiv").style.display = "block";
     document.getElementById("display").style.display = "none";
-
-    easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
 
 
     document.getElementById("comments").style.display = "none";
