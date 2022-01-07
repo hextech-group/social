@@ -326,7 +326,110 @@ function updateProfile() {
 
 let reply
 
+function quickReply() {
+  console.log("begin creating post process");
+  console.log("replying to : " + localStorage.getItem('replyAuthor'));
+  console.log(localStorage.getItem('replyLink'));
+  let tag = document.getElementById('tag').value;
+  console.log("tags test: " + tag)
+  let postTitle = document.getElementById('postTitle').value;
+  let ran = AES256.encrypt(postTitle, postTitle);
+  ran = ran.substring(12, 18);
+  // console.log("ran is : " + ran);
 
+  let postpermLink = ran.toLowerCase();
+  // console.log("perm link " + postpermLink);
+  let postData = easyMDE.value();
+  console.log(postData)
+  // console.log("document.getElementById('postingKey').value " + document.getElementById('postingKey').value);
+  // console.log(hiveuser);
+  let postingAs = localStorage.getItem("hive");
+  // console.log("replying to : " + reply)
+  // let setTags = "['testing', 'blokz', 'test']";
+  console.log('a');
+  // todo: reply to comments and posts
+  tag = replaceAll(tag, " ", "");
+  
+  if(tag.length <= 0) {
+    tag += "blog";
+  } else {
+    tag += ",blog";
+  }
+  
+  tag = tag.split(",")
+  let jsonmeta = {
+    tags: tag,
+    app: 'blokz'
+  }
+
+  jsonmeta = JSON.stringify(jsonmeta)
+  console.log(jsonmeta)
+  
+ if (window.hive_keychain) {
+    console.log('b');
+    console.log('keychain post or comment');
+    console.log("commenting to :" + parentPermlink);  
+    let parentAuthor = localStorage.getItem('replyAuthor');
+    let parentPermBC = localStorage.getItem('replyLink');
+    // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
+    let postAs = localStorage.getItem("hiveKeychainVerified");
+    let opsBroad = [
+      [
+        "comment",
+        {
+          "parent_author": parentAuthor,
+          "parent_permlink": parentPermBC,
+          "author": postAs,
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "title": postTitle,
+          "body": postData,
+          "json_metadata": jsonmeta
+        } 
+      ],
+      [
+        "comment_options",
+        {
+          "author": postAs,
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "allow_votes": true,
+          "allow_curation_rewards": true,
+          "max_accepted_payout": "1000000.000 HBD",
+          "percent_hbd": 10000,
+          "extensions": [
+            [
+              0,
+              {
+                "beneficiaries": [
+                  {
+                    "account": "blokz",
+                    "weight": 500
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    ];
+
+        hive_keychain.requestBroadcast(postAs,opsBroad,"Posting",function(response) {
+        console.log("main js response - post");
+        console.log(response);
+
+    console.log('hold tight')
+    setTimeout(() => {
+      let url = "../?post=" + postAs + "/" + postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc";
+      window.location.href = url;
+    }, 8000);
+
+
+      }
+ 
+    );
+    // console.log(hiveuser + " connected");
+  } 
+
+}
 
 
 function createPost() {
@@ -524,17 +627,21 @@ function displayPost() {
   let author = letting[0].replace("@", '');
   let permlink = letting[1];
   // console.log("letting : " + author + permlink);
+  localStorage.setItem('replyAuthor', author);
+  localStorage.setItem('replyLink', permlink);
+  // console.log("this is a reply to " + result.parent_author)
   hive.api.getContent(author, permlink, function (err, result) {
     console.log(result)
     //  let findVoter = JSON.stringify(result.active_votes);
     // console.log(findVoter);
 
     if (result.parent_author.length > 1) {
-      console.log("this is a reply to " + result.parent_author)
+
 
       document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>replying to : <a href='../?post=" + result.parent_author + "/" + result.parent_permlink + "'>" + result.parent_author + "/" + result.parent_permlink + "</a></div>";
     } else {
-      console.log("this is a top level comment")
+      console.log("this is a top level comment");
+
     }
     let post1 = md.render(result.body).replace("\n", "");
     //post1 = post1.replace(new RegExp("<img ", 'g'), "<img width='80%' ");
@@ -582,8 +689,8 @@ function displayPost() {
       console.log('you have yet to upvote this post')
     }
     */
-    // todo : comments
-    document.getElementById("comments").innerHTML += `<h3>Comments</h3> <div style='padding: 5px;'><button onclick='replyClick("` + author + `","` + permlink + `")'>reply</button></div>`;
+    // todo : commentsz
+    document.getElementById("comments").innerHTML += `<h4>Comments</h4> `;
     hive.api.getContentReplies(author, permlink, function (err, result) {
 
       if (result.length > 0) {
@@ -1033,6 +1140,14 @@ window.onload = function loading() {
    
     easyMDE = new EasyMDE({ element: document.getElementById('postBody'), minHeight: "55vh",maxHeight: "55vh"  });
   } else if(window.location.pathname == "/profile_update/") {
+  } else if(getQueryVariable("post") !== false && localStorage.getItem("hiveKeychainVerified")) {
+    easyMDE = new EasyMDE({ element: document.getElementById('replyBody') });
+    
+    // TODO : check if logged in, if yes, trigger...  
+    document.getElementById("somecontext").style.display = "block";
+  
+  
+  
   } else {
     easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
 

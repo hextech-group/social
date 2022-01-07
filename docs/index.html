@@ -27,7 +27,7 @@
 
 <link rel="stylesheet" href="../css/styles.css?ver=7.42b">
 
-<script src="../js/blokz.js?ver=7.42b"></script>
+<script src="../js/blokz.js?ver=7.42b" defer></script>
 <script src="../js/aes256.min.js?ver=7.42b"></script>
 
 
@@ -149,9 +149,20 @@
 <div id="display"
   style="overflow-wrap: break-word; padding: 1em; margin: auto; margin-top: 2em; max-width: 800px; justify-content: center; ">
 </div>
+
+
+<!-- Quick Reply -->
+<div id="somecontext"
+  style="display: none; padding: 1em; margin: auto; margin-top: .25em; margin-bottom: 0px; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
+<h4>Quick Reply: </h4>  <textarea id="replyBody"></textarea> <br /><button type="button" id="nextBtn" onclick="quickReply()"
+class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+data-upgraded=",MaterialButton,MaterialRipple">Submit</button></div>
+
+
+
 <div id="comments"
-  style="padding: 1em; margin: auto; margin-top: 2em; margin-bottom: 100px; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
-</div>
+  style="padding: 1em; margin: auto; margin-top: .25em; margin-bottom: 100px; max-width: 800px; justify-content: center; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;">
+ </div>
 
 <div id="newPostDiv" style="background-color: white; display:none; padding: 1em;  margin: 0px ">
   <small id="postorcomment"></small>
@@ -249,7 +260,6 @@
     deferredPrompt = e;
   });
   </script>
-
 
 
 </body>
