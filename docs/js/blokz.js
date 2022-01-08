@@ -568,18 +568,18 @@ function createPost() {
 
 }
 
-function upvote(permlink, author) {
+function upvote(permlink, author, percentage, id) {
   if (window.hive_keychain) {
     if (localStorage.getItem("hiveKeychainVerified") !== null) {
 
       hiveuser = localStorage.getItem("hiveKeychainVerified");
 
-      let weight = 10000;
+      let weight = 10000 * percentage;
       hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) {
         console.log(response);
         // todo:  change reaction color
 
-        document.getElementById("thumbs").style.color = "red";
+        document.getElementById(id).style.color = "red";
       })
 
       // console.log(hiveuser + " connected");
@@ -632,8 +632,7 @@ function displayPost() {
   // console.log("this is a reply to " + result.parent_author)
   hive.api.getContent(author, permlink, function (err, result) {
     console.log(result)
-    //  let findVoter = JSON.stringify(result.active_votes);
-    // console.log(findVoter);
+
 
     if (result.parent_author.length > 1) {
 
@@ -655,7 +654,7 @@ function displayPost() {
     document.getElementById("display").innerHTML += "<div style='font-weight: strong; font-size: 200%; line-height: 100%; padding: .1em;'>" + result.title + "</div>";
     document.getElementById("display").innerHTML += "<br /><a href='../?hive=" + result.author + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + result.author + "/avatar'></button> <h4 style='display: inline;'>" + result.author + "</a></h3><br />" + whenagain;
 
-    document.getElementById("display").innerHTML += "<div style='float: right; text-align: right; justify-content: right; padding-top: 2em;'> Reading time: " + timeToRead.toFixed(0) + " min <br /><i class='material-icons' onclick='share()' style='cursor: pointer;'>share</i></div></div>";
+    document.getElementById("display").innerHTML += "<div style='float: right; text-align: right; justify-content: right; padding-top: 2em;'> Reading time: " + timeToRead.toFixed(0) + " min </div></div>";
 
 
     document.getElementById("display").innerHTML += "<hr style='clear:both' />";
@@ -679,16 +678,19 @@ function displayPost() {
     } else {
       jsonTAGS.tags.forEach(genTags);
     }
-    document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`)' id='thumbs'>thumb_up</span> ";
 
     // TODO : color reaction 
-    /* if (findVoter.search(localStorage.getItem("hive")) > 0) {
+    let percentage = "1"
+    document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`,`" + percentage +"`,`thumbs`)' id='thumbs'>thumb_up</span> ";
+    let findVoter = JSON.stringify(result.active_votes);
+    console.log(findVoter);
+     if (findVoter.search(localStorage.getItem("hive")) > 0) {
       console.log("user found, you have upvoted this");
       document.getElementById("thumbs").style.color = "red";
     } else {
       console.log('you have yet to upvote this post')
     }
-    */
+    
     // todo : commentsz
     document.getElementById("comments").innerHTML += `<h4>Comments</h4> `;
     hive.api.getContentReplies(author, permlink, function (err, result) {
@@ -724,6 +726,35 @@ function displayPost() {
 
 
 function nonBlokzUser(hiveuser) {
+
+      // to thy own self be true
+      console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
+      let entryy = localStorage.getItem("hiveKeychainVerified");
+      entryy = entryy.toLowerCase();
+      // CURRENT TODO: FRIEND IMAGE
+      console.log("CAUGHT: " + entryy);
+      var favfriend = document.createElement("div");
+      favfriend.id = "whoamiaa";
+      favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
+      favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
+      document.getElementById("favorites").appendChild(favfriend);
+      var para = document.createElement("div");                 // Create a <p> element
+      para.id = favfriend.id + "sub";
+      var ffs = document.createElement("div");
+      ffs.id = favfriend.id;
+      var ffsName = document.createElement("div");
+      ffsName.id = favfriend.id + "ffsName";
+      var ff = favfriend.id + "NEW";   // placeholder
+      document.getElementById(favfriend.id).appendChild(para);
+      document.getElementById(ffs.id).appendChild(ffsName);
+      var image = document.createElement("img");
+      var imageParent = document.getElementById(para.id);
+      image.className = "avatar";
+      image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
+      imageParent.appendChild(image);
+      document.getElementById(favfriend.id).appendChild(ffsName);
+      ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>"; 
+
 
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
@@ -898,7 +929,7 @@ function buildprofile(hiveuser) {
     for (var i = 0; i < result.length; i++) {
 
       // testing for replies 
-      // console.log(" for loop data : " + JSON.stringify(result[i]));
+      console.log(" for loop data : " + JSON.stringify(result[i]));
       // console.log("who dis " + hiveuser);
       // console.log("i is " + i);
       // http://127.0.0.1:3000/?post=yabapmatt/some-thoughts-on-the-future
@@ -906,7 +937,10 @@ function buildprofile(hiveuser) {
       // console.log('post created on : ' + result[i].created);
       let postedon = new Date(result[i].created.slice(0, 10)).toDateString();
       let descjson = JSON.parse(result[i].json_metadata);
-      console.log("working with json_metadata: " + descjson.description);
+      console.log("working with json_metadata: " + JSON.stringify(descjson));
+    
+
+    
 
       if (descjson.description !== undefined) {
         console.log("success on description : " + descjson.description);
@@ -922,11 +956,27 @@ function buildprofile(hiveuser) {
       }
       postedon = postedon.split('GMT');
 
+     let id = i
+
+      console.log(result[i].author + "/" + result[i].permlink)
+
+
+
+    // TODO : color reaction 
+    let percentage = "1"
 
       document.getElementById("blog").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
         "<div style='overflow: hidden'>" + postdesc + "</div>" +
-        "<div style='margin-top: 1em; min-width: 50%; text-align: right'> " + postedon + "</div></div>";
-
+        "<hr /><div style='margin-top: 1em; min-width: 50%; text-align: right'><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage +"`,`" + id +"`)' id='"+ id + "'>thumb_up</span> | Posted on: " +
+        " " + postedon + "</div></div>";
+        let findVoter = JSON.stringify(result[i].active_votes);
+        console.log(findVoter);
+         if (findVoter.search(localStorage.getItem("hive")) > 0) {
+          console.log("user found, you have upvoted this");
+          document.getElementById(id).style.color = "red";
+        } else {
+          console.log('you have yet to upvote this post')
+        }
     }
   });
 
@@ -1017,9 +1067,20 @@ function buildprofile(hiveuser) {
 
       // favorite steemians
       var favs = sanitize(bitff.favorites);
+
+
+
+
       // console.log("favs : " + favs);
       let favsLog = favs.split(',');
+     
       favsLog.forEach(function (entry) {
+
+
+
+
+
+
         if (entry !== "sn0n") {
           if (entry.length > 2) {
             // console.log("show: " + entry);
@@ -1049,8 +1110,9 @@ function buildprofile(hiveuser) {
             document.getElementById(entryy + "_").appendChild(ffsName);
             ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
           }
-        }
+        } 
       }); // finished displaying blokzprofile
+    
 
     } else {
       nonBlokzUser(hiveuser);
