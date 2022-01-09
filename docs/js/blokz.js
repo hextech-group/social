@@ -847,7 +847,7 @@ function nonBlokzUser(hiveuser) {
 
 
 function splash() {
-
+  
   // console.log("splash engaged");
   var html = `<div id='splash'><h3 style="margin: 2px; padding: 2px;">personal.community</h3><img src="../images/logo192.png"><br />` +
     
@@ -1318,7 +1318,7 @@ window.onload = function loading() {
   } else if (update === true) {
     updatePage();
   } else if (localStorage.getItem("hive") !== null) {
-    // buildprofile(localStorage.getItem("hive"));
+    buildprofile(localStorage.getItem("hive"));
   } else {
     splash();
     hidecomm();
