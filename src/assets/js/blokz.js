@@ -118,7 +118,7 @@ function hidecomm() {
 }
 
 function updatePage() {
-  // console.log("welcome to updating a profile");
+  console.log("welcome to updating a profile");
   if (localStorage.getItem("hive") !== null) {
     hiveuser = localStorage.getItem("hive");
     // console.log(typeof hiveuser)
@@ -289,38 +289,63 @@ function updateProfile() {
 
   const bene = Object.create(beneProfile);
 
-  hive.broadcast.comment(
-    document.getElementById('postingKey').value,
-    '', //author
-    'blokzprofile', //firsttag
-    document.getElementById('hiveuser').value,
-    'blokzprofile', //permlink
-    'My Personal.Community Profile',
-    data,
-    // json meta
-    {
-      tags: ['blokz'],
-      app: 'blokz',
-      article: article,
-      interests: interests,
-      favorites: favorites
-    },
-    function (err, result) {
-      if (err)
-        document.getElementById('upprofile').innerHTML = "<h3>something went wrong...</h3>" + err;
-      else
-        document.getElementById('upprofile').innerHTML = "<h3> Please wait while updating profile...</h3>";
 
-      setTimeout(() => {
-        let url = "../?hive=" + upwho;
-        window.location.href = url;
-      }, 8000);
-
-
-      // localStorage.setItem("hive", (document.getElementById('hiveuser').value));
-      // window.location.href = '../';
+  if (window.hive_keychain) {
+    console.log('b');
+    console.log('keychain post or comment');
+    console.log("commenting to :" + parentPermlink);  
+    let parentPermBC = 'blokzprofile';
+    if (parentPermlink.length > 1) {
+      parentPermBC = parentPermlink
+    } else {
+      parentPermBC = "blokzprofile"
     }
-  );
+    // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
+    let postAs = localStorage.getItem("hiveKeychainVerified");
+
+let profilejson = {
+  tags: 'personalcommunity',
+  app: 'blokz',
+  article: article,
+  interests: interests,
+  favorites: favorites
+}
+    profilejson = JSON.stringify(profilejson)
+    let opsBroad = [
+      [
+        "comment",
+        {
+          "parent_author": "",
+          "parent_permlink": "blokzprofile",
+          "author": postAs,
+          "permlink": "blokzprofile",
+          "title": "My Personal.Community Profile",
+          "body": data,
+          "json_metadata": profilejson,
+        } 
+      ]
+    ];
+
+        hive_keychain.requestBroadcast(postAs,opsBroad,"Posting",function(response) {
+        console.log("main js response - post");
+        console.log(response);
+
+    console.log('hold tight')
+  setTimeout(() => {
+      let url = "../?hive=" + postAs;
+      window.location.href = url;
+    }, 8000); 
+
+
+      }
+ 
+    );
+    // console.log(hiveuser + " connected");
+  }
+
+
+
+
 
 }
 
@@ -727,6 +752,8 @@ function displayPost() {
 
 function nonBlokzUser(hiveuser) {
 
+
+      if(localStorage.getItem("hiveKeychainVerified") != undefined) {
       // to thy own self be true
       console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
       let entryy = localStorage.getItem("hiveKeychainVerified");
@@ -754,7 +781,7 @@ function nonBlokzUser(hiveuser) {
       imageParent.appendChild(image);
       document.getElementById(favfriend.id).appendChild(ffsName);
       ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>"; 
-
+}
 
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
@@ -1202,6 +1229,8 @@ window.onload = function loading() {
    
     easyMDE = new EasyMDE({ element: document.getElementById('postBody'), minHeight: "55vh",maxHeight: "55vh"  });
   } else if(window.location.pathname == "/profile_update/") {
+    easyMDE = new EasyMDE({element: document.getElementById('article')});
+    updatePage()
   } else if(getQueryVariable("post") !== false && localStorage.getItem("hiveKeychainVerified")) {
     easyMDE = new EasyMDE({ element: document.getElementById('replyBody') });
     
@@ -1255,7 +1284,7 @@ window.onload = function loading() {
   }
 
   if (update !== true && localStorage.getItem("hive") !== null) {
-   // document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
+   document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
   }
 
   if (tag !== "null") {
@@ -1283,12 +1312,13 @@ window.onload = function loading() {
     document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
 
     displayPost();
-  } else if (hiveuser !== undefined) {
-    buildprofile(hiveuser)
+  } else if (hiveuser !== undefined && window.location.pathname != "/profile_update/") {
+   // shouldnt trigger on profule_update 
+     buildprofile(hiveuser)
   } else if (update === true) {
     updatePage();
   } else if (localStorage.getItem("hive") !== null) {
-    buildprofile(localStorage.getItem("hive"));
+    // buildprofile(localStorage.getItem("hive"));
   } else {
     splash();
     hidecomm();

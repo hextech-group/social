@@ -104,33 +104,18 @@
 
   <div class="mdl-textfield mdl-js-textfield">
     <small>Bio/About</small><textarea id="article"></textarea>
-    <script>
-      easyMDE = new EasyMDE({element: document.getElementById('article')});
-      </script>
+
     <label class="mdl-textfield__label" for="article" id="articleLabel"></label>
   </div>
 
   <div>
-    <!--       Submit using : <br />
-      <button onclick="blokz_keychain()">hive keychain</button>
-      <br /></div>-->
 
-    <div class="mdl-textfield mdl-js-textfield">
-      <small>Private Posting Key:<br />(if keychain not installed)</small><br /><input class="mdl-textfield__input" type="password" id="postingKey">
-      <label class="mdl-textfield__label" for="postingKey"></label>
-
-    </div>
     <div>
       <button type="button" id="nextBtn" onclick="updateProfile()"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
         data-upgraded=",MaterialButton,MaterialRipple"> Update Profile</button>
     </div>
-    <!-- 
-      <div>
-      or use: <br />
-      <button onclick="blokz_hivesigner()">hivesigner</button>
-    </div>
-    -->
+
 
   </div>
 </div>
