@@ -222,32 +222,6 @@ function hiveuserUp() {
   });
 }
 
-
-// posting_json_metadata beginnings
-/*
-
-{
-  "roles": ["posting", "active", "owner"],
-  "operation": "account_update2",
-  "params": [
-    "account": "hiveio",
-    "posting_json_metadata": ""
-  ]
-},
-
-  hive.broadcast.account_update2(
-        "account": "hiveio",
-    "posting_json_metadata": ""
-  );
-
-  hive.broadcast.accountUpdate2(wif, account, owner, active, posting, memoKey, jsonMetadata, function(err, result) {
-  console.log(err, result);
-});
-
-
-*/
-
-// uses private posting key to update profile
 function updateProfile() {
   let data = "<img src='https://personal.community/images/logo512.png'><br />I've created a <a href='https://personal.community'>personal.community</a> profile, please check it out here:<br /> <a href='https://personal.community/?hive=" + document.getElementById('hiveuser').value + "' target='_blank'>personal.community/?hive=" + document.getElementById('hiveuser').value + "</a>";
   let article = easyMDE.value();
@@ -847,7 +821,7 @@ function nonBlokzUser(hiveuser) {
 
 
 function splash() {
-  
+  document.body.style.backgroundImage = "url('../images/background.webp')";
   // console.log("splash engaged");
   var html = `<div id='splash'><h3 style="margin: 2px; padding: 2px;">personal.community</h3><img src="../images/logo192.png"><br />` +
     
@@ -1226,28 +1200,20 @@ window.onload = function loading() {
 
 
   if (getQueryVariable("newpost") !== false) {
-   
     easyMDE = new EasyMDE({ element: document.getElementById('postBody'), minHeight: "55vh",maxHeight: "55vh"  });
   } else if(window.location.pathname == "/profile_update/") {
     easyMDE = new EasyMDE({element: document.getElementById('article')});
     updatePage()
   } else if(getQueryVariable("post") !== false && localStorage.getItem("hiveKeychainVerified")) {
     easyMDE = new EasyMDE({ element: document.getElementById('replyBody') });
-    
-    // TODO : check if logged in, if yes, trigger...  
     document.getElementById("somecontext").style.display = "block";
-  
-  
-  
   } else {
     easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
-
   }
 
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
       localStorage.setItem("hive", getQueryVariable("loginas"));
-
     }
     hiveuser = getQueryVariable("loginas");
     if (window.hive_keychain) {
@@ -1269,7 +1235,6 @@ window.onload = function loading() {
             };
           });
       };
-
       keyChainPassing(hiveuser);
       // console.log(hiveuser + " connected");
     } else {
@@ -1291,13 +1256,8 @@ window.onload = function loading() {
     showtag(tag);
   } else if (getQueryVariable("newpost") !== false) {
     console.log("NEW POST");
-    // testing commenting
-
-
     document.getElementById("newPostDiv").style.display = "block";
     document.getElementById("display").style.display = "none";
-
-
     document.getElementById("comments").style.display = "none";
     if (getQueryVariable("author") !== false) {
       parentAuthor = getQueryVariable("author");
@@ -1310,7 +1270,6 @@ window.onload = function loading() {
     loadTags();
   } else if (post === "true") {
     document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
-
     displayPost();
   } else if (hiveuser !== undefined && window.location.pathname != "/profile_update/") {
    // shouldnt trigger on profule_update 
@@ -1337,5 +1296,3 @@ window.onload = function loading() {
   */
 
 }
-
-
