@@ -1,11 +1,12 @@
 "use strict";
 // begin code for 404 routes (https://personal.community/@sn0n/blokzprofile , etc...)
 // EXAMPLE URLS : 
-// https://personal.community/@sn0n/feed
-// https://personal.community/created/blog
-// https://personal.community/trending/blog
+// TODO : https://personal.community/@sn0n/feed (feed isnt a permlink)
+// TODO : https://personal.community/created/blog
+// TODO : https://personal.community/trending/blog
 // https://personal.community/@sn0n
 // https://personal.community/crypto/@sn0n/had-to-login-to-cryptocom-again-you-arent-alone
+// https://personal.community/@sn0n/blokzprofile/
 if (window.location.hash.length > 1) {
   const path = window.location.hash.replace('#/', '')
   console.log(path)
