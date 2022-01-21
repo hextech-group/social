@@ -17,7 +17,8 @@ if (window.location.hash.length > 1) {
     console.log("checking for post");
     if (path2[1] !== undefined) {
       console.log("i found a post here: " + path2[1]);
-      routes = routes + "/" + path2[1]
+      routes = routes + "/" + path2[1];
+      history.pushState({ page: 1 }, "Some title", '?post=' + routes)
      } else {
        console.log("no post found, redirecting to ?hive=")
        history.pushState({ page: 1 }, "Some title", '?hive=' + routes)
