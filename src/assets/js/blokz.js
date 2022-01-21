@@ -6,8 +6,6 @@
 // https://personal.community/trending/blog
 // https://personal.community/@sn0n
 // https://personal.community/crypto/@sn0n/had-to-login-to-cryptocom-again-you-arent-alone
-
-clear()
 if (window.location.hash.length > 1) {
   const path = window.location.hash.replace('#/', '')
   console.log(path)
