@@ -1,4 +1,77 @@
 "use strict";
+// begin code for 404 routes (https://personal.community/@sn0n/blokzprofile , etc...)
+// EXAMPLE URLS : 
+// https://personal.community/@sn0n/feed
+// https://personal.community/created/blog
+// https://personal.community/trending/blog
+// https://personal.community/@sn0n
+// https://personal.community/crypto/@sn0n/had-to-login-to-cryptocom-again-you-arent-alone
+
+clear()
+if (window.location.hash.length > 1) {
+  const path = window.location.hash.replace('#/', '')
+  console.log(path)
+  let routes = ''
+  const path2 = path.split("/")
+  if (path2[0].charAt(0) == "@") {
+    console.log("@{USERNAME} Found");
+    routes = path2[0];
+    console.log("checking for post");
+    if (path2[1] !== undefined) {
+      console.log("i found a post here: " + path2[1]);
+      routes = routes + "/" + path2[1]
+     } else {
+       console.log("no post found, redirecting to ?hive=")
+       history.pushState({ page: 1 }, "Some title", '?hive=' + routes)
+     }
+  } else {
+    console.log("@ NOT Found ");
+    if (path2[1].charAt(0) == "@") {
+      console.log("@{USERNAME} Found after a first tag");
+      routes = path2[1]
+    }
+    if (path2[2] !== undefined) {
+      console.log("but i found a post here: " + path2[2])
+      routes = routes + "/" + path2[2]
+    }
+    history.pushState({ page: 1 }, "Some title", '?post=' + routes)
+    console.log("this be thy path out: " + routes)
+  }
+
+  location.reload();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 hive.api.setOptions({ url: 'https://api.hive.blog' });
 let url = "https://api.hive.blog";
@@ -267,7 +340,7 @@ function updateProfile() {
   if (window.hive_keychain) {
     console.log('b');
     console.log('keychain post or comment');
-    console.log("commenting to :" + parentPermlink);  
+    console.log("commenting to :" + parentPermlink);
     let parentPermBC = 'blokzprofile';
     if (parentPermlink.length > 1) {
       parentPermBC = parentPermlink
@@ -277,13 +350,13 @@ function updateProfile() {
     // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
     let postAs = localStorage.getItem("hiveKeychainVerified");
 
-let profilejson = {
-  tags: 'personalcommunity',
-  app: 'blokz',
-  article: article,
-  interests: interests,
-  favorites: favorites
-}
+    let profilejson = {
+      tags: 'personalcommunity',
+      app: 'blokz',
+      article: article,
+      interests: interests,
+      favorites: favorites
+    }
     profilejson = JSON.stringify(profilejson)
     let opsBroad = [
       [
@@ -296,23 +369,23 @@ let profilejson = {
           "title": "My Personal.Community Profile",
           "body": data,
           "json_metadata": profilejson,
-        } 
+        }
       ]
     ];
 
-        hive_keychain.requestBroadcast(postAs,opsBroad,"Posting",function(response) {
-        console.log("main js response - post");
-        console.log(response);
+    hive_keychain.requestBroadcast(postAs, opsBroad, "Posting", function (response) {
+      console.log("main js response - post");
+      console.log(response);
 
-    console.log('hold tight')
-  setTimeout(() => {
-      let url = "../?hive=" + postAs;
-      window.location.href = url;
-    }, 8000); 
+      console.log('hold tight')
+      setTimeout(() => {
+        let url = "../?hive=" + postAs;
+        window.location.href = url;
+      }, 8000);
 
 
-      }
- 
+    }
+
     );
     // console.log(hiveuser + " connected");
   }
@@ -348,13 +421,13 @@ function quickReply() {
   console.log('a');
   // todo: reply to comments and posts
   tag = replaceAll(tag, " ", "");
-  
-  if(tag.length <= 0) {
+
+  if (tag.length <= 0) {
     tag += "blog";
   } else {
     tag += ",blog";
   }
-  
+
   tag = tag.split(",")
   let jsonmeta = {
     tags: tag,
@@ -363,11 +436,11 @@ function quickReply() {
 
   jsonmeta = JSON.stringify(jsonmeta)
   console.log(jsonmeta)
-  
- if (window.hive_keychain) {
+
+  if (window.hive_keychain) {
     console.log('b');
     console.log('keychain post or comment');
-    console.log("commenting to :" + parentPermlink);  
+    console.log("commenting to :" + parentPermlink);
     let parentAuthor = localStorage.getItem('replyAuthor');
     let parentPermBC = localStorage.getItem('replyLink');
     // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
@@ -379,17 +452,17 @@ function quickReply() {
           "parent_author": parentAuthor,
           "parent_permlink": parentPermBC,
           "author": postAs,
-          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase() + "pc",
           "title": postTitle,
           "body": postData,
           "json_metadata": jsonmeta
-        } 
+        }
       ],
       [
         "comment_options",
         {
           "author": postAs,
-          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase() + "pc",
           "allow_votes": true,
           "allow_curation_rewards": true,
           "max_accepted_payout": "1000000.000 HBD",
@@ -411,22 +484,22 @@ function quickReply() {
       ]
     ];
 
-        hive_keychain.requestBroadcast(postAs,opsBroad,"Posting",function(response) {
-        console.log("main js response - post");
-        console.log(response);
+    hive_keychain.requestBroadcast(postAs, opsBroad, "Posting", function (response) {
+      console.log("main js response - post");
+      console.log(response);
 
-    console.log('hold tight')
-    setTimeout(() => {
-      let url = "../?post=" + postAs + "/" + postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc";
-      window.location.href = url;
-    }, 8000);
+      console.log('hold tight')
+      setTimeout(() => {
+        let url = "../?post=" + postAs + "/" + postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase() + "pc";
+        window.location.href = url;
+      }, 8000);
 
 
-      }
- 
+    }
+
     );
     // console.log(hiveuser + " connected");
-  } 
+  }
 
 }
 
@@ -452,13 +525,13 @@ function createPost() {
   console.log('a');
   // todo: reply to comments and posts
   tag = replaceAll(tag, " ", "");
-  
-  if(tag.length <= 0) {
+
+  if (tag.length <= 0) {
     tag += "blog";
   } else {
     tag += ",blog";
   }
-  
+
   tag = tag.split(",")
   let jsonmeta = {
     tags: tag,
@@ -470,12 +543,12 @@ function createPost() {
   if (window.hive_keychain) {
     console.log('b');
     console.log('keychain post or comment');
-    console.log("commenting to :" + parentPermlink);  
+    console.log("commenting to :" + parentPermlink);
     let parentPermBC = '';
     if (parentPermlink.length > 1) {
       parentPermBC = parentPermlink
     } else {
-      parentPermBC = postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc"
+      parentPermBC = postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase() + "pc"
     }
     // comment.get_parent_id() == parent_comment.get_id(): The parent of a comment cannot change.
     let postAs = localStorage.getItem("hiveKeychainVerified");
@@ -486,17 +559,17 @@ function createPost() {
           "parent_author": parentAuthor,
           "parent_permlink": parentPermBC,
           "author": postAs,
-          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase() + "pc",
           "title": postTitle,
           "body": postData,
           "json_metadata": jsonmeta
-        } 
+        }
       ],
       [
         "comment_options",
         {
           "author": postAs,
-          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc",
+          "permlink": postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase() + "pc",
           "allow_votes": true,
           "allow_curation_rewards": true,
           "max_accepted_payout": "1000000.000 HBD",
@@ -518,22 +591,22 @@ function createPost() {
       ]
     ];
 
-        hive_keychain.requestBroadcast(postAs,opsBroad,"Posting",function(response) {
-        console.log("main js response - post");
-        console.log(response);
+    hive_keychain.requestBroadcast(postAs, opsBroad, "Posting", function (response) {
+      console.log("main js response - post");
+      console.log(response);
 
-    console.log('hold tight')
-    setTimeout(() => {
-      let url = "../?post=" + postAs + "/" + postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase()+"pc";
-      window.location.href = url;
-    }, 8000);
+      console.log('hold tight')
+      setTimeout(() => {
+        let url = "../?post=" + postAs + "/" + postpermLink.replace(/[^A-Za-z]+/g, '-').toLowerCase() + "pc";
+        window.location.href = url;
+      }, 8000);
 
 
-      }
- 
+    }
+
     );
     // console.log(hiveuser + " connected");
-  }  else {
+  } else {
 
     // broadcast a new post
     console.log('c');
@@ -680,16 +753,16 @@ function displayPost() {
 
     // TODO : color reaction 
     let percentage = "1"
-    document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`,`" + percentage +"`,`thumbs`)' id='thumbs'>thumb_up</span> ";
+    document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`,`" + percentage + "`,`thumbs`)' id='thumbs'>thumb_up</span> ";
     let findVoter = JSON.stringify(result.active_votes);
     console.log(findVoter);
-     if (findVoter.search(localStorage.getItem("hive")) > 0) {
+    if (findVoter.search(localStorage.getItem("hive")) > 0) {
       console.log("user found, you have upvoted this");
       document.getElementById("thumbs").style.color = "red";
     } else {
       console.log('you have yet to upvote this post')
     }
-    
+
     // todo : commentsz
     document.getElementById("comments").innerHTML += `<h4>Comments</h4> `;
     hive.api.getContentReplies(author, permlink, function (err, result) {
@@ -727,35 +800,35 @@ function displayPost() {
 function nonBlokzUser(hiveuser) {
 
 
-      if(localStorage.getItem("hiveKeychainVerified") != undefined) {
-      // to thy own self be true
-      console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
-      let entryy = localStorage.getItem("hiveKeychainVerified");
-      entryy = entryy.toLowerCase();
-      // CURRENT TODO: FRIEND IMAGE
-      console.log("CAUGHT: " + entryy);
-      var favfriend = document.createElement("div");
-      favfriend.id = "whoamiaa";
-      favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
-      favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
-      document.getElementById("favorites").appendChild(favfriend);
-      var para = document.createElement("div");                 // Create a <p> element
-      para.id = favfriend.id + "sub";
-      var ffs = document.createElement("div");
-      ffs.id = favfriend.id;
-      var ffsName = document.createElement("div");
-      ffsName.id = favfriend.id + "ffsName";
-      var ff = favfriend.id + "NEW";   // placeholder
-      document.getElementById(favfriend.id).appendChild(para);
-      document.getElementById(ffs.id).appendChild(ffsName);
-      var image = document.createElement("img");
-      var imageParent = document.getElementById(para.id);
-      image.className = "avatar";
-      image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
-      imageParent.appendChild(image);
-      document.getElementById(favfriend.id).appendChild(ffsName);
-      ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>"; 
-}
+  if (localStorage.getItem("hiveKeychainVerified") != undefined) {
+    // to thy own self be true
+    console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
+    let entryy = localStorage.getItem("hiveKeychainVerified");
+    entryy = entryy.toLowerCase();
+    // CURRENT TODO: FRIEND IMAGE
+    console.log("CAUGHT: " + entryy);
+    var favfriend = document.createElement("div");
+    favfriend.id = "whoamiaa";
+    favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
+    favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
+    document.getElementById("favorites").appendChild(favfriend);
+    var para = document.createElement("div");                 // Create a <p> element
+    para.id = favfriend.id + "sub";
+    var ffs = document.createElement("div");
+    ffs.id = favfriend.id;
+    var ffsName = document.createElement("div");
+    ffsName.id = favfriend.id + "ffsName";
+    var ff = favfriend.id + "NEW";   // placeholder
+    document.getElementById(favfriend.id).appendChild(para);
+    document.getElementById(ffs.id).appendChild(ffsName);
+    var image = document.createElement("img");
+    var imageParent = document.getElementById(para.id);
+    image.className = "avatar";
+    image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
+    imageParent.appendChild(image);
+    document.getElementById(favfriend.id).appendChild(ffsName);
+    ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
+  }
 
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
@@ -824,8 +897,8 @@ function splash() {
   document.body.style.backgroundImage = "url('../images/background.webp')";
   // console.log("splash engaged");
   var html = `<div id='splash'><h3 style="margin: 2px; padding: 2px;">personal.community</h3><img src="../images/logo192.png"><br />` +
-    
-    `<h6 style="margin: 2px; padding: 2px;"><a class='mdl-button mdl-chip--contact mdl-chip--deletable' href='https://hive.io'><img class='mdl-chip__contact mdl-color--black' src='../images/hive.png' alt='hive.io'></img><span class='mdl-chip__text' style='font-weight: bold; color: #212529; font-family: 'Work Sans', sans-serif;'>hive powered &nbsp;</span></a> </h6>`+
+
+    `<h6 style="margin: 2px; padding: 2px;"><a class='mdl-button mdl-chip--contact mdl-chip--deletable' href='https://hive.io'><img class='mdl-chip__contact mdl-color--black' src='../images/hive.png' alt='hive.io'></img><span class='mdl-chip__text' style='font-weight: bold; color: #212529; font-family: 'Work Sans', sans-serif;'>hive powered &nbsp;</span></a> </h6>` +
 
 
 
@@ -939,9 +1012,9 @@ function buildprofile(hiveuser) {
       let postedon = new Date(result[i].created.slice(0, 10)).toDateString();
       let descjson = JSON.parse(result[i].json_metadata);
       console.log("working with json_metadata: " + JSON.stringify(descjson));
-    
 
-    
+
+
 
       if (descjson.description !== undefined) {
         console.log("success on description : " + descjson.description);
@@ -957,27 +1030,27 @@ function buildprofile(hiveuser) {
       }
       postedon = postedon.split('GMT');
 
-     let id = i
+      let id = i
 
       console.log(result[i].author + "/" + result[i].permlink)
 
 
 
-    // TODO : color reaction 
-    let percentage = "1"
+      // TODO : color reaction 
+      let percentage = "1"
 
       document.getElementById("blog").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
         "<div style='overflow: hidden'>" + postdesc + "</div>" +
-        "<hr /><div style='margin-top: 1em; min-width: 50%; text-align: right'><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage +"`,`" + id +"`)' id='"+ id + "'>thumb_up</span> | Posted on: " +
+        "<hr /><div style='margin-top: 1em; min-width: 50%; text-align: right'><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage + "`,`" + id + "`)' id='" + id + "'>thumb_up</span> | Posted on: " +
         " " + postedon + "</div></div>";
-        let findVoter = JSON.stringify(result[i].active_votes);
-        console.log(findVoter);
-         if (findVoter.search(localStorage.getItem("hive")) > 0) {
-          console.log("user found, you have upvoted this");
-          document.getElementById(id).style.color = "red";
-        } else {
-          console.log('you have yet to upvote this post')
-        }
+      let findVoter = JSON.stringify(result[i].active_votes);
+      console.log(findVoter);
+      if (findVoter.search(localStorage.getItem("hive")) > 0) {
+        console.log("user found, you have upvoted this");
+        document.getElementById(id).style.color = "red";
+      } else {
+        console.log('you have yet to upvote this post')
+      }
     }
   });
 
@@ -1074,7 +1147,7 @@ function buildprofile(hiveuser) {
 
       // console.log("favs : " + favs);
       let favsLog = favs.split(',');
-     
+
       favsLog.forEach(function (entry) {
 
 
@@ -1111,9 +1184,9 @@ function buildprofile(hiveuser) {
             document.getElementById(entryy + "_").appendChild(ffsName);
             ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
           }
-        } 
+        }
       }); // finished displaying blokzprofile
-    
+
 
     } else {
       nonBlokzUser(hiveuser);
@@ -1178,7 +1251,7 @@ function showtag(tag) {
         document.getElementById("display").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'>" +
           "<div><div style='min-width:70%'>" +
           "<h5><a href='?post=" + discussion.author + "/" + result[i].permlink + "'>" + result[i].title + "</a></h5>" +
- 
+
           "<a href='..?hive=" + discussion.author + "'><span class='mdl-chip mdl-chip--contact'>" +
           "<span class='mdl-chip__contact mdl-color--teal mdl-color-text--white'><img src='https://images.hive.blog/u/" + discussion.author + "/avatar'></span>" +
           "<span class='mdl-chip__text'>" + discussion.author + "</span>" +
@@ -1202,11 +1275,11 @@ window.onload = function loading() {
 
 
   if (getQueryVariable("newpost") !== false) {
-    easyMDE = new EasyMDE({ element: document.getElementById('postBody'), minHeight: "55vh",maxHeight: "55vh"  });
-  } else if(window.location.pathname == "/profile_update/") {
-    easyMDE = new EasyMDE({element: document.getElementById('article')});
+    easyMDE = new EasyMDE({ element: document.getElementById('postBody'), minHeight: "55vh", maxHeight: "55vh" });
+  } else if (window.location.pathname == "/profile_update/") {
+    easyMDE = new EasyMDE({ element: document.getElementById('article') });
     updatePage()
-  } else if(getQueryVariable("post") !== false && localStorage.getItem("hiveKeychainVerified")) {
+  } else if (getQueryVariable("post") !== false && localStorage.getItem("hiveKeychainVerified")) {
     easyMDE = new EasyMDE({ element: document.getElementById('replyBody') });
     document.getElementById("somecontext").style.display = "block";
   } else {
@@ -1251,7 +1324,7 @@ window.onload = function loading() {
   }
 
   if (update !== true && localStorage.getItem("hive") !== null) {
-   document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
+    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
   }
 
   if (tag !== "null") {
@@ -1274,8 +1347,8 @@ window.onload = function loading() {
     document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
     displayPost();
   } else if (hiveuser !== undefined && window.location.pathname != "/profile_update/") {
-   // shouldnt trigger on profule_update 
-     buildprofile(hiveuser)
+    // shouldnt trigger on profule_update 
+    buildprofile(hiveuser)
   } else if (update === true) {
     updatePage();
   } else if (localStorage.getItem("hive") !== null) {
