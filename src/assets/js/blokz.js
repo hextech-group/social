@@ -923,7 +923,7 @@ function buildprofile(hiveuser) {
     document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
   });
 
-  hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 10, (err, result) => {
+  hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 20, (err, result) => {
     // testing for loop for posts. 
     // data for each post in a loop
     //document.getElementById("blog").innerHTML += "most recent posts of <h1><a href='../?hive=" + hiveuser + "'>" + hiveuser + "</a></h1>";
@@ -1123,8 +1123,10 @@ function buildprofile(hiveuser) {
   document.title = hiveuser + "'s personal.community profile";
 }
 
+
+// ?tag=(tag)
 function showtag(tag) {
-  hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 10 }, function (err, result) {
+  hive.api.getDiscussionsByCreated({ "tag": tag, "limit": 20 }, function (err, result) {
     if (err === null) {
       var i, len = result.length;
       console.log("what is a " + tag);
