@@ -833,7 +833,16 @@ function nonBlokzUser(hiveuser) {
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
   document.title = hiveuser + "'s personal.community profile";
+  
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
+    let createdAge = res.accounts[0].created.slice(0, 10);
+    let datedd = createdAge.split("-");
+    console.log("Member since: " + datedd[0]);
+    function monthName(mon) {
+      return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][mon - 1];
+    }
+    document.getElementById("age").innerHTML = monthName(datedd[1]) + " " + datedd[2] + ", " + datedd[0];
+    if (res.accounts[0].posting_json_metadata.length > 1) {
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     console.log("posting_json: " + posting_json);
 
@@ -842,8 +851,6 @@ function nonBlokzUser(hiveuser) {
     document.getElementById("profimg").src = "https://images.hive.blog/u/" + hiveuser + "/avatar";
 
     document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
-
-
 
 
     if (JSON.parse(posting_json).profile.website !== undefined) {
@@ -867,7 +874,14 @@ function nonBlokzUser(hiveuser) {
     } else {
       titleset = "";
     }
+  } else {
 
+   
+      document.getElementById("strongWebsite").style.display = "none";
+   
+      document.getElementById("strongLocation").style.display = "none";
+   
+  }
 
     // document.getElementById("toptab").style.display = "none";
     //document.getElementById("strongLocation").style.display = "none";
@@ -884,7 +898,7 @@ function nonBlokzUser(hiveuser) {
 
 
     //// console.log("Location: " +JSON.parse(posting_json).profile.location);
-
+  
   });
   // finished displaying posting_json_metadata for non blokz/profile user
 
@@ -948,6 +962,7 @@ function buildprofile(hiveuser) {
   console.log("fetching profile for : " + hiveuser)
   // gets posting_json_metadata for generic profile data for user
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
+    if (res.accounts[0].posting_json_metadata.length > 1) {
     let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
     console.log("posting_json: " + posting_json);
     if (JSON.parse(posting_json).profile.about !== undefined) {
@@ -979,6 +994,7 @@ function buildprofile(hiveuser) {
     } else {
       document.getElementById("strongLocation").style.display = "none";
     }
+  
     let createdAge = res.accounts[0].created.slice(0, 10);
     let datedd = createdAge.split("-");
     console.log("Member since: " + datedd[0]);
@@ -994,7 +1010,8 @@ function buildprofile(hiveuser) {
     document.getElementById("profimg").src = useravatar;
     // display cover image
     document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
-  });
+    }  });
+
 
   hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 20, (err, result) => {
     // testing for loop for posts. 
