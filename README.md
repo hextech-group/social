@@ -4,7 +4,15 @@ A $HIVE powered social profile
 Static Site files are located in ./docs/ upon building,
 https://personal.community/ runs on GitHub pages using this repo.  
 
-Source files for editing are in ./src/
+Source files f
+
+# TODO
+refactor page selector (tag !== "null")
+fix tags display bug on new post (index newpost div)
+blokzlock()
+blokzlock private key for (new post, edit profile, comment, vote, ???)
+add some 'did i break something' tests
+more on yellow post-it notes
 
 # Installation
 to get started, clone repo with:

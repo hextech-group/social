@@ -20,10 +20,10 @@ if (window.location.hash.length > 1) {
       console.log("i found a post here: " + path2[1]);
       routes = routes + "/" + path2[1];
       history.pushState({ page: 1 }, "Some title", '?post=' + routes)
-     } else {
-       console.log("no post found, redirecting to ?hive=")
-       history.pushState({ page: 1 }, "Some title", '?hive=' + routes)
-     }
+    } else {
+      console.log("no post found, redirecting to ?hive=")
+      history.pushState({ page: 1 }, "Some title", '?hive=' + routes)
+    }
   } else {
     console.log("@ NOT Found ");
     if (path2[1].charAt(0) == "@") {
@@ -607,7 +607,7 @@ function createPost() {
     );
     // console.log(hiveuser + " connected");
   } else {
-
+    // TODO : blokzlock private key
     // broadcast a new post
     console.log('c');
     hive.broadcast.comment(
@@ -1270,8 +1270,29 @@ function showtag(tag) {
   });
 }
 
+
+function blokzlock() {
+// close menu
+// blokzmenu();
+console.log('nope');
+// create modal
+// stor localstorage key 
+// use aes
+
+var encrypted = AES256.encrypt('TEXT', 'PASSWORD');
+console.log(encrypted);
+
+// close dialog
+// document.querySelector('dialog').close();
+
+}
+
+
+
+
 // MAIN()
 window.onload = function loading() {
+
 
 
   if (getQueryVariable("newpost") !== false) {
@@ -1319,13 +1340,33 @@ window.onload = function loading() {
 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
-    document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i> Logout</button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a></div> ";
-    document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
+    if(localStorage.getItem("verified") == 'true') {
+      document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' onclick='localStorage.removeItem(`verified`);location.reload()'><i class='material-icons'>verified_user</i><small style='color: green;'>verified</small></button></div> ";
+      document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
+      if (update !== true && localStorage.getItem("hive") !== null) {
+        document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
+      }
+    } else {
+      document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' id='show-dialog' type='button' class='mdl-button'><i class='material-icons'>verified_user</i><small style='color: red;'>blokz lock</small></button></div> ";
+      // document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
+
+      var dialog = document.querySelector('dialog');
+      var showDialogButton = document.querySelector('#show-dialog');
+      if (! dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+      }
+      showDialogButton.addEventListener('click', function() {
+        dialog.showModal();
+      });
+      dialog.querySelector('.close').addEventListener('click', function() {
+        dialog.close();
+      });
+        /* Or dialog.show(); to show the dialog without a backdrop. */
+
+    }
   }
 
-  if (update !== true && localStorage.getItem("hive") !== null) {
-    document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
-  }
+
 
   if (tag !== "null") {
     showtag(tag);
@@ -1334,6 +1375,7 @@ window.onload = function loading() {
     document.getElementById("newPostDiv").style.display = "block";
     document.getElementById("display").style.display = "none";
     document.getElementById("comments").style.display = "none";
+    document.getElementById("share").style.display = "none";
     if (getQueryVariable("author") !== false) {
       parentAuthor = getQueryVariable("author");
       parentPermlink = getQueryVariable("permlink");

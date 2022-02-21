@@ -20,7 +20,7 @@
 <script src="../js/mdl-chips-input.js" type="application/javascript"></script>
 
 
-<div style="position: fixed; right: 20px; top: 20px"><small><i class='material-icons' onclick='share()' style='cursor: pointer;'>share</i></small></div>
+<div style="position: fixed; right: 20px; top: 20px" id="share"><small><i class='material-icons' onclick='share()' style='cursor: pointer;'>share</i></small></div>
         
 
 <div id="profile" style="padding-right: 1em; padding-left: 1em;"></div>
@@ -151,3 +151,25 @@ data-upgraded=",MaterialButton,MaterialRipple">Submit</button></div>
 
 
 </div>
+
+
+
+
+
+
+
+
+  <dialog class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Verification</h4>
+    <div class="mdl-dialog__content">
+      <p>
+        Store your private posting key encrypted until you verify a session code.
+      </p>
+      <div class="verifiedusers"></div>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button" onclick='blokzlock();localStorage.setItem("verified", "true");location.reload()'>Add Key</button>
+      <button type="button" class="mdl-button close"><i class='material-icons'>close</i></button>
+    </div>
+  </dialog>
+
