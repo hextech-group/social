@@ -1150,7 +1150,6 @@ function buildprofile(hiveuser) {
 
 
       if (localStorage.getItem("hiveKeychainVerified")) {
-        
         // to thy own self be true
         console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
         let entryy = localStorage.getItem("hiveKeychainVerified");

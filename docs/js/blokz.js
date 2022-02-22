@@ -1147,7 +1147,9 @@ function buildprofile(hiveuser) {
       // favorite steemians
       var favs = sanitize(bitff.favorites);
 
-      if (localStorage.getItem("hiveKeychainVerified") != undefined) {
+
+
+      if (localStorage.getItem("hiveKeychainVerified")) {
         // to thy own self be true
         console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
         let entryy = localStorage.getItem("hiveKeychainVerified");
@@ -1177,12 +1179,10 @@ function buildprofile(hiveuser) {
         ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
       }
 
-
       // console.log("favs : " + favs);
       let favsLog = favs.split(',');
 
       favsLog.forEach(function (entry) {
-
 
 
 
