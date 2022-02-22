@@ -751,7 +751,7 @@ function displayPost() {
     }
 
     // TODO : color reaction 
-    let percentage = "1"
+    let percentage = "13"
     document.getElementById("display").innerHTML += "<hr /><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em' onClick='upvote(`" + permlink + "`,`" + author + "`,`" + percentage + "`,`thumbs`)' id='thumbs'>thumb_up</span> ";
     let findVoter = JSON.stringify(result.active_votes);
     console.log(findVoter);
@@ -1042,7 +1042,7 @@ function buildprofile(hiveuser) {
 
 
       // TODO : color reaction 
-      let percentage = "1"
+      let percentage = "13"
 
       document.getElementById("blog").innerHTML += "<div style='margin: 1em; border: 1px solid grey; box-shadow: 1px 1px; text-align: left; padding-left: 1em;'><h4><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a></h4>" +
         "" + postedon + "<div style='overflow: hidden;'>" + postdesc + "</div>" +
@@ -1281,7 +1281,7 @@ function showtag(tag) {
           console.log("What post desc we working with here: " + postdesc);
           postdesc = postdesc + "...";
         }
-        let percentage = "1";
+        let percentage = "13";
         let id = i;
         document.getElementById("display").innerHTML += "<div style='background-color: #fff;border: 1px solid grey; box-shadow: 1px 1px; padding: 1em; margin: 1em;'>" +
           "<div><div style='min-width:70%'>" +
