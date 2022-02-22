@@ -160,10 +160,14 @@ data-upgraded=",MaterialButton,MaterialRipple">Submit</button></div>
 
 
   <dialog class="mdl-dialog">
-    <h4 class="mdl-dialog__title">Verification</h4>
+    <h4 class="mdl-dialog__title">blokz lock (incomplete)</h4>
     <div class="mdl-dialog__content">
       <p>
-        Store your private posting key encrypted until you verify a session code.
+        Store your private key<sup><small><a href="https://github.com/mervick/aes-everywhere/tree/master/javascript">1</a></small></sup> using a pin for convenience. The "more secure" method would be to use <br />
+        <a class='mdl-chip mdl-chip--contact mdl-chip--deletable mdl-color--black' style="color: red" href='https://hive-keychain.com/'>
+          <img class='mdl-chip__contact' src='../images/hive_keychain.png' alt='hive.io'></img>
+          <span class='mdl-chip__text' style="font-weight: bold; font-family: 'Work Sans', sans-serif;">Keychain</span>
+        </a><br /> but we (i, sn0n) do believe our implementation is secure enough for a posting key. <hr />
       </p>
       <div class="verifiedusers"></div>
     </div>

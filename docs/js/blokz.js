@@ -911,7 +911,7 @@ function splash() {
   document.body.style.backgroundImage = "url('../images/background.webp')";
   // console.log("splash engaged");
   var html = `<div id='splash'><h3 style="margin: 2px; padding: 2px;">personal.community</h3><img src="../images/logo192.png"><br />` +
-    `<h6 style="margin: 2px; padding: 2px;"><a class='mdl-button mdl-chip--contact mdl-chip--deletable' href='https://hive.io'><img class='mdl-chip__contact mdl-color--black' src='../images/hive.png' alt='hive.io'></img><span class='mdl-chip__text' style='font-weight: bold; color: #212529; font-family: 'Work Sans', sans-serif;'>hive powered &nbsp;</span></a> </h6>` +
+    `<h6 style="margin: 2px; padding: 2px;"><a class='mdl-button mdl-chip--contact mdl-chip--deletable' href='https://hive.io'><img class='mdl-chip__contact mdl-color--black' src='../images/hive.png' alt='hive.io'></img><span class='mdl-chip__text' style="font-weight: bold; color: #212529; font-family: 'Work Sans', sans-serif;">hive powered &nbsp;</span></a> </h6>` +
     //`    </div>` + test
     `<hr />To get started, hit the <img src="../images/favicon.png" style="height:16px" /> icon down below.` +
     `<br /> This is used to navigate personal.community past this page<br /> ` +
