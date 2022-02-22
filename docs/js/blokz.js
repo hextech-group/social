@@ -645,6 +645,7 @@ function upvote(permlink, author, percentage, id) {
       hiveuser = localStorage.getItem("hiveKeychainVerified");
 
       let weight = 10000 * percentage;
+      console.log('we made it: ');
       hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) {
         console.log(response);
         // todo:  change reaction color
@@ -1044,9 +1045,9 @@ function buildprofile(hiveuser) {
       let percentage = "1"
 
       document.getElementById("blog").innerHTML += "<div style='margin: 1em; border: 1px solid grey; box-shadow: 1px 1px; text-align: left; padding-left: 1em;'><h4><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a></h4>" +
-        "<div style='overflow: hidden;'>" + postdesc + "</div>" +
-        "<div style='margin-top: 1em; min-width: 50%; text-align: right; padding: .25em'><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage + "`,`" + id + "`)' id='" + id + "'>thumb_up</span> | Posted on: " +
-        " " + postedon + "</div></div>";
+        "" + postedon + "<div style='overflow: hidden;'>" + postdesc + "</div>" +
+        "<div style='margin-top: 1em; min-width: 50%; text-align: right; padding: .25em'><span style='font-size:1em'>Acknowledge </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage + "`,`" + id + "`)' id='" + id + "'>thumb_up</span> " +
+        "</div></div>";
       let findVoter = JSON.stringify(result[i].active_votes);
       console.log(findVoter);
       if (findVoter.search(localStorage.getItem("hive")) > 0) {
@@ -1252,18 +1253,22 @@ function showtag(tag) {
           console.log("What post desc we working with here: " + postdesc);
           postdesc = postdesc + "...";
         }
-        document.getElementById("display").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'>" +
+        let percentage = "1";
+        let id = i;
+        document.getElementById("display").innerHTML += "<div style='background-color: #fff;border: 1px solid grey; box-shadow: 1px 1px; padding: 1em; margin: 1em;'>" +
           "<div><div style='min-width:70%'>" +
-          "<h5><a href='?post=" + discussion.author + "/" + result[i].permlink + "'>" + result[i].title + "</a></h5>" +
+          "<h4><a href='?post=" + discussion.author + "/" + result[i].permlink + "'>" + result[i].title + "</a></h4>" +
 
-          "<a href='..?hive=" + discussion.author + "'><span class='mdl-chip mdl-chip--contact'>" +
-          "<span class='mdl-chip__contact mdl-color--teal mdl-color-text--white'><img src='https://images.hive.blog/u/" + discussion.author + "/avatar'></span>" +
-          "<span class='mdl-chip__text'>" + discussion.author + "</span>" +
+          "<a href='..?hive=" + discussion.author + "'><img src='https://images.hive.blog/u/" + discussion.author + "/avatar' width='32px' height='32px' style='-moz-border-radius:75px;-webkit-border-radius: 75px;'>" +
+          " <span class='mdl-chip__text'> " + discussion.author  +
           "</span></a></div>" +
           "<div style='justify-content: right; min-width: 30%;'> " + whenbytag + "</div>" +
-          "<div style='overflow: hidden; padding-bottom: .5em;'>" + postdesc + "</div>" +
+          "<div style='overflow: hidden; padding-bottom: .5em; padding-left: 5em; padding-right: 5em; padding-top: 1em; '>" + postdesc + "</div>" +
 
-          "</div></div>";
+          "</div>"+
+          "<div style='margin-top: 1em; min-width: 50%; text-align: right; padding: .25em'><span style='font-size:1em'>Acknowledge </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage + "`,`" + id + "`)' id='" + id + "'>thumb_up</span> " +
+          "</div>";
+          "</div>";
 
         // document.getElementById("display").innerHTML += "<a href='?post=@" + discussion.author + "/" + sanitize(discussion.permlink) + "'>" + sanitize(discussion.title) + "</a><br /> by " + discussion.author + " on " + whenbytag + " | <span class='material-icons' style='font-size:12px'>thumbs_up_down</span> " + reactioncount + "<hr />";
         document.getElementById("comments").style.display = "none";
