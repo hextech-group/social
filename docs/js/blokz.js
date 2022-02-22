@@ -643,7 +643,7 @@ function upvote(permlink, author, percentage, id) {
     if (localStorage.getItem("hiveKeychainVerified") !== null) {
 
       hiveuser = localStorage.getItem("hiveKeychainVerified");
-
+      percentage = percentage*0.01;
       let weight = 10000 * percentage;
       console.log('we made it: ');
       hive_keychain.requestVote(hiveuser, permlink, author, weight, function (response) {
