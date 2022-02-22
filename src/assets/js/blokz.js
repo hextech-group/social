@@ -163,7 +163,7 @@ function words(str) {
 
 
 function logout() {
-  let url = "../#loggedout";
+  let url = "../";
   localStorage.removeItem('hive');
   localStorage.removeItem('hiveKeychainVerified');
   window.location.href = url;
@@ -693,7 +693,7 @@ function share() {
 };
 
 function displayPost() {
-  document.getElementById("display").style = "padding:2em; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;"
+  document.getElementById("display").style = "margin: auto; margin-top: .25em; margin-bottom: .25em; max-width: 800px; justify-content: center; padding:2em; background-color: whitesmoke; border: 1px solid grey; box-shadow: 1px 1px;"
   console.log('displaying post')
   var letting = getQueryVariable("post").split("/");
   let author = letting[0].replace("@", '');
@@ -810,7 +810,7 @@ function nonBlokzUser(hiveuser) {
     var favfriend = document.createElement("div");
     favfriend.id = "whoamiaa";
     favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
-    favfriend.style = "display: inline-block; padding: 5px; margin: 15px auto;width: 100px;  text-align: center"
+    favfriend.style = "display: inline-block; padding: 5px; margin: 10px auto;width: 100px;  text-align: center"
     document.getElementById("favorites").appendChild(favfriend);
     var para = document.createElement("div");                 // Create a <p> element
     para.id = favfriend.id + "sub";
@@ -833,7 +833,7 @@ function nonBlokzUser(hiveuser) {
   // LOAD GENERIC posting_json_metadata for non blokz/profile user
   // console.log("user does not exist! or something went wrong")
   document.title = hiveuser + "'s personal.community profile";
-  
+
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
     let createdAge = res.accounts[0].created.slice(0, 10);
     let datedd = createdAge.split("-");
@@ -843,45 +843,45 @@ function nonBlokzUser(hiveuser) {
     }
     document.getElementById("age").innerHTML = monthName(datedd[1]) + " " + datedd[2] + ", " + datedd[0];
     if (res.accounts[0].posting_json_metadata.length > 1) {
-    let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
-    console.log("posting_json: " + posting_json);
+      let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+      console.log("posting_json: " + posting_json);
 
 
 
-    document.getElementById("profimg").src = "https://images.hive.blog/u/" + hiveuser + "/avatar";
+      document.getElementById("profimg").src = "https://images.hive.blog/u/" + hiveuser + "/avatar";
 
-    document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
+      document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
 
 
-    if (JSON.parse(posting_json).profile.website !== undefined) {
-      let saniweb = JSON.parse(posting_json).profile.website;
-      let saniwebsite = sanitize(saniweb);
-      document.getElementById("favsite").innerHTML = "<a href='" + saniwebsite + "' target='_blank'>" + saniwebsite + "</a>";
+      if (JSON.parse(posting_json).profile.website !== undefined) {
+        let saniweb = JSON.parse(posting_json).profile.website;
+        let saniwebsite = sanitize(saniweb);
+        document.getElementById("favsite").innerHTML = "<a href='" + saniwebsite + "' target='_blank'>" + saniwebsite + "</a>";
+      } else {
+        document.getElementById("strongWebsite").style.display = "none";
+      }
+      if (JSON.parse(posting_json).profile.location !== undefined) {
+        let saniloc = JSON.parse(posting_json).profile.location;
+        let sanilocation = sanitize(saniloc);
+        document.getElementById("location").innerHTML = sanilocation;
+      } else {
+        document.getElementById("strongLocation").style.display = "none";
+      }
+      if (JSON.parse(posting_json).profile.about !== undefined) {
+        let saniabo = JSON.parse(posting_json).profile.about;
+        let saniabout = sanitize(saniabo);
+        titleset = saniabout;
+      } else {
+        titleset = "";
+      }
     } else {
+
+
       document.getElementById("strongWebsite").style.display = "none";
-    }
-    if (JSON.parse(posting_json).profile.location !== undefined) {
-      let saniloc = JSON.parse(posting_json).profile.location;
-      let sanilocation = sanitize(saniloc);
-      document.getElementById("location").innerHTML = sanilocation;
-    } else {
-      document.getElementById("strongLocation").style.display = "none";
-    }
-    if (JSON.parse(posting_json).profile.about !== undefined) {
-      let saniabo = JSON.parse(posting_json).profile.about;
-      let saniabout = sanitize(saniabo);
-      titleset = saniabout;
-    } else {
-      titleset = "";
-    }
-  } else {
 
-   
-      document.getElementById("strongWebsite").style.display = "none";
-   
       document.getElementById("strongLocation").style.display = "none";
-   
-  }
+
+    }
 
     // document.getElementById("toptab").style.display = "none";
     //document.getElementById("strongLocation").style.display = "none";
@@ -898,7 +898,7 @@ function nonBlokzUser(hiveuser) {
 
 
     //// console.log("Location: " +JSON.parse(posting_json).profile.location);
-  
+
   });
   // finished displaying posting_json_metadata for non blokz/profile user
 
@@ -911,11 +911,7 @@ function splash() {
   document.body.style.backgroundImage = "url('../images/background.webp')";
   // console.log("splash engaged");
   var html = `<div id='splash'><h3 style="margin: 2px; padding: 2px;">personal.community</h3><img src="../images/logo192.png"><br />` +
-
     `<h6 style="margin: 2px; padding: 2px;"><a class='mdl-button mdl-chip--contact mdl-chip--deletable' href='https://hive.io'><img class='mdl-chip__contact mdl-color--black' src='../images/hive.png' alt='hive.io'></img><span class='mdl-chip__text' style='font-weight: bold; color: #212529; font-family: 'Work Sans', sans-serif;'>hive powered &nbsp;</span></a> </h6>` +
-
-
-
     //`    </div>` + test
     `<hr />To get started, hit the <img src="../images/favicon.png" style="height:16px" /> icon down below.` +
     `<br /> This is used to navigate personal.community past this page<br /> ` +
@@ -923,9 +919,6 @@ function splash() {
   var tempElement = document.createElement('splash');
   tempElement.innerHTML = html;
   document.getElementsByTagName('body')[0].appendChild(tempElement.firstChild);
-
-
-
 }
 
 if (getQueryVariable("hive") !== false) {
@@ -935,11 +928,6 @@ if (getQueryVariable("hive") !== false) {
   hiveuser = getQueryVariable("hive").replace('@', '');
   // console.log(hiveuser + " connected");
 }
-
-
-
-
-
 
 if (getQueryVariable("tag") !== false) {
   tag = getQueryVariable("tag");
@@ -963,54 +951,55 @@ function buildprofile(hiveuser) {
   // gets posting_json_metadata for generic profile data for user
   hive.api.call('database_api.find_accounts', { accounts: [hiveuser] }, (err, res) => {
     if (res.accounts[0].posting_json_metadata.length > 1) {
-    let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
-    console.log("posting_json: " + posting_json);
-    if (JSON.parse(posting_json).profile.about !== undefined) {
-      let saniabo = JSON.parse(posting_json).profile.about;
-      let saniabout = sanitize(saniabo);
-      document.getElementById("usertitle").innerHTML = saniabout;
-    } else {
-      titleset = "";
+      let posting_json = JSON.parse(JSON.stringify(res.accounts[0].posting_json_metadata));
+      console.log("posting_json: " + posting_json);
+      if (JSON.parse(posting_json).profile.about !== undefined) {
+        let saniabo = JSON.parse(posting_json).profile.about;
+        let saniabout = sanitize(saniabo);
+        document.getElementById("usertitle").innerHTML = saniabout;
+      } else {
+        titleset = "";
+      }
+      if (JSON.parse(posting_json).profile.name !== undefined) {
+        let saniname = JSON.parse(posting_json).profile.name;
+        let saniName1 = sanitize(saniname);
+        document.getElementById("name").innerHTML = saniName1;
+      } else {
+        document.getElementById("name").innerHTML = hiveuser;
+      }
+      if (JSON.parse(posting_json).profile.website !== undefined) {
+        let saniweb = JSON.parse(posting_json).profile.website;
+        let saniwebsite = sanitize(saniweb);
+        document.getElementById("favsite").innerHTML = "<a href='" + saniwebsite + "' target='_blank'>" + saniwebsite + "</a>";
+      } else {
+        document.getElementById("strongWebsite").style.display = "none";
+      }
+      if (JSON.parse(posting_json).profile.location !== undefined) {
+        let saniloc = JSON.parse(posting_json).profile.location;
+        let sanilocation = sanitize(saniloc);
+        console.log("loc " + sanilocation)
+        document.getElementById("location").innerHTML = sanilocation;
+      } else {
+        document.getElementById("strongLocation").style.display = "none";
+      }
+
+      let createdAge = res.accounts[0].created.slice(0, 10);
+      let datedd = createdAge.split("-");
+      console.log("Member since: " + datedd[0]);
+      function monthName(mon) {
+        return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][mon - 1];
+      }
+      document.getElementById("age").innerHTML = monthName(datedd[1]) + " " + datedd[2] + ", " + datedd[0];
+      // TODO: -- remove testing notes ^>^
+      // console.log("posting_json: " + posting_json);
+      // display avater
+      // https://images.hive.blog/u/" + result.author + "/avatar
+      let useravatar = "https://images.hive.blog/u/" + hiveuser + "/avatar";
+      document.getElementById("profimg").src = useravatar;
+      // display cover image
+      document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
     }
-    if (JSON.parse(posting_json).profile.name !== undefined) {
-      let saniname = JSON.parse(posting_json).profile.name;
-      let saniName1 = sanitize(saniname);
-      document.getElementById("name").innerHTML = saniName1;
-    } else {
-      document.getElementById("name").innerHTML = hiveuser;
-    }
-    if (JSON.parse(posting_json).profile.website !== undefined) {
-      let saniweb = JSON.parse(posting_json).profile.website;
-      let saniwebsite = sanitize(saniweb);
-      document.getElementById("favsite").innerHTML = "<a href='" + saniwebsite + "' target='_blank'>" + saniwebsite + "</a>";
-    } else {
-      document.getElementById("strongWebsite").style.display = "none";
-    }
-    if (JSON.parse(posting_json).profile.location !== undefined) {
-      let saniloc = JSON.parse(posting_json).profile.location;
-      let sanilocation = sanitize(saniloc);
-      console.log("loc " + sanilocation)
-      document.getElementById("location").innerHTML = sanilocation;
-    } else {
-      document.getElementById("strongLocation").style.display = "none";
-    }
-  
-    let createdAge = res.accounts[0].created.slice(0, 10);
-    let datedd = createdAge.split("-");
-    console.log("Member since: " + datedd[0]);
-    function monthName(mon) {
-      return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][mon - 1];
-    }
-    document.getElementById("age").innerHTML = monthName(datedd[1]) + " " + datedd[2] + ", " + datedd[0];
-    // TODO: -- remove testing notes ^>^
-    // console.log("posting_json: " + posting_json);
-    // display avater
-    // https://images.hive.blog/u/" + result.author + "/avatar
-    let useravatar = "https://images.hive.blog/u/" + hiveuser + "/avatar";
-    document.getElementById("profimg").src = useravatar;
-    // display cover image
-    document.getElementById("coverimage").style.backgroundImage = "url('https://images.hive.blog/0x0/" + JSON.parse(posting_json).profile.cover_image + "')";
-    }  });
+  });
 
 
   hive.api.getDiscussionsByAuthorBeforeDate(hiveuser, null, now, 20, (err, result) => {
@@ -1056,9 +1045,9 @@ function buildprofile(hiveuser) {
       // TODO : color reaction 
       let percentage = "1"
 
-      document.getElementById("blog").innerHTML += "<div style='background-color: #fff; border: 1px solid #e7e7f1;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); padding: 1em; margin: 1em;'><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a>" +
-        "<div style='overflow: hidden'>" + postdesc + "</div>" +
-        "<hr /><div style='margin-top: 1em; min-width: 50%; text-align: right'><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage + "`,`" + id + "`)' id='" + id + "'>thumb_up</span> | Posted on: " +
+      document.getElementById("blog").innerHTML += "<div style='margin: 1em; border: 1px solid grey; box-shadow: 1px 1px; text-align: left; padding-left: 1em;'><h4><a href='?post=" + hiveuser + "/" + result[i].permlink + "'>" + result[i].title + "</a></h4>" +
+        "<div style='overflow: hidden;'>" + postdesc + "</div>" +
+        "<div style='margin-top: 1em; min-width: 50%; text-align: right; padding: .25em'><span style='font-size:1em'>Reaction: </span> <span class='material-icons' style='font-size:1em; cursor: pointer;' onClick='upvote(`" + result[i].permlink + "`,`" + result[i].author + "`,`" + percentage + "`,`" + id + "`)' id='" + id + "'>thumb_up</span> | Posted on: " +
         " " + postedon + "</div></div>";
       let findVoter = JSON.stringify(result[i].active_votes);
       console.log(findVoter);
@@ -1231,13 +1220,13 @@ function showtag(tag) {
             let communityinfo = JSON.parse(xhr.responseText)
             console.log("at bat " + communityinfo.result.title);
             let contentofTag = document.getElementById("display").innerHTML;
-            document.getElementById("display").innerHTML = "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>" + communityinfo.result.title + " community posts</div><br />" + contentofTag;
+            document.getElementById("display").innerHTML = "<small>most recent</small><div style='font-size: 2em; padding: .1em; margin: .2em'>" + communityinfo.result.title + " community posts</div><br />" + contentofTag;
           }
         };
         var data = '{"jsonrpc":"2.0", "method":"bridge.get_community", "params":{"name":"' + tag + '","observer":"blokz"}, "id":1}';
         xhr.send(data);
       } else {
-        document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 300%; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
+        document.getElementById("display").innerHTML += "<small>most recent</small><div style='font-size: 3em; padding: .1em; margin: .2em'>#" + tag + " posts</div><br />";
 
       }
 
@@ -1289,18 +1278,18 @@ function showtag(tag) {
 
 
 function blokzlock() {
-// close menu
-// blokzmenu();
-console.log('nope');
-// create modal
-// stor localstorage key 
-// use aes
+  // close menu
+  // blokzmenu();
+  console.log('nope');
+  // create modal
+  // stor localstorage key 
+  // use aes
 
-var encrypted = AES256.encrypt('TEXT', 'PASSWORD');
-console.log(encrypted);
+  var encrypted = AES256.encrypt('TEXT', 'PASSWORD');
+  console.log(encrypted);
 
-// close dialog
-// document.querySelector('dialog').close();
+  // close dialog
+  // document.querySelector('dialog').close();
 
 }
 
@@ -1324,6 +1313,7 @@ window.onload = function loading() {
     easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
   }
 
+    // 
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
       localStorage.setItem("hive", getQueryVariable("loginas"));
@@ -1353,11 +1343,12 @@ window.onload = function loading() {
     } else {
       console.log('keychain not installed')
     };
+    window.location.href = "../"
   };
 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
-    if(localStorage.getItem("verified") == 'true') {
+    if (localStorage.getItem("verified") == 'true') {
       document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' onclick='localStorage.removeItem(`verified`);location.reload()'><i class='material-icons'>verified_user</i><small style='color: green;'>verified</small></button></div> ";
       document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
       if (update !== true && localStorage.getItem("hive") !== null) {
@@ -1369,16 +1360,16 @@ window.onload = function loading() {
 
       var dialog = document.querySelector('dialog');
       var showDialogButton = document.querySelector('#show-dialog');
-      if (! dialog.showModal) {
+      if (!dialog.showModal) {
         dialogPolyfill.registerDialog(dialog);
       }
-      showDialogButton.addEventListener('click', function() {
+      showDialogButton.addEventListener('click', function () {
         dialog.showModal();
       });
-      dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.querySelector('.close').addEventListener('click', function () {
         dialog.close();
       });
-        /* Or dialog.show(); to show the dialog without a backdrop. */
+      /* Or dialog.show(); to show the dialog without a backdrop. */
 
     }
   }
@@ -1403,7 +1394,7 @@ window.onload = function loading() {
     }
     loadTags();
   } else if (post === "true") {
-    document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
+   // document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
     displayPost();
   } else if (hiveuser !== undefined && window.location.pathname != "/profile_update/") {
     // shouldnt trigger on profule_update 
