@@ -1311,7 +1311,7 @@ window.onload = function loading() {
     easyMDE = new EasyMDE({ element: document.getElementById('postBody') });
   }
 
-    // 
+  // 
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
       localStorage.setItem("hive", getQueryVariable("loginas"));
@@ -1343,27 +1343,29 @@ window.onload = function loading() {
       console.log('keychain not installed');
       window.location.href = "../"
     };
-     
+
   };
 
 
   // add hive - keychaing : localStorage.getItem("hiveKeychainVerified") 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
-    if (localStorage.getItem("hiveKeychainVerified") !== undefined) {
+    if (localStorage.getItem("hiveKeychainVerified") !== null) {
       document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a></div> ";
       document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
       if (update !== true && localStorage.getItem("hive") !== null) {
         document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
       }
       console.log('keychain verified exists')
-          } else if (localStorage.getItem("verified") == 'true' ) {
+    } else if (localStorage.getItem("verified") == 'true') {
+      console.log('logged in true')
       document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' onclick='localStorage.removeItem(`verified`);location.reload()'><i class='material-icons'>verified_user</i><small style='color: green;'>verified</small></button></div> ";
       document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
       if (update !== true && localStorage.getItem("hive") !== null) {
         document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
       }
-    }  else {
+    } else {
+      console.log('login or something')
       document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' id='show-dialog' type='button' class='mdl-button'><i class='material-icons'>verified_user</i><small style='color: red;'>blokz lock</small></button></div> ";
       // document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
 
@@ -1401,7 +1403,7 @@ window.onload = function loading() {
     }
     loadTags();
   } else if (post === "true") {
-   // document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
+    // document.body.style.background = "#333 url(../images/back.png) no-repeat center center fixed";
     displayPost();
   } else if (hiveuser !== undefined && window.location.pathname != "/profile_update/") {
     // shouldnt trigger on profule_update 
