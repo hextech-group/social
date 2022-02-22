@@ -1147,7 +1147,35 @@ function buildprofile(hiveuser) {
       // favorite steemians
       var favs = sanitize(bitff.favorites);
 
-
+      if (localStorage.getItem("hiveKeychainVerified") != undefined) {
+        // to thy own self be true
+        console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
+        let entryy = localStorage.getItem("hiveKeychainVerified");
+        entryy = entryy.toLowerCase();
+        // CURRENT TODO: FRIEND IMAGE
+        console.log("CAUGHT: " + entryy);
+        var favfriend = document.createElement("div");
+        favfriend.id = "whoamiaa";
+        favfriend.setAttribute("onclick", "window.location.href='./?hive=" + entryy + "';");
+        favfriend.style = "display: inline-block; padding: 5px; margin: 10px auto;width: 100px;  text-align: center"
+        document.getElementById("favorites").appendChild(favfriend);
+        var para = document.createElement("div");                 // Create a <p> element
+        para.id = favfriend.id + "sub";
+        var ffs = document.createElement("div");
+        ffs.id = favfriend.id;
+        var ffsName = document.createElement("div");
+        ffsName.id = favfriend.id + "ffsName";
+        var ff = favfriend.id + "NEW";   // placeholder
+        document.getElementById(favfriend.id).appendChild(para);
+        document.getElementById(ffs.id).appendChild(ffsName);
+        var image = document.createElement("img");
+        var imageParent = document.getElementById(para.id);
+        image.className = "avatar";
+        image.src = "https://images.hive.blog/u/" + entryy + "/avatar";            // image.src = "IMAGE URL/PATH"
+        imageParent.appendChild(image);
+        document.getElementById(favfriend.id).appendChild(ffsName);
+        ffsName.innerHTML = "<small id='" + ff + "'>" + entryy + "</small>";
+      }
 
 
       // console.log("favs : " + favs);
