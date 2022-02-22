@@ -1350,13 +1350,20 @@ window.onload = function loading() {
   // add hive - keychaing : localStorage.getItem("hiveKeychainVerified") 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
-    if (localStorage.getItem("verified") == 'true' ) {
+    if (localStorage.getItem("hiveKeychainVerified") !== undefined) {
+      document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a></div> ";
+      document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
+      if (update !== true && localStorage.getItem("hive") !== null) {
+        document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
+      }
+      console.log('keychain verified exists')
+          } else if (localStorage.getItem("verified") == 'true' ) {
       document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' onclick='localStorage.removeItem(`verified`);location.reload()'><i class='material-icons'>verified_user</i><small style='color: green;'>verified</small></button></div> ";
       document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
       if (update !== true && localStorage.getItem("hive") !== null) {
         document.getElementById('showUpdate').innerHTML = "<a href='../profile_update/'>Update Profile</a>";
       }
-    } else {
+    }  else {
       document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' id='show-dialog' type='button' class='mdl-button'><i class='material-icons'>verified_user</i><small style='color: red;'>blokz lock</small></button></div> ";
       // document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
 
