@@ -212,8 +212,6 @@ function login(username) {
   localStorage.setItem("hive", username);
 
 
-  let url = "../?hive=" + username;
-  window.location.href = url;
 
 
 }
@@ -1331,6 +1329,7 @@ window.onload = function loading() {
               // all is well!
               console.log("success;");
               localStorage.setItem("hiveKeychainVerified", hiveuser);
+              window.location.href = "../"
             } else {
               console.log('that username didnt work bruh');
               localStorage.removeItem("hive");
@@ -1341,14 +1340,17 @@ window.onload = function loading() {
       keyChainPassing(hiveuser);
       // console.log(hiveuser + " connected");
     } else {
-      console.log('keychain not installed')
+      console.log('keychain not installed');
+      window.location.href = "../"
     };
-    window.location.href = "../"
+     
   };
 
+
+  // add hive - keychaing : localStorage.getItem("hiveKeychainVerified") 
   if (localStorage.getItem("hive") !== null) {
     let loggedinas = localStorage.getItem("hive");
-    if (localStorage.getItem("verified") == 'true') {
+    if (localStorage.getItem("verified") == 'true' ) {
       document.getElementById("loggedin").innerHTML = "<div style='float: right'><button class='mdl-button mdl-js-button' onclick='logout()'><i class='material-icons'>exit_to_app</i><small>Logout</small></button></div> <div style='padding-top: 3px;'><a href='../?hive=" + loggedinas + "' style='text-decoration: none'><button class='mdl-button mdl-js-button mdl-button--fab'><img src='https://images.hive.blog/u/" + loggedinas + "/avatar'></button> " + loggedinas + "</a><button class='mdl-button mdl-js-button' onclick='localStorage.removeItem(`verified`);location.reload()'><i class='material-icons'>verified_user</i><small style='color: green;'>verified</small></button></div> ";
       document.getElementById("loggedin").innerHTML += "<br /><a href='../?newpost=true'>Write Post</a>";
       if (update !== true && localStorage.getItem("hive") !== null) {
@@ -1360,9 +1362,7 @@ window.onload = function loading() {
 
       var dialog = document.querySelector('dialog');
       var showDialogButton = document.querySelector('#show-dialog');
-      if (!dialog.showModal) {
-        dialogPolyfill.registerDialog(dialog);
-      }
+
       showDialogButton.addEventListener('click', function () {
         dialog.showModal();
       });
