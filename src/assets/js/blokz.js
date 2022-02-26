@@ -7,6 +7,7 @@
 // https://personal.community/@sn0n
 // https://personal.community/crypto/@sn0n/had-to-login-to-cryptocom-again-you-arent-alone
 // https://personal.community/@sn0n/blokzprofile/
+
 if (window.location.hash.length > 1) {
   const path = window.location.hash.replace('#/', '')
   console.log(path)
@@ -165,6 +166,7 @@ function words(str) {
 function logout() {
   let url = "../";
   localStorage.removeItem('hive');
+  localStorage.removeItem('verified');
   localStorage.removeItem('hiveKeychainVerified');
   window.location.href = url;
   setTimeout(continueLogout, 1000);
@@ -210,10 +212,6 @@ function updatePage() {
 function login(username) {
   username = document.getElementById('login').value;
   localStorage.setItem("hive", username);
-
-
-
-
 }
 
 function replaceAll(string, search, replace) {
@@ -799,10 +797,10 @@ function displayPost() {
 function nonBlokzUser(hiveuser) {
 
 
-  if (localStorage.getItem("hiveKeychainVerified") != undefined) {
+  if (localStorage.getItem("hive") != undefined) {
     // to thy own self be true
-    console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
-    let entryy = localStorage.getItem("hiveKeychainVerified");
+    console.log("ok wtf m8" + localStorage.getItem("hive"))
+    let entryy = localStorage.getItem("hive");
     entryy = entryy.toLowerCase();
     // CURRENT TODO: FRIEND IMAGE
     console.log("CAUGHT: " + entryy);
@@ -1351,27 +1349,33 @@ window.onload = function loading() {
     }
     hiveuser = getQueryVariable("loginas");
     if (window.hive_keychain) {
-      function keyChainPassing(keychainpass) {
-        hive_keychain.requestHandshake(function () {
-          console.log("Handshake received!");
-        })
-        hive_keychain.requestSignBuffer(keychainpass, 'Login', 'Posting',
-          (response) => {
-            console.log(response)
-            if (response.success) {
-              // all is well!
-              console.log("success;");
-              localStorage.setItem("hiveKeychainVerified", hiveuser);
-              window.location.href = "../"
-            } else {
-              console.log('that username didnt work bruh');
-              localStorage.removeItem("hive");
-              window.location.href = "../?failedlogin"
-            };
-          });
-      };
-      keyChainPassing(hiveuser);
-      // console.log(hiveuser + " connected");
+      let confirmAction = confirm("Use hive-Keychain?");
+      if (confirmAction) {
+        function keyChainPassing(keychainpass) {
+          hive_keychain.requestHandshake(function () {
+            console.log("Handshake received!");
+          })
+          hive_keychain.requestSignBuffer(keychainpass, 'Login', 'Posting',
+            (response) => {
+              console.log(response)
+              if (response.success) {
+                // all is well!
+                console.log("success;");
+                localStorage.setItem("hiveKeychainVerified", hiveuser);
+                window.location.href = "../"
+              } else {
+                console.log('that username didnt work bruh');
+                localStorage.removeItem("hive");
+                window.location.href = "../?failedlogin"
+              };
+            });
+        };
+        keyChainPassing(hiveuser);
+        // console.log(hiveuser + " connected");
+      } else {
+        window.location.href = "../"
+      }
+
     } else {
       console.log('keychain not installed');
       window.location.href = "../"
