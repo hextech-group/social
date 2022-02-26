@@ -941,6 +941,7 @@ if (getQueryVariable("post") !== false) {
 function buildprofile(hiveuser) {
 
 
+  
   let profile = document.getElementById('TempProfile');
   let display = document.getElementById('profile');
   display.appendChild(profile.content.cloneNode(true));
@@ -1147,10 +1148,10 @@ function buildprofile(hiveuser) {
 
 
 
-      if (localStorage.getItem("hiveKeychainVerified")) {
+      if (localStorage.getItem("hive")) {
         // to thy own self be true
-        console.log("ok wtf m8" + localStorage.getItem("hiveKeychainVerified"))
-        let entryy = localStorage.getItem("hiveKeychainVerified");
+        console.log("ok wtf m8" + localStorage.getItem("hive"))
+        let entryy = localStorage.getItem("hive");
         entryy = entryy.toLowerCase();
         // CURRENT TODO: FRIEND IMAGE
         console.log("CAUGHT: " + entryy);
