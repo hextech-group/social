@@ -1345,9 +1345,10 @@ window.onload = function loading() {
   // 
   if (getQueryVariable("loginas") !== false) {
     if (localStorage.getItem("hive") === null) {
-      localStorage.setItem("hive", getQueryVariable("loginas"));
+      let whois = getQueryVariable("loginas").toLowerCase()
+      localStorage.setItem("hive", whois);
     }
-    hiveuser = getQueryVariable("loginas");
+    hiveuser = getQueryVariable("loginas").toLowerCase();
     if (window.hive_keychain) {
       let confirmAction = confirm("Use hive-Keychain?");
       if (confirmAction) {
