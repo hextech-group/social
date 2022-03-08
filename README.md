@@ -2,7 +2,7 @@
 A $HIVE powered social profile
 
 Static Site files are located in ./docs/ upon building,
-https://social.hextexh.group/ runs on GitHub pages using the following repo
+https://social.hextech.group/ runs on GitHub pages using the following repo
  
  https://github.com/hextech-group/personal.community
 
